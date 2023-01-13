@@ -30,4 +30,8 @@ class SharedPreferences(context: Context) {
         return sharedPreferences.getBoolean("firstlaunch", true)
     }
 
+    fun isLoggedIn(): Boolean {
+        return sharedPreferences.getBoolean("isLoggedIn", false)
+    }
+
 }

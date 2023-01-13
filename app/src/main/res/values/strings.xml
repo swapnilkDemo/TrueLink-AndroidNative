@@ -19,4 +19,9 @@
     <string name="welcome_text_2">Truelink is youe best friend to protech you against hackers</string>
     <string name="stat">Stats:</string>
     <string name="welcome_text_3">Trueling scans over 2 million links daily to keep you safe from hacking and phishing attacks!</string>
+    <string name="hint_phone">Enter mobile number</string>
+    <string name="privacy_msg"><![CDATA[By checking this  you are confirming that you have read and agree to Truelink\'s Privacy  Policy  and & Term of Use]]></string>
+    <string name="generate_otp">Generate OTP</string>
+    <string name="login_text">Enter your phone number to continue</string>
+    <string name="login_subtext">we will send you a verification code</string>
 </resources>
