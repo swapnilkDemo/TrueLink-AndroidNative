@@ -9,6 +9,7 @@ import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import br.com.simplepass.loadingbutton.animatedDrawables.ProgressType
@@ -33,7 +34,7 @@ class MainActivity : AppCompatActivity() {
 
         navView = binding.fluidBottomNavigation
 
-        val navController = findNavController(R.id.nav_host_fragment_activity_main)
+      /*  val navController = findNavController(R.id.nav_host_fragment_activity_main)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
          val appBarConfiguration = AppBarConfiguration(
@@ -41,8 +42,10 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications
             )
         )
-        setupActionBarWithNavController(navController, appBarConfiguration)
-         navView.setupWithNavController(navController)
+        setupActionBarWithNavController(navController, appBarConfiguration)*/
+        // navView.setupWithNavController(navController)
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController = navHostFragment.navController
         setNavigation()
 
         //appPref.putString(appPref.INCIDENT_ID, "");
