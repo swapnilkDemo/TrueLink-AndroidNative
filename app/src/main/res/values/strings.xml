@@ -24,4 +24,7 @@
     <string name="generate_otp">Generate OTP</string>
     <string name="login_text">Enter your phone number to continue</string>
     <string name="login_subtext">we will send you a verification code</string>
+    <string name="default_country">+91</string>
+    <string name="enter_mobile">Enter mobile number</string>
+    <string name="error_privacy">Agree Privacy Policy to continue</string>
 </resources>

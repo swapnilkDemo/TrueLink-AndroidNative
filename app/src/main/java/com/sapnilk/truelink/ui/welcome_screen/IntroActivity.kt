@@ -50,7 +50,7 @@ class IntroActivity : FragmentActivity() {
             /*After setting the adapter use the timer */
             val handler = Handler()
             val Update = Runnable {
-                if (currentPage === 3 - 1) {
+                if (currentPage === 4 - 1) {
                     currentPage = 0
                 }
                 viewPager2.setCurrentItem(currentPage++, true)

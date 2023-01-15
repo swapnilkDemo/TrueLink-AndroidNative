@@ -1,11 +1,13 @@
 package com.sapnilk.truelink.ui
 
-import android.app.Dialog
-import android.content.DialogInterface
+import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
+import android.os.Handler
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
@@ -13,14 +15,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.Group
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import br.com.simplepass.loadingbutton.animatedDrawables.ProgressType
+import br.com.simplepass.loadingbutton.customViews.CircularProgressButton
+import br.com.simplepass.loadingbutton.customViews.ProgressButton
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.hbb20.CountryCodePicker
 import com.sapnilk.truelink.MainActivity
 import com.sapnilk.truelink.R
 import com.sapnilk.truelink.utils.SharedPreferences
-import java.util.concurrent.TimeUnit
 
 
 class SigninActivity : AppCompatActivity() {
@@ -63,9 +70,9 @@ class SigninActivity : AppCompatActivity() {
     lateinit var btnsignout: Button
     lateinit var btnlogin: Button
     lateinit var txtregister: Button
+
     //lateinit var txtlogin:Button
     lateinit var txtphone: TextInputEditText
-    lateinit var progressslogin: ProgressBar
     lateinit var groupregister: Group
 
     val usertypes = arrayOf("Architect", "College", "IIA Authority")
@@ -82,11 +89,17 @@ class SigninActivity : AppCompatActivity() {
     private var enabled: Boolean = false
     private var mat: AlertDialog? = null
     private var autoverified: Boolean = false
+    private var isPrivacyChecked: Boolean = false
 
     private lateinit var btnokterms: Button
     private lateinit var termsview: View
     private lateinit var recyclerterms: RecyclerView
     private lateinit var sharedPrefs: SharedPreferences
+    private lateinit var countryCodePicker: CountryCodePicker
+    private lateinit var edit_phone: TextInputEditText
+    private lateinit var edit_countryCode: TextInputEditText
+    private lateinit var circulaProgressButton: CircularProgressButton
+
 
     //private val db = Firebase.firestore
 
@@ -105,27 +118,60 @@ class SigninActivity : AppCompatActivity() {
     }
 
     fun initialize() {
-//        laylogin = findViewById(R.id.lay_login_main)
-//        progressslogin = findViewById(R.id.progress_login)
-        txtphone = findViewById(R.id.txtinp_userphone_login)
+        edit_phone = findViewById(R.id.edit_phone)
+//        edit_countryCode = findViewById(R.id.edit_coutryCOde)
+//        edit_countryCode.setText(getString(R.string.default_country))
+        countryCodePicker = findViewById(R.id.ccp)
         chktermns = findViewById(R.id.chk_privacy)
+        chktermns.setOnCheckedChangeListener { buttonView, isChecked ->
+            isPrivacyChecked = isChecked
+        }
+
+        val code = Integer.parseInt(getString(R.string.default_country))
+        @Suppress("DEPRECATION")
+        countryCodePicker.setDefaultCountryUsingPhoneCode(code)
 
         btnlogin = findViewById(R.id.button_login)
         btnlogin.setOnClickListener {
-            if (txtphone.text.toString().isNotEmpty()) {
-                progressslogin.visibility = View.VISIBLE
-                btnlogin.isEnabled = false
-                ////Initiate Login///////////////////
-                startLogin()
-            } else
-                Toast.makeText(this, "Enter mobile number", Toast.LENGTH_SHORT).show()
+            if (isPrivacyChecked)
+                if (edit_phone.text.toString().isNotEmpty()) {
+                    btnlogin.isEnabled = false
+                    ////Initiate Login///////////////////
+                    startLogin()
+                } else
+                    Toast.makeText(this, getString(R.string.enter_mobile), Toast.LENGTH_SHORT)
+                        .show()
+            else
+                Toast.makeText(this, getString(R.string.error_privacy), Toast.LENGTH_SHORT).show()
+        }
+
+        circulaProgressButton = findViewById(R.id.btn_generateOtp)
+        circulaProgressButton.setOnClickListener {
+            if (isPrivacyChecked)
+                if (edit_phone.text.toString().isNotEmpty()) {
+                    btnlogin.isEnabled = false
+                    ////Initiate Login///////////////////
+                    circulaProgressButton.morphAndRevert {  }
+                    startLogin()
+                } else
+                    Toast.makeText(this, getString(R.string.enter_mobile), Toast.LENGTH_SHORT)
+                        .show()
+            else
+                Toast.makeText(this, getString(R.string.error_privacy), Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun startLogin() {
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-        finish()
+        val bitmap = BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher_foreground)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            circulaProgressButton.doneLoadingAnimation(getColor(R.color.login_btn), bitmap)
+        }
+        Handler().postDelayed(Runnable {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }, 3000)
+
     }
 
     private fun signout() {
@@ -192,7 +238,10 @@ class SigninActivity : AppCompatActivity() {
 
       }
   */
+    protected open fun showPrivacyPolicy() {
+        var bottomSheetDialog: BottomSheetDialog = BottomSheetDialog(this)
 
+    }
 
     override fun onDestroy() {
         super.onDestroy()
@@ -202,5 +251,36 @@ class SigninActivity : AppCompatActivity() {
         }
     }
 
+    private fun defaultColor(context: Context) = ContextCompat.getColor(context, android.R.color.black)
+    private fun defaultDoneImage(resources: Resources): Bitmap =
+        BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher_foreground)
 
+    fun ProgressButton.morphDoneAndRevert(
+        context: Context,
+        fillColor: Int = defaultColor(context),
+        bitmap: Bitmap = defaultDoneImage(context.resources),
+        doneTime: Long = 3000,
+        revertTime: Long = 4000
+    ) {
+        progressType = ProgressType.INDETERMINATE
+        startAnimation()
+        Handler().run {
+            postDelayed({ doneLoadingAnimation(fillColor, bitmap) }, doneTime)
+            postDelayed(::revertAnimation, revertTime)
+        }
+    }
+
+    fun ProgressButton.morphAndRevert(
+        revertTime: Long = 3000,
+        startAnimationCallback: () -> Unit = {}
+    ) {
+        startAnimation(startAnimationCallback)
+        Handler().postDelayed(::revertAnimation, revertTime)
+    }
+
+    fun ProgressButton.morphStopRevert(stopTime: Long = 1000, revertTime: Long = 2000) {
+        startAnimation()
+        Handler().postDelayed(::stopAnimation, stopTime)
+        Handler().postDelayed(::revertAnimation, revertTime)
+    }
 }

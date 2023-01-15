@@ -55,6 +55,7 @@
         android:text="Login"
         android:textColor="@color/white"
         android:textSize="18sp"
+        android:textAllCaps="false"
         app:backgroundTint="@color/login_btn"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
