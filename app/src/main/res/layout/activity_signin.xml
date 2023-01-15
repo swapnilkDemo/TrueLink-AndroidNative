@@ -48,7 +48,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin20"
         app:cardBackgroundColor="@color/gray_200"
-        app:cardCornerRadius="@dimen/_2sdp"
+        app:cardCornerRadius="@dimen/_8dp"
         app:cardElevation="@dimen/margin10">
 
         <LinearLayout
@@ -56,19 +56,33 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="@dimen/_1sdp"
+            android:layout_margin="@dimen/_2sdp"
             android:background="@color/colorPrimary"
             android:gravity="center"
             android:orientation="horizontal">
 
-            <Spinner
+            <com.hbb20.CountryCodePicker
                 android:id="@+id/ccp"
+                android:background="@color/gray_200"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="16dp" />
-
+                android:padding="@dimen/_5sdp" />
+          <!--  <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_coutryCOde"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:background="@null"
+                android:gravity="center_vertical"
+                android:inputType="phone"
+                android:focusable="false"
+                android:editable="false"
+                android:padding="@dimen/_2sdp"
+                android:textColor="@color/white"
+                android:textColorHint="@color/gray_200"
+                android:textSize="@dimen/_16sdp" />-->
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/txtinp_userphone_login"
+                android:id="@+id/edit_phone"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
@@ -97,8 +111,10 @@
         android:textColor="@color/gray_200"
         android:textSize="@dimen/_10sdp" />
 
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/button_login"
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -108,7 +124,25 @@
         android:text="@string/generate_otp"
         android:textAllCaps="false"
         android:textSize="@dimen/_16sdp" />
-
+    <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
+        android:id="@+id/btn_generateOtp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/backgroun_round"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/margin20"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/login_btn"
+        android:gravity="center"
+        app:spinning_bar_color="@android:color/holo_blue_bright"
+        app:spinning_bar_padding="8dp"
+        app:spinning_bar_width="4dp"
+        android:drawableLeft="@android:drawable/arrow_up_float"
+        android:drawableRight="@android:drawable/arrow_up_float"
+        android:padding="10dp"
+        android:text="@string/generate_otp"
+        android:textAllCaps="false"
+        android:textSize="@dimen/_16sdp"/>
     <!--  app:spinning_bar_width="4dp" &lt;!&ndash; Optional &ndash;&gt;
       app:spinning_bar_color="#FFF" &lt;!&ndash; Optional &ndash;&gt;
       app:spinning_bar_padding="6dp" &lt;!&ndash; Optional &ndash;&gt;-->
