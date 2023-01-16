@@ -56,6 +56,8 @@ dependencies {
     implementation 'com.hbb20:ccp:2.5.0'
     ///////////////////Progress Button////////////////////
     implementation 'br.com.simplepass:loading-button-android:2.2.0'
+    /////////////////////////For PIN Preview//////////////////////////////////
+    implementation 'io.github.chaosleung:pinview:1.4.4'
     ////////////////////////////////////////////////////////////
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

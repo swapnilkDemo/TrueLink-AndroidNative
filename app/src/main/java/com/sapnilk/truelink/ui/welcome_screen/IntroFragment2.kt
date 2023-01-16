@@ -1,12 +1,15 @@
 package com.swapnilk.truelink
 
+import android.graphics.Color
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.sapnilk.truelink.R
+import com.sapnilk.truelink.utils.CommonFunctions
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -19,7 +22,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [IntroFragment2.newInstance] factory method to
  * create an instance of this fragment.
  */
-class IntroFragment2 : Fragment(){
+class IntroFragment2 : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -41,6 +44,15 @@ class IntroFragment2 : Fragment(){
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_intro2, container, false)
+        var commonFunctions: CommonFunctions? = activity?.let { CommonFunctions(it) }
+        view.findViewById<TextView>(R.id.txt__description)?.text =
+            commonFunctions?.spanTextWithColor(
+                getString(R.string.welcome_text_2),
+                Color.RED,
+                52,
+                59
+            )
+
         return view
 
     }

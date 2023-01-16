@@ -10,7 +10,11 @@
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/ic_notifications_black_24dp.xml" value="0.1495" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/activity_intro.xml" value="0.1765625" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/activity_main.xml" value="0.1" />
-        <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/activity_signin.xml" value="0.5" />
+        <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/activity_signin.xml" value="0.25" />
+        <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/activity_splash_screen.xml" value="0.1" />
+        <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/bottom_sheet_otp.xml" value="0.1765625" />
+        <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/bottom_sheet_privacy.xml" value="0.1390625" />
+        <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/fragment_intro.xml" value="0.1765625" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/menu/bottom_nav_menu.xml" value="0.1765625" />
       </map>
     </option>

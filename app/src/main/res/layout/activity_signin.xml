@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
@@ -63,24 +62,25 @@
 
             <com.hbb20.CountryCodePicker
                 android:id="@+id/ccp"
-                android:background="@color/gray_200"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/_5sdp" />
-          <!--  <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edit_coutryCOde"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:background="@null"
-                android:gravity="center_vertical"
-                android:inputType="phone"
-                android:focusable="false"
-                android:editable="false"
-                android:padding="@dimen/_2sdp"
-                android:textColor="@color/white"
-                android:textColorHint="@color/gray_200"
-                android:textSize="@dimen/_16sdp" />-->
+                android:background="@color/gray_200"
+                android:padding="@dimen/_5sdp"
+                app:ccp_textSize="@dimen/_16sdp" />
+            <!--  <com.google.android.material.textfield.TextInputEditText
+                  android:id="@+id/edit_coutryCOde"
+                  android:layout_width="wrap_content"
+                  android:layout_height="match_parent"
+                  android:layout_gravity="center_vertical"
+                  android:background="@null"
+                  android:gravity="center_vertical"
+                  android:inputType="phone"
+                  android:focusable="false"
+                  android:editable="false"
+                  android:padding="@dimen/_2sdp"
+                  android:textColor="@color/white"
+                  android:textColorHint="@color/gray_200"
+                  android:textSize="@dimen/_16sdp" />-->
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edit_phone"
                 android:layout_width="match_parent"
@@ -91,7 +91,7 @@
                 android:gravity="center_vertical"
                 android:hint="@string/hint_phone"
                 android:inputType="phone"
-                android:padding="@dimen/_2sdp"
+                android:padding="@dimen/_5sdp"
                 android:textColor="@color/white"
                 android:textColorHint="@color/gray_200"
                 android:textSize="@dimen/_16sdp" />
@@ -99,22 +99,36 @@
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
-    <CheckBox
-        android:id="@+id/chk_privacy"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:layout_marginLeft="@dimen/margin20"
         android:layout_marginRight="@dimen/margin20"
-        android:gravity="center"
-        android:text="@string/privacy_msg"
-        android:textColor="@color/gray_200"
-        android:textSize="@dimen/_10sdp" />
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/chk_privacy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:text="" />
+
+        <TextView
+            android:id="@+id/txt_privacy_msg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="@color/gray_200"
+            android:textSize="@dimen/_10sdp" />
+
+    </LinearLayout>
 
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/button_login"
-        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -123,24 +137,25 @@
         android:gravity="center"
         android:text="@string/generate_otp"
         android:textAllCaps="false"
-        android:textSize="@dimen/_16sdp" />
+        android:textSize="@dimen/_16sdp"
+        android:visibility="gone" />
+
     <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
         android:id="@+id/btn_generateOtp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/backgroun_round"
         android:layout_gravity="center"
         android:layout_margin="@dimen/margin20"
-        android:textColor="@color/white"
         android:backgroundTint="@color/login_btn"
         android:gravity="center"
-        app:spinning_bar_color="@android:color/black"
-        app:spinning_bar_padding="8dp"
-        app:spinning_bar_width="4dp"
         android:padding="10dp"
         android:text="@string/generate_otp"
         android:textAllCaps="false"
-        android:textSize="@dimen/_16sdp"/>
+        android:textColor="@color/white"
+        android:textSize="@dimen/_16sdp"
+        app:spinning_bar_color="@android:color/black"
+        app:spinning_bar_padding="8dp"
+        app:spinning_bar_width="4dp" />
     <!--  app:spinning_bar_width="4dp" &lt;!&ndash; Optional &ndash;&gt;
       app:spinning_bar_color="#FFF" &lt;!&ndash; Optional &ndash;&gt;
       app:spinning_bar_padding="6dp" &lt;!&ndash; Optional &ndash;&gt;-->

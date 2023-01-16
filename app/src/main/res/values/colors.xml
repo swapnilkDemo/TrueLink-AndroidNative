@@ -9,6 +9,9 @@
     <color name="white">#FFFFFFFF</color>
     <color name="colorPrimary">#323239</color>
     <color name="gray_200">#EEEEEE</color>
-    <color name="login_btn">#3265FE
-    </color>
+    <color name="login_btn">#3265FE</color>
+    <color name="link">#56ACE0</color>
+    <color name="yellow_text">#FFD600</color>
+    <color name="orange_text">#FF563F</color>
+
 </resources>

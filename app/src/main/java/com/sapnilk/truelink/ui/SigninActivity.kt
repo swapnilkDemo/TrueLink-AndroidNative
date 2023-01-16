@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -20,6 +21,9 @@ import androidx.recyclerview.widget.RecyclerView
 import br.com.simplepass.loadingbutton.animatedDrawables.ProgressType
 import br.com.simplepass.loadingbutton.customViews.CircularProgressButton
 import br.com.simplepass.loadingbutton.customViews.ProgressButton
+import com.chaos.view.PinView
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetBehavior.SAVE_FIT_TO_CONTENTS
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.textfield.TextInputEditText
@@ -27,6 +31,7 @@ import com.google.android.material.textfield.TextInputLayout
 import com.hbb20.CountryCodePicker
 import com.sapnilk.truelink.MainActivity
 import com.sapnilk.truelink.R
+import com.sapnilk.truelink.utils.CommonFunctions
 import com.sapnilk.truelink.utils.SharedPreferences
 
 
@@ -68,7 +73,6 @@ class SigninActivity : AppCompatActivity() {
     lateinit var txtterms: Button
     lateinit var textView: TextView
     lateinit var btnsignout: Button
-    lateinit var btnlogin: Button
     lateinit var txtregister: Button
 
     //lateinit var txtlogin:Button
@@ -99,8 +103,9 @@ class SigninActivity : AppCompatActivity() {
     private lateinit var edit_phone: TextInputEditText
     private lateinit var edit_countryCode: TextInputEditText
     private lateinit var circulaProgressButton: CircularProgressButton
+    private lateinit var txt_privacy_msg: TextView
 
-
+    lateinit var commonFunctions: CommonFunctions
     //private val db = Firebase.firestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -109,6 +114,7 @@ class SigninActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signin)
         sharedPrefs = SharedPreferences(applicationContext)
+        commonFunctions = CommonFunctions(applicationContext)
         /////////////Check if previously logged in user////////////
         if (sharedPrefs.isLoggedIn())
             startMain()
@@ -122,42 +128,52 @@ class SigninActivity : AppCompatActivity() {
 //        edit_countryCode = findViewById(R.id.edit_coutryCOde)
 //        edit_countryCode.setText(getString(R.string.default_country))
         countryCodePicker = findViewById(R.id.ccp)
+        txt_privacy_msg = findViewById(R.id.txt_privacy_msg)
+        txt_privacy_msg.setText(
+            commonFunctions.spanTextWithColor(
+                getString(R.string.privacy_msg),
+                Color.CYAN,
+                79,
+                93
+            )
+        )
+
         chktermns = findViewById(R.id.chk_privacy)
         chktermns.setOnCheckedChangeListener { buttonView, isChecked ->
             isPrivacyChecked = isChecked
+        }
+        txt_privacy_msg.setOnClickListener {
+            showPrivacyPolicy()
         }
 
         val code = Integer.parseInt(getString(R.string.default_country))
         @Suppress("DEPRECATION")
         countryCodePicker.setDefaultCountryUsingPhoneCode(code)
 
-        btnlogin = findViewById(R.id.button_login)
-        btnlogin.setOnClickListener {
-            if (isPrivacyChecked)
-                if (edit_phone.text.toString().isNotEmpty()) {
-                    btnlogin.isEnabled = false
-                    ////Initiate Login///////////////////
-                    startLogin()
-                } else
-                    Toast.makeText(this, getString(R.string.enter_mobile), Toast.LENGTH_SHORT)
-                        .show()
-            else
-                Toast.makeText(this, getString(R.string.error_privacy), Toast.LENGTH_SHORT).show()
-        }
-
         circulaProgressButton = findViewById(R.id.btn_generateOtp)
-        circulaProgressButton.setOnClickListener {
-            if (isPrivacyChecked)
-                if (edit_phone.text.toString().isNotEmpty()) {
-                    btnlogin.isEnabled = false
-                    ////Initiate Login///////////////////
-                    circulaProgressButton.morphAndRevert {  }
-                    startLogin()
-                } else
-                    Toast.makeText(this, getString(R.string.enter_mobile), Toast.LENGTH_SHORT)
+        circulaProgressButton.run {
+            setOnClickListener {
+                if (isPrivacyChecked)
+                    if (edit_phone.text.toString().isNotEmpty()) {
+                        circulaProgressButton.isEnabled = false
+                        ////Initiate Login///////////////////
+                        morphDoneAndRevert(this@SigninActivity)
+                        showOtpDialog()
+                    } else
+                        Toast.makeText(
+                            this@SigninActivity,
+                            getString(R.string.enter_mobile),
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                else
+                    Toast.makeText(
+                        this@SigninActivity,
+                        getString(R.string.error_privacy),
+                        Toast.LENGTH_SHORT
+                    )
                         .show()
-            else
-                Toast.makeText(this, getString(R.string.error_privacy), Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -185,17 +201,8 @@ class SigninActivity : AppCompatActivity() {
          }*/
     }
 
-    private fun showRegister() {
-        laylogin.visibility = View.GONE
-    }
-
-    private fun showLogin() {
-        laylogin.visibility = View.VISIBLE
-    }
 
     fun startMain() {
-        //println("subcribing to ${auth.currentUser.uid}")
-        //FirebaseMessaging.getInstance().subscribeToTopic(auth.currentUser.uid).addOnCompleteListener { task -> }
         val mainintent = Intent(this, MainActivity::class.java)
         startActivity(mainintent)
         finish()
@@ -216,30 +223,60 @@ class SigninActivity : AppCompatActivity() {
     }
 
 
-    /* protected open fun showOtpDialog(msg: String, function: () -> Unit) {
-          mat = MaterialAlertDialogBuilder(this).create()
-          val view = LayoutInflater.from(this).inflate(R.layout.otp_layout, null)
-          val txtotp = view.findViewById<TextInputLayout>(R.id.txtinp_otp)
-          val prog = view.findViewById<ProgressBar>(R.id.progress_otp)
-          val btnotp = view.findViewById<Button>(R.id.btn_otp)
+    protected open fun showOtpDialog() {
+        var bottomSheetDialog: BottomSheetDialog =
+            BottomSheetDialog(this, R.style.BottomSheetDialog)
+        val v: View = layoutInflater.inflate(R.layout.bottom_sheet_otp, null)
+        bottomSheetDialog.setContentView(v)
+        bottomSheetDialog.show()
 
-          btnotp.setOnClickListener {
-              if (txtotp.editText?.text.isNullOrEmpty()) {
-                  Toast.makeText(this, "Enter OTP", Toast.LENGTH_SHORT).show()
-              } else {
-                  val otp = txtotp.editText?.text.toString()
-                  mat?.dismiss()
-              }
+        val linearLayout: LinearLayout? =
+            bottomSheetDialog.findViewById<LinearLayout>(R.id.ll_child)
+        val behavior = linearLayout?.let { BottomSheetBehavior.from(it) }
+        if (behavior != null) {
+            behavior.state = BottomSheetBehavior.STATE_EXPANDED
+            behavior.skipCollapsed = true
+            behavior.peekHeight = SAVE_FIT_TO_CONTENTS
+        }
+        var pinView = bottomSheetDialog.findViewById<PinView>(R.id.pinView)
+        bottomSheetDialog.findViewById<CircularProgressButton>(R.id.btnotp)
+            ?.setOnClickListener {
+                if (pinView?.text.isNullOrEmpty()) {
+                    Toast.makeText(this, "Enter OTP", Toast.LENGTH_SHORT).show()
+                } else {
+                    val otp = pinView?.text.toString()
+                    bottomSheetDialog?.dismiss()
+                    startMain()
+                }
 
-          }
-          mat?.setView(view)
-          mat?.setCancelable(false)
-          mat?.show()
+            }
+    }
 
-      }
-  */
     protected open fun showPrivacyPolicy() {
-        var bottomSheetDialog: BottomSheetDialog = BottomSheetDialog(this)
+        var bottomSheetDialog: BottomSheetDialog =
+            BottomSheetDialog(this, R.style.BottomSheetDialog)
+        val v: View = layoutInflater.inflate(R.layout.bottom_sheet_privacy, null)
+        bottomSheetDialog.setContentView(v)
+        bottomSheetDialog.show()
+
+        val linearLayout: LinearLayout? =
+            bottomSheetDialog.findViewById<LinearLayout>(R.id.ll_child)
+        val behavior = linearLayout?.let { BottomSheetBehavior.from(it) }
+        if (behavior != null) {
+            behavior.state = BottomSheetBehavior.STATE_EXPANDED
+            behavior.skipCollapsed = true
+            behavior.peekHeight = SAVE_FIT_TO_CONTENTS
+        }
+
+        bottomSheetDialog.findViewById<CircularProgressButton?>(R.id.btn_accept)
+            ?.setOnClickListener {
+                bottomSheetDialog.dismiss()
+                chktermns.isChecked = true
+            }
+        bottomSheetDialog.findViewById<TextView?>(R.id.txt_privacy_header)
+            ?.setOnClickListener {
+                bottomSheetDialog.dismiss()
+            }
 
     }
 
@@ -251,9 +288,12 @@ class SigninActivity : AppCompatActivity() {
         }
     }
 
-    private fun defaultColor(context: Context) = ContextCompat.getColor(context, android.R.color.black)
+    ///////////////////////Generate OPT Button Animations/////////////////////////////
+    private fun defaultColor(context: Context) =
+        ContextCompat.getColor(context, android.R.color.black)
+
     private fun defaultDoneImage(resources: Resources): Bitmap =
-        BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher_foreground)
+        BitmapFactory.decodeResource(resources, R.drawable.ic_pregnant_woman_white_48dp)
 
     fun ProgressButton.morphDoneAndRevert(
         context: Context,
