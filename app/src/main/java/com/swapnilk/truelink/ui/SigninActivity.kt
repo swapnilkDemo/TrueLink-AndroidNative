@@ -11,13 +11,9 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import android.widget.*
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.Group
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.RecyclerView
 import br.com.simplepass.loadingbutton.animatedDrawables.ProgressType
 import br.com.simplepass.loadingbutton.customViews.CircularProgressButton
 import br.com.simplepass.loadingbutton.customViews.ProgressButton
@@ -27,9 +23,7 @@ import com.chaos.view.PinView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.SAVE_FIT_TO_CONTENTS
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.card.MaterialCardView
 import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
 import com.hbb20.CountryCodePicker
 import com.swapnilk.truelink.AdminGetOTPMutation
 import com.swapnilk.truelink.MainActivity
@@ -45,67 +39,11 @@ class SigninActivity : AppCompatActivity() {
      override val coroutineContext: CoroutineContext
          get() = (Dispatchers.Main + job) as Job*/
 
-    val chklogin: String = "login"
-    val chkregister: String = "register"
-
-    val TAG: String = "iia_app"
-    val RC_SIGN_IN: Int = 123
-
-    lateinit var laysignupbase: ConstraintLayout
-
-    lateinit var laylogin: MaterialCardView
-    lateinit var layregister: MaterialCardView
-
-    lateinit var imagesigninlogo: ImageView
-
-    lateinit var txtinpUserType: TextInputLayout
-    lateinit var txtinpUserName: TextInputLayout
-    lateinit var txtinpUserPhone: TextInputLayout
-    lateinit var txtinpFirmName: TextInputLayout
-    lateinit var txtinpAddress: TextInputLayout
-    lateinit var txtinpEmail: TextInputLayout
-    lateinit var txtinpUniqueId: TextInputLayout
-
-    lateinit var autotxtUserType: AutoCompleteTextView
-    lateinit var edttxtUserName: TextInputEditText
-    lateinit var edttxtUserPhone: TextInputEditText
-    lateinit var edtFirmName: TextInputEditText
-    lateinit var edtAddress: TextInputEditText
-    lateinit var edtEmail: TextInputEditText
-    lateinit var edtUniqueId: TextInputEditText
-    lateinit var recyclerCollege: RecyclerView
-    lateinit var chkArchitect: CheckBox
-    lateinit var chkCollege: CheckBox
-    lateinit var btnRegister: Button
     lateinit var chktermns: CheckBox
-    lateinit var txtterms: Button
     lateinit var textView: TextView
-    lateinit var btnsignout: Button
-    lateinit var txtregister: Button
 
-    //lateinit var txtlogin:Button
-    lateinit var txtphone: TextInputEditText
-    lateinit var groupregister: Group
-
-    val usertypes = arrayOf("Architect", "College", "IIA Authority")
-
-    lateinit var storedVerificationId: String
-
-    private var empid: String = ""
-    private var username: String = ""
-    private var phone: String = ""
-    private var email: String = ""
-    private var address: String = ""
-    private var type: String = ""
-
-    private var enabled: Boolean = false
-    private var mat: AlertDialog? = null
-    private var autoverified: Boolean = false
     private var isPrivacyChecked: Boolean = false
 
-    private lateinit var btnokterms: Button
-    private lateinit var termsview: View
-    private lateinit var recyclerterms: RecyclerView
     private lateinit var sharedPrefs: SharedPreferences
     private lateinit var countryCodePicker: CountryCodePicker
     private lateinit var edit_phone: TextInputEditText
@@ -121,9 +59,9 @@ class SigninActivity : AppCompatActivity() {
         Thread.sleep(300)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signin)
+        //////////////////////////Initialize required objects//////
         sharedPrefs = SharedPreferences(applicationContext)
         commonFunctions = CommonFunctions(applicationContext)
-        //////////////////////////Initialize required objects//////
         apolloClient = ApolloClient.Builder()
             .serverUrl("https://tuelink.neki.dev/graphql")
             .build()
@@ -238,7 +176,7 @@ class SigninActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode === RC_SIGN_IN) {
+        if (requestCode === 123) {
             // The Task returned from this call is always completed, no need to attach
             // a listener.
         }
@@ -304,10 +242,6 @@ class SigninActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        if (mat != null) {
-            mat?.dismiss()
-            mat = null
-        }
 //        job.cancel()
     }
 
