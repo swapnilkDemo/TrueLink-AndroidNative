@@ -1,0 +1,26 @@
+mutation AdminsVerifyOTP($requestId: String!, $otp: String!, $phone: String!, $dialCode: String!) {
+  AdminsVerifyOTP(request_id: $requestId, otp: $otp, phone: $phone, dialCode: $dialCode) {
+    code
+    message
+    success
+    accessToken
+    payload {
+      uid
+      username
+      fullname
+      dialcode
+      phone
+      email
+      gender
+      avatar
+      address
+      city
+      state
+      country
+      pincode
+      fcmtoken
+      refreshToken
+      lastLogin
+    }
+  }
+}

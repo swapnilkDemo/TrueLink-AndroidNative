@@ -1,0 +1,8 @@
+mutation AdminGetOTP($phone: String!, $dialCode: String!) {
+  AdminGetOTP(phone: $phone, dialCode: $dialCode) {
+    code
+    message
+    request_id
+    success
+  }
+}

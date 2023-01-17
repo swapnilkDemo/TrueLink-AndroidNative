@@ -21,7 +21,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -71,6 +71,6 @@ dependencies {
 }
 apollo {
     service("service") {
-        packageName.set("com.sapnilk.truelink")
+        packageName.set("com.swapnilk.truelink")
     }
 }
