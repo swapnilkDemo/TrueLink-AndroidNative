@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Theme.TrueLink" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
@@ -7,7 +7,7 @@
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/login_btn</item>
-        <item name="colorSecondaryVariant">@color/purple_500</item>
+        <item name="colorSecondaryVariant">@color/login_btn</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
@@ -29,9 +29,29 @@
 
     <style name="Theme.TrueLink.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="Dark.TopLog" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowBackground">@drawable/ic_logo_white_tgline</item>
-        <item name="backgroundColor">@color/colorPrimary</item>
-        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
+
+    <!--BottomSheet Dialog Theme-->
+
+    <style name="BottomSheetDialog" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/bottomSheetStyleWrapper</item>
+        <item name="behavior_draggable">false</item>
+    </style>
+
+    <style name="CustomBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="BottomSheetDialogSoftInputMode" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/bottomSheetStyleWrapper</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
+
+    <style name="bottomSheetStyleWrapper" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="behavior_peekHeight">1650dp</item>
+        <item name="behavior_draggable">false</item>
     </style>
 </resources>

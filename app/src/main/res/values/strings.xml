@@ -14,17 +14,34 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="welcome">Welcome</string>
     <string name="fact">Fact:</string>
-    <string name="welcome_text_1">99% of hacking is occur due to cliking on fake links</string>
+    <string name="welcome_text_1">99% of hacking is occur due to clicking on fake links</string>
     <string name="hacking_alert">Hacking Alert!</string>
-    <string name="welcome_text_2">Truelink is youe best friend to protech you against hackers</string>
+    <string name="welcome_text_2">Truelink is your best friend to protect you against hackers</string>
     <string name="stat">Stats:</string>
-    <string name="welcome_text_3">Trueling scans over 2 million links daily to keep you safe from hacking and phishing attacks!</string>
+    <string name="welcome_text_3">Truelink scans over 2 million links daily to keep you safe from hacking and phishing attacks!</string>
     <string name="hint_phone">Enter mobile number</string>
-    <string name="privacy_msg"><![CDATA[By checking this  you are confirming that you have read and agree to Truelink\'s Privacy  Policy  and & Term of Use]]></string>
+    <string name="privacy_msg"><![CDATA[By checking this  you are confirming that you have read and agree to Truelink\'s Privacy Policy  and & Term of Use]]></string>
     <string name="generate_otp">Generate OTP</string>
     <string name="login_text">Enter your phone number to continue</string>
     <string name="login_subtext">we will send you a verification code</string>
     <string name="default_country">+91</string>
     <string name="enter_mobile">Enter mobile number</string>
     <string name="error_privacy">Agree Privacy Policy to continue</string>
+    <string name="title_privacy">Privacy Policy</string>
+    <string name="accept">I Accept</string>
+    <string name="privacy_text">AN Brothers E-Learning Private Limited Last updated: November 16,
+        2022 This Privacy Policy describes Our policies and procedures on the collection,
+        use and disclosure of Your information when You use the Service and tells You about
+        Your privacy rights and how the law protects You. One of our main priorities is the privacy
+        of our visitors. This Privacy Policy document contains types of information that is collected
+        and recorded by truelink and how we use it.  We use Your Personal data to provide and improve
+        the Service. By using the Service, You agree to the collection and use of information in accordance
+        with this Privacy Policy.  Consent  By using our application, you hereby consent to our Privacy Policy
+        and agree to its terms Interpretation and Definitions   Interpretation The words of which the initial
+        letter is capitalized have meanings defined under the following conditions.
+        The following definitions shall have the same meaning regardless of whether they appear in singular or
+        in plural.</string>
+    <string name="otp_verification">OTP Verification</string>
+    <string name="enter_otp">Entr OTP sent to your phone number</string>
+    <string name="verify"><![CDATA[Verify & Continue]]></string>
 </resources>
