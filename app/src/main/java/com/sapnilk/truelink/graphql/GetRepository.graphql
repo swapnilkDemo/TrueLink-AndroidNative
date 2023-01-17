@@ -1,7 +1,0 @@
-query HeroQuery($id: String!) {
-  hero(id: $id) {
-    id
-    name
-    appearsIn
-  }
-}
