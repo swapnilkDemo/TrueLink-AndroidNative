@@ -285,7 +285,7 @@ class SigninActivity : AppCompatActivity() {
         ContextCompat.getColor(context, android.R.color.black)
 
     private fun defaultDoneImage(resources: Resources): Bitmap =
-        BitmapFactory.decodeResource(resources, R.drawable.ic_pregnant_woman_white_48dp)
+        BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_foreground)
 
     fun ProgressButton.morphDoneAndRevert(
         context: Context,
