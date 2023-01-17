@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace 'com.sapnilk.truelink'
+    namespace 'com.swapnilk.truelink'
     compileSdk 32
 
     defaultConfig {
-        applicationId "com.sapnilk.truelink"
+        applicationId "com.swapnilk.truelink"
         minSdk 21
         targetSdk 32
         versionCode 1
