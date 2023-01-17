@@ -129,13 +129,11 @@ class SigninActivity : AppCompatActivity() {
 //        edit_countryCode.setText(getString(R.string.default_country))
         countryCodePicker = findViewById(R.id.ccp)
         txt_privacy_msg = findViewById(R.id.txt_privacy_msg)
-        txt_privacy_msg.setText(
-            commonFunctions.spanTextWithColor(
-                getString(R.string.privacy_msg),
-                Color.CYAN,
-                79,
-                93
-            )
+        txt_privacy_msg.text = commonFunctions.spanTextWithColor(
+            getString(R.string.privacy_msg),
+            Color.CYAN,
+            79,
+            93
         )
 
         chktermns = findViewById(R.id.chk_privacy)
@@ -208,12 +206,6 @@ class SigninActivity : AppCompatActivity() {
         finish()
     }
 
-    override fun onStart() {
-        super.onStart()
-        // Check if user is signed in (non-null) and update UI accordingly.
-        //updateUI(currentUser)
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode === RC_SIGN_IN) {
@@ -245,7 +237,7 @@ class SigninActivity : AppCompatActivity() {
                     Toast.makeText(this, "Enter OTP", Toast.LENGTH_SHORT).show()
                 } else {
                     val otp = pinView?.text.toString()
-                    bottomSheetDialog?.dismiss()
+                    bottomSheetDialog.dismiss()
                     startMain()
                 }
 

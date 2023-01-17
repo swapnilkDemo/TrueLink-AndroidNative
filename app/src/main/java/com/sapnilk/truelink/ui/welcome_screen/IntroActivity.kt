@@ -39,7 +39,7 @@ class IntroActivity : FragmentActivity() {
             viewPager2 = findViewById(R.id.viewpager_intro)
             indicator = findViewById(R.id.indicator)
             indicator.setViewPager(viewPager2)
-            indicator.createIndicators(3, 0);
+            indicator.createIndicators(3, 0)
             btnlogin = findViewById(R.id.button_login_main)
             btnlogin.setOnClickListener {
                 startSignin()

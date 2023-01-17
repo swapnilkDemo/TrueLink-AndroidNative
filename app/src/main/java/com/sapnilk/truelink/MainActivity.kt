@@ -104,6 +104,6 @@ class MainActivity : AppCompatActivity() {
                     ContextCompat.getDrawable(this, R.drawable.ic_notifications_black_24dp)
                 )
             )
-        navView.items = fluidBottomNavigationItems;
+        navView.items = fluidBottomNavigationItems
     }
 }
