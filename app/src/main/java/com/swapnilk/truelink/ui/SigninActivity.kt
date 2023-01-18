@@ -21,6 +21,7 @@ import br.com.simplepass.loadingbutton.animatedDrawables.ProgressType
 import br.com.simplepass.loadingbutton.customViews.CircularProgressButton
 import br.com.simplepass.loadingbutton.customViews.ProgressButton
 import com.apollographql.apollo3.ApolloClient
+import com.apollographql.apollo3.api.ApolloResponse
 import com.apollographql.apollo3.exception.ApolloException
 import com.chaos.view.PinView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -28,9 +29,9 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior.SAVE_FIT_TO_C
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.textfield.TextInputEditText
 import com.hbb20.CountryCodePicker
-import com.swapnilk.truelink.GetOTPMutation
 import com.swapnilk.truelink.MainActivity
 import com.swapnilk.truelink.R
+import com.swapnilk.truelink.VerifyOTPMutation
 import com.swapnilk.truelink.utils.CommonFunctions
 import com.swapnilk.truelink.utils.SharedPreferences
 import kotlinx.coroutines.CoroutineScope
@@ -40,8 +41,7 @@ import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
 
-class SigninActivity : AppCompatActivity(),
-    CoroutineScope {
+class SigninActivity : AppCompatActivity(), CoroutineScope {
     private var job: Job = Job()
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main + job
@@ -67,12 +67,9 @@ class SigninActivity : AppCompatActivity(),
         //////////////////////////Initialize required objects//////
         sharedPrefs = SharedPreferences(applicationContext)
         commonFunctions = CommonFunctions(applicationContext)
-        apolloClient = ApolloClient.Builder()
-            .serverUrl("https://tuelink.neki.dev/graphql")
-            .build()
+        apolloClient = ApolloClient.Builder().serverUrl("https://tuelink.neki.dev/graphql").build()
         /////////////Check if previously logged in user////////////
-        if (sharedPrefs.isLoggedIn())
-            startMain()
+        if (sharedPrefs.isLoggedIn()) startMain()
         else {
             initialize()
         }
@@ -85,10 +82,7 @@ class SigninActivity : AppCompatActivity(),
         countryCodePicker = findViewById(R.id.ccp)
         txt_privacy_msg = findViewById(R.id.txt_privacy_msg)
         txt_privacy_msg.text = commonFunctions.spanTextWithColor(
-            getString(R.string.privacy_msg),
-            Color.CYAN,
-            79,
-            93
+            getString(R.string.privacy_msg), Color.CYAN, 79, 93
         )
 
         chktermns = findViewById(R.id.chk_privacy)
@@ -100,8 +94,7 @@ class SigninActivity : AppCompatActivity(),
         }
 
         var code = Integer.parseInt(getString(R.string.default_country))
-        @Suppress("DEPRECATION")
-        countryCodePicker.setDefaultCountryUsingPhoneCode(code)
+        @Suppress("DEPRECATION") countryCodePicker.setDefaultCountryUsingPhoneCode(code)
         countryCodePicker.setOnCountryChangeListener {
             code = countryCodePicker.selectedCountryCodeAsInt
             edit_countryCode.setText(code)
@@ -110,44 +103,29 @@ class SigninActivity : AppCompatActivity(),
         circulaProgressButton = findViewById(R.id.btn_generateOtp)
         circulaProgressButton.run {
             setOnClickListener {
-                if (isPrivacyChecked)
-                    if (edit_phone.text.toString().isNotEmpty()) {
-                        circulaProgressButton.isEnabled = false
-                        //////////////////Initiate Login///////////////////
-                        morphDoneAndRevert(this@SigninActivity)
-                        /////////////////Call GetOTP Mutation /////////////
-                        val getOTPMutation = GetOTPMutation(
-                            edit_phone.text.toString(),
-                            edit_countryCode.text.toString()
-                        )
-                        ///////////Start background thread//////////
-                        launch {
-                            val response = try {
-                                apolloClient.mutation(
-                                    getOTPMutation
-
-                                ).execute()
-                            } catch (e: ApolloException) {
-                                Log.d("Exception", e.message!!)
-                            }
-                            if (response != null)
-                                showOtpDialog(response)
-                        }
-
-                    } else
-                        Toast.makeText(
-                            this@SigninActivity,
-                            getString(R.string.enter_mobile),
-                            Toast.LENGTH_SHORT
-                        )
-                            .show()
-                else
-                    Toast.makeText(
-                        this@SigninActivity,
-                        getString(R.string.error_privacy),
-                        Toast.LENGTH_SHORT
+                if (isPrivacyChecked) if (edit_phone.text.toString().isNotEmpty()) {
+                    circulaProgressButton.isEnabled = false
+                    //////////////////Initiate Login///////////////////
+                    morphDoneAndRevert(this@SigninActivity)
+                    /////////////////Call GetOTP Mutation /////////////
+                    val getOTPMutation = GetOTPMutation(
+                        edit_phone.text.toString(), edit_countryCode.text.toString()
                     )
-                        .show()
+                    ///////////Start background thread//////////
+                    launch {
+                        val response: ApolloResponse<GetOTPMutation.Data> = apolloClient.mutation(
+                            getOTPMutation
+
+                        ).execute()
+                        if (response != null) showOtpDialog(response)
+                    }
+
+                } else Toast.makeText(
+                    this@SigninActivity, getString(R.string.enter_mobile), Toast.LENGTH_SHORT
+                ).show()
+                else Toast.makeText(
+                    this@SigninActivity, getString(R.string.error_privacy), Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
@@ -193,9 +171,9 @@ class SigninActivity : AppCompatActivity(),
     }
 
 
-    protected open fun showOtpDialog(response: Any) {
+    protected open fun showOtpDialog(response: ApolloResponse<GetOTPMutation.Data>) {
         var bottomSheetDialog: BottomSheetDialog =
-            BottomSheetDialog(this, R.style.bottomSheetStyleWrapper)
+            BottomSheetDialog(this, R.style.BottomSheetDialog)
         val v: View = layoutInflater.inflate(R.layout.bottom_sheet_otp, null)
         bottomSheetDialog.setContentView(v)
         bottomSheetDialog.show()
@@ -209,27 +187,48 @@ class SigninActivity : AppCompatActivity(),
             behavior.peekHeight = SAVE_FIT_TO_CONTENTS
         }
         var pinView = bottomSheetDialog.findViewById<PinView>(R.id.pinView)
-        bottomSheetDialog.findViewById<CircularProgressButton>(R.id.btnotp)
-            ?.setOnClickListener {
-                if (pinView?.text.isNullOrEmpty()) {
-                    Toast.makeText(this, "Enter OTP", Toast.LENGTH_SHORT).show()
-                }else if(pinView?.text?.length ?:  < 4){
-                    Toast.makeText(this, "OTP must be 4 digit", Toast.LENGTH_SHORT).show()
-                } else {
-                    val otp = pinView?.text.toString()
+        bottomSheetDialog.findViewById<CircularProgressButton>(R.id.btnotp)?.run {
+                setOnClickListener {
+                    if (pinView?.text.isNullOrEmpty()) {
+                        Toast.makeText(this@SigninActivity, "Enter OTP", Toast.LENGTH_SHORT).show()
+                    } else if (pinView!!.text!!.length < 4) {
+                        Toast.makeText(
+                            this@SigninActivity, "OTP should be of 4 digit", Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        //////////////////Initiate OTPVerification///////////////////
+                        morphDoneAndRevert(this@SigninActivity)
+                        /////////////////Call VerifyOTP Mutation /////////////
+                        val otp = pinView?.text.toString()
 
-                      /*  var verifyOtpMutation = VerifyOTP(
-                            response
-                        )*/
+                        val verifyOtpMutation = VerifyOTPMutation(
+                            "336173624345383039333231",
+                            otp,
+                            edit_phone.text.toString(),
+                            edit_countryCode.text.toString()
+                        )
+                        ///////////Start background thread//////////
+                        launch {
+                            val responseVerify = try {
+                                apolloClient.mutation(verifyOtpMutation).execute()
+                            } catch (e: ApolloException) {
+                                Log.d("Exception :", e.message!!)
+                            }
+                            if (responseVerify != null) {
+                                startMain()
+                            }
+
+                        }
                     }
                 }
-
             }
+
     }
+
 
     protected open fun showPrivacyPolicy() {
         var bottomSheetDialog: BottomSheetDialog =
-            BottomSheetDialog(this, R.style.bottomSheetStyleWrapper)
+            BottomSheetDialog(this, R.style.BottomSheetDialog)
         val v: View = layoutInflater.inflate(R.layout.bottom_sheet_privacy, null)
         bottomSheetDialog.setContentView(v)
         bottomSheetDialog.show()
@@ -248,8 +247,7 @@ class SigninActivity : AppCompatActivity(),
                 bottomSheetDialog.dismiss()
                 chktermns.isChecked = true
             }
-        bottomSheetDialog.findViewById<TextView?>(R.id.txt_privacy_header)
-            ?.setOnClickListener {
+        bottomSheetDialog.findViewById<TextView?>(R.id.txt_privacy_header)?.setOnClickListener {
                 bottomSheetDialog.dismiss()
             }
 
@@ -283,8 +281,7 @@ class SigninActivity : AppCompatActivity(),
     }
 
     fun ProgressButton.morphAndRevert(
-        revertTime: Long = 3000,
-        startAnimationCallback: () -> Unit = {}
+        revertTime: Long = 3000, startAnimationCallback: () -> Unit = {}
     ) {
         startAnimation(startAnimationCallback)
         Handler().postDelayed(::revertAnimation, revertTime)
