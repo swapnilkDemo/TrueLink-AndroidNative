@@ -67,20 +67,23 @@
                 android:background="@color/gray_200"
                 android:padding="@dimen/_5sdp"
                 app:ccp_textSize="@dimen/_16sdp" />
-            <!--  <com.google.android.material.textfield.TextInputEditText
-                  android:id="@+id/edit_coutryCOde"
-                  android:layout_width="wrap_content"
-                  android:layout_height="match_parent"
-                  android:layout_gravity="center_vertical"
-                  android:background="@null"
-                  android:gravity="center_vertical"
-                  android:inputType="phone"
-                  android:focusable="false"
-                  android:editable="false"
-                  android:padding="@dimen/_2sdp"
-                  android:textColor="@color/white"
-                  android:textColorHint="@color/gray_200"
-                  android:textSize="@dimen/_16sdp" />-->
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_coutryCode"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:background="@null"
+                android:editable="false"
+                android:focusable="false"
+                android:gravity="center_vertical"
+                android:inputType="phone"
+                android:padding="@dimen/_2sdp"
+                android:textColor="@color/white"
+                android:textColorHint="@color/gray_200"
+                android:textSize="@dimen/_16sdp"
+                android:visibility="gone" />
+
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edit_phone"
                 android:layout_width="match_parent"

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "794028701804",
+    "project_id": "truelink-7bc31",
+    "storage_bucket": "truelink-7bc31.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:794028701804:android:705c0764d244138a128049",
+        "android_client_info": {
+          "package_name": "com.swapnilk.truelink"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "794028701804-3q6pl1t0if0elf2clikr4oeovrtj2ulc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8XoPpTw0ZFysUA6GkR3cRBu4FmqipyVA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "794028701804-3q6pl1t0if0elf2clikr4oeovrtj2ulc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

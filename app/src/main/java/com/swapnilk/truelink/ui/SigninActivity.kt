@@ -9,10 +9,13 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.View
-import android.widget.*
+import android.widget.CheckBox
+import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import br.com.simplepass.loadingbutton.animatedDrawables.ProgressType
 import br.com.simplepass.loadingbutton.customViews.CircularProgressButton
@@ -25,19 +28,23 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior.SAVE_FIT_TO_C
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.textfield.TextInputEditText
 import com.hbb20.CountryCodePicker
-import com.swapnilk.truelink.AdminGetOTPMutation
+import com.swapnilk.truelink.GetOTPMutation
 import com.swapnilk.truelink.MainActivity
 import com.swapnilk.truelink.R
 import com.swapnilk.truelink.utils.CommonFunctions
 import com.swapnilk.truelink.utils.SharedPreferences
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
 
 
-class SigninActivity : AppCompatActivity() {
-    /*,
-     CoroutineScope
-      private var job: Job = Job()
-     override val coroutineContext: CoroutineContext
-         get() = (Dispatchers.Main + job) as Job*/
+class SigninActivity : AppCompatActivity(),
+    CoroutineScope {
+    private var job: Job = Job()
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
 
     lateinit var chktermns: CheckBox
     lateinit var textView: TextView
@@ -55,8 +62,6 @@ class SigninActivity : AppCompatActivity() {
     lateinit var apolloClient: ApolloClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        Thread.sleep(300)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signin)
         //////////////////////////Initialize required objects//////
@@ -75,7 +80,7 @@ class SigninActivity : AppCompatActivity() {
 
     fun initialize() {
         edit_phone = findViewById(R.id.edit_phone)
-//        edit_countryCode = findViewById(R.id.edit_coutryCOde)
+        edit_countryCode = findViewById(R.id.edit_coutryCode)
 //        edit_countryCode.setText(getString(R.string.default_country))
         countryCodePicker = findViewById(R.id.ccp)
         txt_privacy_msg = findViewById(R.id.txt_privacy_msg)
@@ -108,20 +113,25 @@ class SigninActivity : AppCompatActivity() {
                 if (isPrivacyChecked)
                     if (edit_phone.text.toString().isNotEmpty()) {
                         circulaProgressButton.isEnabled = false
-                        ////Initiate Login///////////////////
+                        //////////////////Initiate Login///////////////////
                         morphDoneAndRevert(this@SigninActivity)
                         /////////////////Call GetOTP Mutation /////////////
-                        val getOTPMutation = AdminGetOTPMutation(
+                        val getOTPMutation = GetOTPMutation(
                             edit_phone.text.toString(),
                             edit_countryCode.text.toString()
                         )
-                        val response = try {
-                            apolloClient.mutation(
-                                getOTPMutation
+                        ///////////Start background thread//////////
+                        launch {
+                            val response = try {
+                                apolloClient.mutation(
+                                    getOTPMutation
 
-                            ).execute()
-                        } catch (e: ApolloException) {
-
+                                ).execute()
+                            } catch (e: ApolloException) {
+                                Log.d("Exception", e.message!!)
+                            }
+                            if (response != null)
+                                showOtpDialog(response)
                         }
 
                     } else
@@ -183,9 +193,9 @@ class SigninActivity : AppCompatActivity() {
     }
 
 
-    protected open fun showOtpDialog() {
+    protected open fun showOtpDialog(response: Any) {
         var bottomSheetDialog: BottomSheetDialog =
-            BottomSheetDialog(this, R.style.BottomSheetDialog)
+            BottomSheetDialog(this, R.style.bottomSheetStyleWrapper)
         val v: View = layoutInflater.inflate(R.layout.bottom_sheet_otp, null)
         bottomSheetDialog.setContentView(v)
         bottomSheetDialog.show()
@@ -203,10 +213,15 @@ class SigninActivity : AppCompatActivity() {
             ?.setOnClickListener {
                 if (pinView?.text.isNullOrEmpty()) {
                     Toast.makeText(this, "Enter OTP", Toast.LENGTH_SHORT).show()
+                }else if(pinView?.text?.length ?:  < 4){
+                    Toast.makeText(this, "OTP must be 4 digit", Toast.LENGTH_SHORT).show()
                 } else {
                     val otp = pinView?.text.toString()
-                    bottomSheetDialog.dismiss()
-                    startMain()
+
+                      /*  var verifyOtpMutation = VerifyOTP(
+                            response
+                        )*/
+                    }
                 }
 
             }
@@ -214,7 +229,7 @@ class SigninActivity : AppCompatActivity() {
 
     protected open fun showPrivacyPolicy() {
         var bottomSheetDialog: BottomSheetDialog =
-            BottomSheetDialog(this, R.style.BottomSheetDialog)
+            BottomSheetDialog(this, R.style.bottomSheetStyleWrapper)
         val v: View = layoutInflater.inflate(R.layout.bottom_sheet_privacy, null)
         bottomSheetDialog.setContentView(v)
         bottomSheetDialog.show()
@@ -242,7 +257,7 @@ class SigninActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-//        job.cancel()
+        job.cancel()
     }
 
     ///////////////////////Generate OPT Button Animations/////////////////////////////
@@ -250,7 +265,7 @@ class SigninActivity : AppCompatActivity() {
         ContextCompat.getColor(context, android.R.color.black)
 
     private fun defaultDoneImage(resources: Resources): Bitmap =
-        BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_foreground)
+        BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher_foreground)
 
     fun ProgressButton.morphDoneAndRevert(
         context: Context,

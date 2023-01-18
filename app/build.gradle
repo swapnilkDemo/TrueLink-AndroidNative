@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'com.apollographql.apollo3' version '3.7.3'
     id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
 }
 
 android {
@@ -48,11 +49,11 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment-ktx:2.4.1'
     implementation 'androidx.navigation:navigation-ui-ktx:2.4.1'
     ///////////////////////////Third-party Libraries/////////////////////
-    /////////////////////Import Bom for Firebase platforms///////////////
+    /*/////////////////////Import Bom for Firebase platforms///////////////
     implementation platform('com.google.firebase:firebase-bom:31.1.1')
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
-    implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.firebase:firebase-analytics-ktx'*/
     ////////////////////////Circle Indicatior For View Pager/////////////
     implementation "me.relex:circleindicator:2.1.6"
     //////////////////Graph/Charts//////////////////////////
@@ -68,6 +69,9 @@ dependencies {
     ////////////////////////////////////////////////////////////
     ///////////....... GraphQL Queries.................////////
     implementation 'com.apollographql.apollo3:apollo-runtime:3.7.3'
+    implementation 'com.google.firebase:firebase-analytics:17.2.2'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.3.2'
+    implementation 'com.google.firebase:firebase-analytics-ktx:21.2.0'
     //implementation 'com.apollographql.apollo3:apollo-coroutines-support:3.7.3'
     //
     testImplementation 'junit:junit:4.13.2'
