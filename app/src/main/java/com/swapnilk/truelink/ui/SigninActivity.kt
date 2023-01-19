@@ -24,6 +24,8 @@ import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.ApolloResponse
 import com.apollographql.apollo3.exception.ApolloException
 import com.chaos.view.PinView
+import com.example.GetOTPMutation
+import com.example.VerifyOTPMutation
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.SAVE_FIT_TO_CONTENTS
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -31,7 +33,6 @@ import com.google.android.material.textfield.TextInputEditText
 import com.hbb20.CountryCodePicker
 import com.swapnilk.truelink.MainActivity
 import com.swapnilk.truelink.R
-import com.swapnilk.truelink.VerifyOTPMutation
 import com.swapnilk.truelink.utils.CommonFunctions
 import com.swapnilk.truelink.utils.SharedPreferences
 import kotlinx.coroutines.CoroutineScope
@@ -67,7 +68,12 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
         //////////////////////////Initialize required objects//////
         sharedPrefs = SharedPreferences(applicationContext)
         commonFunctions = CommonFunctions(applicationContext)
-        apolloClient = ApolloClient.Builder().serverUrl("https://tuelink.neki.dev/graphql").build()
+        try {
+            apolloClient =
+                ApolloClient.Builder().serverUrl("https://truelink.neki.dev/graphql/").build()
+        } catch (e: ApolloException) {
+            e.message?.let { Log.d("Exception ", it) }
+        }
         /////////////Check if previously logged in user////////////
         if (sharedPrefs.isLoggedIn()) startMain()
         else {
@@ -94,10 +100,11 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
         }
 
         var code = Integer.parseInt(getString(R.string.default_country))
+        edit_countryCode.setText(code.toString())
         @Suppress("DEPRECATION") countryCodePicker.setDefaultCountryUsingPhoneCode(code)
         countryCodePicker.setOnCountryChangeListener {
             code = countryCodePicker.selectedCountryCodeAsInt
-            edit_countryCode.setText(code)
+            edit_countryCode.setText(code.toString())
         }
 
         circulaProgressButton = findViewById(R.id.btn_generateOtp)
@@ -117,7 +124,7 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
                             getOTPMutation
 
                         ).execute()
-                        if (response != null) showOtpDialog(response)
+                        if (response != null) afterResult(response)
                     }
 
                 } else Toast.makeText(
@@ -128,6 +135,17 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
                 ).show()
             }
         }
+    }
+
+    private fun afterResult(response: ApolloResponse<GetOTPMutation.Data>) {
+        if (response.data?.getOTP!!.success) response.data!!.getOTP.request_id?.let {
+            showOtpDialog(
+                it
+            )
+        }
+        else Toast.makeText(
+            this, "Login Error" + " " + response.data?.getOTP!!.message, Toast.LENGTH_SHORT
+        ).show()
     }
 
 
@@ -156,7 +174,7 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
     }
 
 
-    fun startMain() {
+    private fun startMain() {
         val mainintent = Intent(this, MainActivity::class.java)
         startActivity(mainintent)
         finish()
@@ -171,7 +189,7 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
     }
 
 
-    protected open fun showOtpDialog(response: ApolloResponse<GetOTPMutation.Data>) {
+    protected open fun showOtpDialog(request_id: String) {
         var bottomSheetDialog: BottomSheetDialog =
             BottomSheetDialog(this, R.style.BottomSheetDialog)
         val v: View = layoutInflater.inflate(R.layout.bottom_sheet_otp, null)
@@ -188,41 +206,52 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
         }
         var pinView = bottomSheetDialog.findViewById<PinView>(R.id.pinView)
         bottomSheetDialog.findViewById<CircularProgressButton>(R.id.btnotp)?.run {
-                setOnClickListener {
-                    if (pinView?.text.isNullOrEmpty()) {
-                        Toast.makeText(this@SigninActivity, "Enter OTP", Toast.LENGTH_SHORT).show()
-                    } else if (pinView!!.text!!.length < 4) {
-                        Toast.makeText(
-                            this@SigninActivity, "OTP should be of 4 digit", Toast.LENGTH_SHORT
-                        ).show()
-                    } else {
-                        //////////////////Initiate OTPVerification///////////////////
-                        morphDoneAndRevert(this@SigninActivity)
-                        /////////////////Call VerifyOTP Mutation /////////////
-                        val otp = pinView?.text.toString()
+            setOnClickListener {
+                if (pinView?.text.isNullOrEmpty()) {
+                    Toast.makeText(this@SigninActivity, "Enter OTP", Toast.LENGTH_SHORT).show()
+                } else if (pinView!!.text!!.length < 4) {
+                    Toast.makeText(
+                        this@SigninActivity, "OTP should be of 4 digit", Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    //////////////////Initiate OTPVerification///////////////////
+                    morphDoneAndRevert(this@SigninActivity)
+                    /////////////////Call VerifyOTP Mutation /////////////
+                    val otp = pinView?.text.toString()
 
-                        val verifyOtpMutation = VerifyOTPMutation(
-                            "336173624345383039333231",
-                            otp,
-                            edit_phone.text.toString(),
-                            edit_countryCode.text.toString()
-                        )
-                        ///////////Start background thread//////////
-                        launch {
-                            val responseVerify = try {
-                                apolloClient.mutation(verifyOtpMutation).execute()
-                            } catch (e: ApolloException) {
-                                Log.d("Exception :", e.message!!)
-                            }
-                            if (responseVerify != null) {
-                                startMain()
-                            }
+                    /* val verifyOtpMutation = VerifyOTPMutation(
+                         "336173624345383039333231",
+                         otp,
+                         edit_phone.text.toString(),
+                         edit_countryCode.text.toString()
+                     )*/
+                    val verifyOtpMutation = VerifyOTPMutation(
+                        request_id,
+                        otp,
+                        edit_phone.text.toString(),
+                        edit_countryCode.text.toString()
+                    )
 
-                        }
+                    ///////////Start background thread//////////
+                    launch {
+                        val responseVerify: ApolloResponse<VerifyOTPMutation.Data> =
+                            apolloClient.mutation(verifyOtpMutation).execute()
+                        if (responseVerify.data?.verifyOTP!!.success == true) startMain()
+                        else afterResultVerify(responseVerify)
+
                     }
                 }
+
             }
 
+        }
+    }
+
+
+    private fun afterResultVerify(response: ApolloResponse<VerifyOTPMutation.Data>) {
+        Toast.makeText(
+            this, "Login Error " + response.data?.verifyOTP!!.message, Toast.LENGTH_SHORT
+        ).show()
     }
 
 
@@ -248,8 +277,8 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
                 chktermns.isChecked = true
             }
         bottomSheetDialog.findViewById<TextView?>(R.id.txt_privacy_header)?.setOnClickListener {
-                bottomSheetDialog.dismiss()
-            }
+            bottomSheetDialog.dismiss()
+        }
 
     }
 

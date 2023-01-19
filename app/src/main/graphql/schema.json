@@ -66,8 +66,8 @@
             "deprecationReason": null
           },
           {
-            "name": "getUsers",
-            "description": null,
+            "name": "getUser",
+            "description": "Get User Details",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -77,6 +77,18 @@
                 "name": "getUserResponse",
                 "ofType": null
               }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "getProfileUploadURL",
+            "description": "Get profile upload URL",
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "getProfileUploadURLRes",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -646,19 +658,7 @@
         "fields": [
           {
             "name": "uid",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "username",
-            "description": null,
+            "description": "Unique ID for User",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -682,7 +682,7 @@
           },
           {
             "name": "dialcode",
-            "description": null,
+            "description": "Country Dial Code",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -694,7 +694,7 @@
           },
           {
             "name": "phone",
-            "description": null,
+            "description": "Phone Number",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -706,18 +706,6 @@
           },
           {
             "name": "email",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "gender",
             "description": null,
             "args": [],
             "type": {
@@ -802,7 +790,7 @@
           },
           {
             "name": "fcmtoken",
-            "description": null,
+            "description": "Firebase Cloud Messaging Token for Push Notifications",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -814,7 +802,7 @@
           },
           {
             "name": "refreshToken",
-            "description": null,
+            "description": "Use refresh token to get new access token",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -835,6 +823,30 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "dob",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Date",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "gender",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "Gender",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "inputFields": null,
@@ -848,297 +860,6 @@
         "description": "The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.",
         "fields": null,
         "inputFields": null,
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "OBJECT",
-        "name": "createUserResponse",
-        "description": null,
-        "fields": [
-          {
-            "name": "code",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Int",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "message",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "success",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "accessToken",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "payload",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "OBJECT",
-              "name": "User",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "inputFields": null,
-        "interfaces": [],
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "SCALAR",
-        "name": "Boolean",
-        "description": "The `Boolean` scalar type represents `true` or `false`.",
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "OBJECT",
-        "name": "loginResponse",
-        "description": null,
-        "fields": [
-          {
-            "name": "code",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Int",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "message",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "success",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "accessToken",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "payload",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "OBJECT",
-              "name": "User",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "inputFields": null,
-        "interfaces": [],
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "INPUT_OBJECT",
-        "name": "createUserInput",
-        "description": null,
-        "fields": null,
-        "inputFields": [
-          {
-            "name": "username",
-            "description": null,
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "fullname",
-            "description": null,
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "dialcode",
-            "description": null,
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "phone",
-            "description": null,
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "secret",
-            "description": null,
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "fcmtoken",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "token",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "location",
-            "description": null,
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Float",
-                "ofType": null
-              }
-            },
-            "defaultValue": null
-          }
-        ],
         "interfaces": null,
         "enumValues": null,
         "possibleTypes": null
@@ -1211,6 +932,16 @@
         ],
         "inputFields": null,
         "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "SCALAR",
+        "name": "Boolean",
+        "description": "The `Boolean` scalar type represents `true` or `false`.",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
         "enumValues": null,
         "possibleTypes": null
       },
@@ -1416,34 +1147,43 @@
         "possibleTypes": null
       },
       {
+        "kind": "ENUM",
+        "name": "Gender",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "MALE",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "FEMALE",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "OTHERS",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
         "kind": "INPUT_OBJECT",
         "name": "updateUserInput",
         "description": null,
         "fields": null,
         "inputFields": [
           {
-            "name": "username",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
             "name": "fullname",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "secret",
-            "description": null,
+            "description": "Full Name of the user",
             "type": {
               "kind": "SCALAR",
               "name": "String",
@@ -1453,7 +1193,7 @@
           },
           {
             "name": "email",
-            "description": null,
+            "description": "Email address of the user",
             "type": {
               "kind": "SCALAR",
               "name": "String",
@@ -1463,7 +1203,7 @@
           },
           {
             "name": "location",
-            "description": null,
+            "description": "GPS location of the user in the format [longitude, latitude]",
             "type": {
               "kind": "LIST",
               "name": null,
@@ -1476,18 +1216,8 @@
             "defaultValue": null
           },
           {
-            "name": "avatar",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
             "name": "address",
-            "description": null,
+            "description": "Street Address",
             "type": {
               "kind": "SCALAR",
               "name": "String",
@@ -1537,10 +1267,30 @@
           },
           {
             "name": "fcmtoken",
-            "description": null,
+            "description": "Firebase Cloud Messaging Token for Push Notifications",
             "type": {
               "kind": "SCALAR",
               "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "dob",
+            "description": "Accepts Date in ISO format like 1996-12-07T18:30:00.000Z or timestamp like 849983400000",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Date",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "gender",
+            "description": null,
+            "type": {
+              "kind": "ENUM",
+              "name": "Gender",
               "ofType": null
             },
             "defaultValue": null
@@ -1556,84 +1306,8 @@
         "description": null,
         "fields": [
           {
-            "name": "createUser",
-            "description": null,
-            "args": [
-              {
-                "name": "form",
-                "description": null,
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "createUserInput",
-                    "ofType": null
-                  }
-                },
-                "defaultValue": null
-              }
-            ],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "createUserResponse",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "login",
-            "description": null,
-            "args": [
-              {
-                "name": "username",
-                "description": null,
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  }
-                },
-                "defaultValue": null
-              },
-              {
-                "name": "secret",
-                "description": null,
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  }
-                },
-                "defaultValue": null
-              }
-            ],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "loginResponse",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "getOTP",
-            "description": null,
+            "description": "Get OTP for phone number verification",
             "args": [
               {
                 "name": "phone",
@@ -1678,7 +1352,7 @@
           },
           {
             "name": "verifyOTP",
-            "description": null,
+            "description": "Verify OTP for phone number verification and get access token for further requests.\nMutation will return accessToken and refreshToken. Use refreshToken to get new accessToken.",
             "args": [
               {
                 "name": "request_id",
@@ -1765,7 +1439,7 @@
           },
           {
             "name": "tokenUpdate",
-            "description": null,
+            "description": "Update Access Token using Refresh Token, Save new Refresh Token in local storage",
             "args": [
               {
                 "name": "RT",
@@ -1796,7 +1470,7 @@
           },
           {
             "name": "updateUser",
-            "description": null,
+            "description": "Update User Details",
             "args": [
               {
                 "name": "form",
@@ -1827,7 +1501,7 @@
           },
           {
             "name": "contactUs",
-            "description": null,
+            "description": "Contact Us Form",
             "args": [
               {
                 "name": "subject",
@@ -2496,135 +2170,31 @@
       },
       {
         "kind": "OBJECT",
-        "name": "Link",
+        "name": "getProfileUploadURLRes",
         "description": null,
         "fields": [
           {
-            "name": "hash",
+            "name": "code",
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "full_url",
+            "name": "message",
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "protocol",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "redirect",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "path",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "netloc",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "params",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "destinationIp",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "query",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "fragment",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "directories",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "LIST",
+              "kind": "NON_NULL",
               "name": null,
               "ofType": {
                 "kind": "SCALAR",
@@ -2636,8 +2206,159 @@
             "deprecationReason": null
           },
           {
-            "name": "queries",
+            "name": "success",
             "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "payload",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "Link",
+        "description": null,
+        "fields": [
+          {
+            "name": "hash",
+            "description": "MD5 hash of the link",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "full_url",
+            "description": "Full URL of the link",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "protocol",
+            "description": "http or https protocol",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "redirect",
+            "description": "where the link redirects to. If the link is a shortened, this will be the final destination",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "path",
+            "description": "directory path of the link",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "netloc",
+            "description": "domain of the link",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "destinationIp",
+            "description": "Destination IP of the link @deprecated",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": true,
+            "deprecationReason": "Use ipinfo.ip instead"
+          },
+          {
+            "name": "fragment",
+            "description": "fragment of the link after the # symbol e.g. https://example.com#anchor1",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "directories",
+            "description": "List of directories in the link in the format of [directory1, directory2] @deprecated",
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": true,
+            "deprecationReason": "Use path instead"
+          },
+          {
+            "name": "queries",
+            "description": "List of queries in the link in the format of key=value",
             "args": [],
             "type": {
               "kind": "LIST",
@@ -2653,7 +2374,7 @@
           },
           {
             "name": "port",
-            "description": null,
+            "description": "Port number of if present on the link",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -2664,20 +2385,8 @@
             "deprecationReason": null
           },
           {
-            "name": "hostname",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "username",
-            "description": null,
+            "description": "username if present on the link e.g. https://username:password@example.com",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -2689,7 +2398,7 @@
           },
           {
             "name": "password",
-            "description": null,
+            "description": "password if present on the link e.g. https://username:password@example.com",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -2701,7 +2410,7 @@
           },
           {
             "name": "whois",
-            "description": null,
+            "description": "Whois Record of the Domain Name",
             "args": [],
             "type": {
               "kind": "OBJECT",
@@ -2713,7 +2422,7 @@
           },
           {
             "name": "totalReports",
-            "description": null,
+            "description": "Total number of reports Submitted by users",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -2725,7 +2434,7 @@
           },
           {
             "name": "reports",
-            "description": null,
+            "description": "List of reports submitted by users",
             "args": [],
             "type": {
               "kind": "LIST",
@@ -2741,7 +2450,7 @@
           },
           {
             "name": "online",
-            "description": null,
+            "description": "true if the link is active",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -2753,7 +2462,7 @@
           },
           {
             "name": "ipinfo",
-            "description": null,
+            "description": "contains the link's IP address information like country, city, etc",
             "args": [],
             "type": {
               "kind": "OBJECT",
@@ -2765,7 +2474,7 @@
           },
           {
             "name": "favicon",
-            "description": null,
+            "description": "contains the link's favicon information",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -2788,7 +2497,7 @@
         "fields": [
           {
             "name": "ip",
-            "description": null,
+            "description": "Destination IP of the link",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -2800,7 +2509,7 @@
           },
           {
             "name": "hostname",
-            "description": null,
+            "description": "server's hostname of the link",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -2836,7 +2545,7 @@
           },
           {
             "name": "country",
-            "description": null,
+            "description": "Country Initials e.g. IN, US, UK, etc",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -2848,19 +2557,19 @@
           },
           {
             "name": "loc",
-            "description": null,
+            "description": "Longitude and Latitude of the link's destination IP in the format of 'longitude, latitude' @deprecated",
             "args": [],
             "type": {
               "kind": "SCALAR",
               "name": "String",
               "ofType": null
             },
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "Use longitude and latitude instead"
           },
           {
             "name": "org",
-            "description": null,
+            "description": "Organization of the link's destination IP",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -2872,7 +2581,7 @@
           },
           {
             "name": "postal",
-            "description": null,
+            "description": "Postal Code",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -2896,23 +2605,11 @@
           },
           {
             "name": "country_name",
-            "description": null,
+            "description": "Full Country Name e.g. India, United States, United Kingdom, etc",
             "args": [],
             "type": {
               "kind": "SCALAR",
               "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "isEU",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
               "ofType": null
             },
             "isDeprecated": false,
@@ -2955,7 +2652,7 @@
         "fields": [
           {
             "name": "name",
-            "description": null,
+            "description": "Name of the company",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -2967,7 +2664,7 @@
           },
           {
             "name": "url",
-            "description": null,
+            "description": "Website of the company",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -2979,7 +2676,7 @@
           },
           {
             "name": "icon",
-            "description": null,
+            "description": "Logo of the company",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3002,7 +2699,7 @@
         "fields": [
           {
             "name": "companyId",
-            "description": null,
+            "description": "unique id of the company",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -3018,7 +2715,7 @@
           },
           {
             "name": "name",
-            "description": null,
+            "description": "Name of the company",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3030,7 +2727,7 @@
           },
           {
             "name": "subtitle",
-            "description": null,
+            "description": "short description of the company",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3042,7 +2739,7 @@
           },
           {
             "name": "image",
-            "description": null,
+            "description": "logo of the company",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3054,7 +2751,7 @@
           },
           {
             "name": "background",
-            "description": null,
+            "description": "banner image of the company",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3066,7 +2763,7 @@
           },
           {
             "name": "category",
-            "description": null,
+            "description": "category of the company e.g. Technology, Finance, Social Media etc",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3078,7 +2775,7 @@
           },
           {
             "name": "verified",
-            "description": null,
+            "description": "true if the company is verified by truelink",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -3094,7 +2791,7 @@
           },
           {
             "name": "ceo",
-            "description": null,
+            "description": "Name of the CEO",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3106,7 +2803,7 @@
           },
           {
             "name": "rank",
-            "description": null,
+            "description": "Rank of the company in Our Database",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3118,7 +2815,7 @@
           },
           {
             "name": "totalScans",
-            "description": null,
+            "description": "Total number of urls scanned under this company",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3130,7 +2827,7 @@
           },
           {
             "name": "founded",
-            "description": null,
+            "description": "Date of the company's foundation",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3142,7 +2839,7 @@
           },
           {
             "name": "headerquarters",
-            "description": null,
+            "description": "Headquarters address",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3154,7 +2851,7 @@
           },
           {
             "name": "facebook",
-            "description": null,
+            "description": "Facebook page url",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3166,7 +2863,7 @@
           },
           {
             "name": "youtube",
-            "description": null,
+            "description": "Youtube channel url",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3178,7 +2875,7 @@
           },
           {
             "name": "twitter",
-            "description": null,
+            "description": "Twitter handle",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3190,7 +2887,7 @@
           },
           {
             "name": "instagram",
-            "description": null,
+            "description": "Instagram handle",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3202,7 +2899,7 @@
           },
           {
             "name": "phone",
-            "description": null,
+            "description": "Phone number",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3214,7 +2911,7 @@
           },
           {
             "name": "email",
-            "description": null,
+            "description": "Email address",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3226,7 +2923,7 @@
           },
           {
             "name": "website",
-            "description": null,
+            "description": "Official website",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3238,7 +2935,7 @@
           },
           {
             "name": "domain",
-            "description": null,
+            "description": "Domain name",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3250,7 +2947,7 @@
           },
           {
             "name": "linkedin",
-            "description": null,
+            "description": "Linkedin page url",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3279,7 +2976,7 @@
         "fields": [
           {
             "name": "companyId",
-            "description": null,
+            "description": "unique id of the company",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -3295,7 +2992,7 @@
           },
           {
             "name": "name",
-            "description": null,
+            "description": "Name of the company",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3307,7 +3004,7 @@
           },
           {
             "name": "subtitle",
-            "description": null,
+            "description": "short description of the company",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3319,7 +3016,7 @@
           },
           {
             "name": "image",
-            "description": null,
+            "description": "logo of the company",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3331,7 +3028,7 @@
           },
           {
             "name": "background",
-            "description": null,
+            "description": "banner image of the company",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3343,7 +3040,7 @@
           },
           {
             "name": "category",
-            "description": null,
+            "description": "category of the company e.g. Technology, Finance, Social Media etc",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3355,7 +3052,7 @@
           },
           {
             "name": "verified",
-            "description": null,
+            "description": "true if the company is verified by truelink",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -3371,7 +3068,7 @@
           },
           {
             "name": "ceo",
-            "description": null,
+            "description": "|Name of the CEO",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3383,7 +3080,7 @@
           },
           {
             "name": "rank",
-            "description": null,
+            "description": "Rank of the company in Our Database",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3395,7 +3092,7 @@
           },
           {
             "name": "totalScans",
-            "description": null,
+            "description": "Total number of urls scanned under this company",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3407,7 +3104,7 @@
           },
           {
             "name": "founded",
-            "description": null,
+            "description": "Date of the company's foundation",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3419,7 +3116,7 @@
           },
           {
             "name": "headerquarters",
-            "description": null,
+            "description": "Headquarters address",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3431,7 +3128,7 @@
           },
           {
             "name": "facebook",
-            "description": null,
+            "description": "Facebook page url",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3443,7 +3140,7 @@
           },
           {
             "name": "youtube",
-            "description": null,
+            "description": "Youtube channel url",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3455,7 +3152,7 @@
           },
           {
             "name": "twitter",
-            "description": null,
+            "description": "Twitter handle",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3467,7 +3164,7 @@
           },
           {
             "name": "instagram",
-            "description": null,
+            "description": "Instagram handle",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3479,7 +3176,7 @@
           },
           {
             "name": "phone",
-            "description": null,
+            "description": "Phone number",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3491,7 +3188,7 @@
           },
           {
             "name": "email",
-            "description": null,
+            "description": "Email address",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3503,7 +3200,7 @@
           },
           {
             "name": "website",
-            "description": null,
+            "description": "Official website",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3515,7 +3212,7 @@
           },
           {
             "name": "domain",
-            "description": null,
+            "description": "Domain name",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3527,7 +3224,7 @@
           },
           {
             "name": "linkedin",
-            "description": null,
+            "description": "Linkedin page url",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3539,7 +3236,7 @@
           },
           {
             "name": "similarCompanies",
-            "description": null,
+            "description": "List of similar companies",
             "args": [],
             "type": {
               "kind": "LIST",
@@ -3572,7 +3269,7 @@
         "fields": [
           {
             "name": "A",
-            "description": null,
+            "description": "List of A records in the format of [record1, record2]",
             "args": [],
             "type": {
               "kind": "LIST",
@@ -3588,7 +3285,7 @@
           },
           {
             "name": "AAAA",
-            "description": null,
+            "description": "List of AAAA records in the format of [record1, record2]",
             "args": [],
             "type": {
               "kind": "LIST",
@@ -3604,7 +3301,7 @@
           },
           {
             "name": "CNAME",
-            "description": null,
+            "description": "List of CNAME records in the format of [record1, record2]",
             "args": [],
             "type": {
               "kind": "LIST",
@@ -3620,7 +3317,7 @@
           },
           {
             "name": "MX",
-            "description": null,
+            "description": "List of MX records in the format of [record1, record2]",
             "args": [],
             "type": {
               "kind": "LIST",
@@ -3636,7 +3333,7 @@
           },
           {
             "name": "NS",
-            "description": null,
+            "description": "List of NS records in the format of [record1, record2]",
             "args": [],
             "type": {
               "kind": "LIST",
@@ -3652,7 +3349,7 @@
           },
           {
             "name": "SOA",
-            "description": null,
+            "description": "List of SOA records in the format of [record1, record2]",
             "args": [],
             "type": {
               "kind": "LIST",
@@ -3668,7 +3365,7 @@
           },
           {
             "name": "TXT",
-            "description": null,
+            "description": "List of SRV/TXT records in the format of [record1, record2]",
             "args": [],
             "type": {
               "kind": "LIST",
@@ -3766,7 +3463,7 @@
         "fields": [
           {
             "name": "domainName",
-            "description": null,
+            "description": "Domain name",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3778,7 +3475,7 @@
           },
           {
             "name": "registrar",
-            "description": null,
+            "description": "Domain Registrar",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3790,7 +3487,7 @@
           },
           {
             "name": "whoisServer",
-            "description": null,
+            "description": "Whois Server from where the data is fetched",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3802,7 +3499,7 @@
           },
           {
             "name": "updatedDate",
-            "description": null,
+            "description": "Date when the domain was last updated",
             "args": [],
             "type": {
               "kind": "LIST",
@@ -3818,7 +3515,7 @@
           },
           {
             "name": "expirationDate",
-            "description": null,
+            "description": "Date when the domain will expire",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3830,7 +3527,7 @@
           },
           {
             "name": "creationDate",
-            "description": null,
+            "description": "Date when the domain was created",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3842,7 +3539,7 @@
           },
           {
             "name": "nameServers",
-            "description": null,
+            "description": "List of name servers in the format of [server1, server2]",
             "args": [],
             "type": {
               "kind": "LIST",
@@ -3858,7 +3555,7 @@
           },
           {
             "name": "status",
-            "description": null,
+            "description": "Status of the domain",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3870,7 +3567,7 @@
           },
           {
             "name": "emails",
-            "description": null,
+            "description": "List of emails in the format of [email1, email2]",
             "args": [],
             "type": {
               "kind": "LIST",
@@ -3886,7 +3583,7 @@
           },
           {
             "name": "dnssec",
-            "description": null,
+            "description": "Dnssec status of the domain",
             "args": [],
             "type": {
               "kind": "LIST",
@@ -3902,7 +3599,7 @@
           },
           {
             "name": "name",
-            "description": null,
+            "description": "Name of the registrant",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3914,7 +3611,7 @@
           },
           {
             "name": "org",
-            "description": null,
+            "description": "Organization of the registrant",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3926,7 +3623,7 @@
           },
           {
             "name": "address",
-            "description": null,
+            "description": "Street address of the registrant",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3938,7 +3635,7 @@
           },
           {
             "name": "city",
-            "description": null,
+            "description": "City of the registrant",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3950,7 +3647,7 @@
           },
           {
             "name": "state",
-            "description": null,
+            "description": "State of the registrant",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3962,7 +3659,7 @@
           },
           {
             "name": "postalCode",
-            "description": null,
+            "description": "Postal code of the registrant",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3974,7 +3671,7 @@
           },
           {
             "name": "country",
-            "description": null,
+            "description": "Country of the registrant",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3986,7 +3683,7 @@
           },
           {
             "name": "dnsrecords",
-            "description": null,
+            "description": "DNS records of the domain",
             "args": [],
             "type": {
               "kind": "OBJECT",
@@ -3998,7 +3695,7 @@
           },
           {
             "name": "company",
-            "description": null,
+            "description": "Company Details Associated with the domain",
             "args": [],
             "type": {
               "kind": "OBJECT",
@@ -4010,7 +3707,7 @@
           },
           {
             "name": "whitelisted",
-            "description": null,
+            "description": "If the domain is whitelisted",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -4022,7 +3719,7 @@
           },
           {
             "name": "linkScanned",
-            "description": null,
+            "description": "number of links scanned under this domain",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -4034,7 +3731,7 @@
           },
           {
             "name": "reportStats",
-            "description": null,
+            "description": "Report summary of the domain",
             "args": [],
             "type": {
               "kind": "OBJECT",

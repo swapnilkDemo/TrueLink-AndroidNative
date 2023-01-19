@@ -1,25 +1,25 @@
 mutation VerifyOTP($requestId: String!, $otp: String!, $phone: String!, $dialCode: String!) {
-  verifyOTP(request_id: $requestId, otp: $otp, phone: $phone, dialCode: $dialCode) {
-    code
-    message
-    success
-    accessToken
-    payload {
-      uid
-      fullname
-      dialcode
-      phone
-      email
-      avatar
-      address
-      city
-      state
-      country
-      pincode
-      fcmtoken
-      refreshToken
-      lastLogin
-      gender
+    verifyOTP(request_id: $requestId, otp: $otp, phone: $phone, dialCode: $dialCode) {
+        code
+        message
+        success
+        accessToken
+        payload {
+            address
+            city
+            avatar
+            country
+            dialcode
+            email
+            fcmtoken
+            fullname
+            gender
+            lastLogin
+            phone
+            pincode
+            refreshToken
+            state
+            uid
+        }
     }
-  }
 }

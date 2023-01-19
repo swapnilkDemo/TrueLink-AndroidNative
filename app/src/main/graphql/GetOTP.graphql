@@ -1,8 +1,8 @@
 mutation GetOTP($phone: String!, $dialCode: String!) {
-  getOTP(phone: $phone, dialCode: $dialCode) {
-    code
-    message
-    success
-    request_id
-  }
+    getOTP(phone: $phone, dialCode: $dialCode) {
+        code
+        message
+        success
+        request_id
+    }
 }
