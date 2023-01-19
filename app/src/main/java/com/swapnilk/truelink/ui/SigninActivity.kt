@@ -9,8 +9,10 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.text.Html
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -27,7 +29,7 @@ import com.chaos.view.PinView
 import com.example.GetOTPMutation
 import com.example.VerifyOTPMutation
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetBehavior.SAVE_FIT_TO_CONTENTS
+import com.google.android.material.bottomsheet.BottomSheetBehavior.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.textfield.TextInputEditText
 import com.hbb20.CountryCodePicker
@@ -194,6 +196,7 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
             BottomSheetDialog(this, R.style.BottomSheetDialog)
         val v: View = layoutInflater.inflate(R.layout.bottom_sheet_otp, null)
         bottomSheetDialog.setContentView(v)
+        bottomSheetDialog.setCancelable(false)
         bottomSheetDialog.show()
 
         val linearLayout: LinearLayout? =
@@ -260,6 +263,7 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
             BottomSheetDialog(this, R.style.BottomSheetDialog)
         val v: View = layoutInflater.inflate(R.layout.bottom_sheet_privacy, null)
         bottomSheetDialog.setContentView(v)
+        bottomSheetDialog.setCancelable(false)
         bottomSheetDialog.show()
 
         val linearLayout: LinearLayout? =
@@ -268,8 +272,10 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
         if (behavior != null) {
             behavior.state = BottomSheetBehavior.STATE_EXPANDED
             behavior.skipCollapsed = true
-            behavior.peekHeight = SAVE_FIT_TO_CONTENTS
+            behavior.peekHeight = SAVE_ALL
         }
+        bottomSheetDialog.findViewById<TextView>(R.id.txt_privacy)
+            ?.setText(Html.fromHtml(getString(R.string.privacy_text)))
 
         bottomSheetDialog.findViewById<CircularProgressButton?>(R.id.btn_accept)
             ?.setOnClickListener {
@@ -303,10 +309,10 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
     ) {
         progressType = ProgressType.INDETERMINATE
         startAnimation()
-        Handler().run {
-            postDelayed({ doneLoadingAnimation(fillColor, bitmap) }, doneTime)
-            postDelayed(::revertAnimation, revertTime)
-        }
+        /* Handler().run {
+             postDelayed({ doneLoadingAnimation(fillColor, bitmap) }, doneTime)
+             postDelayed(::revertAnimation, revertTime)
+         }*/
     }
 
     fun ProgressButton.morphAndRevert(

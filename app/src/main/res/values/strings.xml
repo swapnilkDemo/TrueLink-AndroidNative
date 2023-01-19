@@ -29,18 +29,25 @@
     <string name="error_privacy">Agree Privacy Policy to continue</string>
     <string name="title_privacy">Privacy Policy</string>
     <string name="accept">I Accept</string>
-    <string name="privacy_text">AN Brothers E-Learning Private Limited Last updated: November 16,
-        2022 This Privacy Policy describes Our policies and procedures on the collection,
-        use and disclosure of Your information when You use the Service and tells You about
-        Your privacy rights and how the law protects You. One of our main priorities is the privacy
-        of our visitors. This Privacy Policy document contains types of information that is collected
-        and recorded by truelink and how we use it.  We use Your Personal data to provide and improve
-        the Service. By using the Service, You agree to the collection and use of information in accordance
-        with this Privacy Policy.  Consent  By using our application, you hereby consent to our Privacy Policy
-        and agree to its terms Interpretation and Definitions   Interpretation The words of which the initial
-        letter is capitalized have meanings defined under the following conditions.
-        The following definitions shall have the same meaning regardless of whether they appear in singular or
-        in plural.</string>
+    <string name="privacy_text"><![CDATA[<!DOCTYPE html>
+<html>
+<head><link href="https://fonts.googleapis.com/css?family=Inter&display=swap" rel="stylesheet" /></head>
+<body>
+
+<div class="v1_10">
+
+<div class="v1_14"><span STYLE="font-size:16.0pt">AN Brothers E-Learning Private Limited</span><span class="v1_16"><br/>Last updated: November 16, 2022</span></div><br/><div class="v1_17"><span class="v1_18">This Privacy Policy describes Our policies and procedures on the collection,
+use and disclosure of Your information when You use the Service and tells You
+about Your privacy rights and how the law protects You. One of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by truelink and how we use it.<br/><br/>
+</span><span class="v1_19">We use Your Personal data to provide and improve the Service. By using the
+Service, You agree to the collection and use of information in accordance with
+this Privacy Policy.
+</span></div><br/><br/><div class="v1_20"><span STYLE="font-size:16.0pt">Consent</span>
+<br/><br/>
+<br>By using our application, you hereby consent to our Privacy Policy and agree to its terms</br></div><div class="v1_22"><span STYLE="font-size:16.0pt">Interpretation and Definitions  </span>
+<br/><br/><br/><span class="v1_24">Interpretation</span><span class="v1_25">The words of which the initial letter is capitalized have meanings defined
+under the following conditions. The following definitions shall have the same
+meaning regardless of whether they appear in singular or in plural.</span></div></div></div></div></div></body></html> ]]></string>
     <string name="otp_verification">OTP Verification</string>
     <string name="enter_otp">Entr OTP sent to your phone number</string>
     <string name="verify"><![CDATA[Verify & Continue]]></string>

@@ -27,7 +27,7 @@
             android:layout_height="@dimen/margin200"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/margin70"
-            android:layout_marginBottom="@dimen/margin10"
+            android:layout_marginBottom="@dimen/margin70"
             android:src="@drawable/ic_login_screen" />
 
         <TextView
@@ -57,25 +57,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="@dimen/margin30"
+            android:layout_margin="@dimen/margin50"
             android:cursorVisible="true"
-            android:hint="****"
-            android:inputType="numberPassword"
+            android:hint="0000"
+            android:inputType="number"
             android:itemBackground="@color/gray_200"
             android:padding="@dimen/_5sdp"
             android:textColor="@color/colorPrimary"
-            android:textSize="18sp"
+            android:textSize="@dimen/_16sdp"
             android:textStyle="bold"
             app:cursorColor="@color/black"
-            app:cursorWidth="2dp"
+            app:cursorWidth="@dimen/_2sdp"
             app:hideLineWhenFilled="true"
             app:itemCount="4"
-            app:itemHeight="50dp"
-            app:itemRadius="4dp"
-            app:itemSpacing="10dp"
-            app:itemWidth="50dp"
+            app:itemHeight="@dimen/margin50"
+            app:itemRadius="@dimen/_4dp"
+            app:itemSpacing="@dimen/margin10"
+            app:itemWidth="@dimen/margin50"
             app:lineColor="@color/gray_200"
-            app:lineWidth="2dp"
+            app:lineWidth="@dimen/_2sdp"
             app:viewType="rectangle" />
 
         <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
@@ -92,8 +92,8 @@
             android:textColor="@color/white"
             android:textSize="@dimen/_16sdp"
             app:spinning_bar_color="@android:color/black"
-            app:spinning_bar_padding="8dp"
-            app:spinning_bar_width="4dp" />
+            app:spinning_bar_padding="@dimen/_8dp"
+            app:spinning_bar_width="@dimen/_4dp" />
         <!--  app:spinning_bar_width="4dp" &lt;!&ndash; Optional &ndash;&gt;
           app:spinning_bar_color="#FFF" &lt;!&ndash; Optional &ndash;&gt;
           app:spinning_bar_padding="6dp" &lt;!&ndash; Optional &ndash;&gt;-->

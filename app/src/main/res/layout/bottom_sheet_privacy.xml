@@ -30,7 +30,6 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:padding="@dimen/_5sdp"
-            android:text="@string/privacy_text"
             android:textColor="@color/gray_200" />
 
         <br.com.simplepass.loadingbutton.customViews.CircularProgressButton

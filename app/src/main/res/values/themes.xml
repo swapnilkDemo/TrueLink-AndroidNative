@@ -51,7 +51,7 @@
 
     <style name="bottomSheetStyleWrapper" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@android:color/transparent</item>
-        <item name="behavior_peekHeight">1650dp</item>
+        <item name="behavior_peekHeight">2650dp</item>
         <item name="behavior_draggable">false</item>
     </style>
 </resources>

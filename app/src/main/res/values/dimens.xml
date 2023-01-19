@@ -22,4 +22,6 @@
     <dimen name="_10sdp">10sp</dimen>
     <dimen name="_8dp">8dp</dimen>
     <dimen name="margin30">30dp</dimen>
+    <dimen name="margin50">50dp</dimen>
+    <dimen name="_4dp">4dp</dimen>
 </resources>
