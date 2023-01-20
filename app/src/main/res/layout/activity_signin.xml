@@ -130,19 +130,6 @@
     </LinearLayout>
 
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/button_login"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="@dimen/margin20"
-        android:backgroundTint="@color/login_btn"
-        android:gravity="center"
-        android:text="@string/generate_otp"
-        android:textAllCaps="false"
-        android:textSize="@dimen/_16sdp"
-        android:visibility="gone" />
-
     <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
         android:id="@+id/btn_generateOtp"
         android:layout_width="match_parent"

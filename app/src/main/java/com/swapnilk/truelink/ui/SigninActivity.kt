@@ -6,18 +6,17 @@ import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.text.Html
 import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import br.com.simplepass.loadingbutton.animatedDrawables.ProgressType
 import br.com.simplepass.loadingbutton.customViews.CircularProgressButton
@@ -45,10 +44,12 @@ import kotlin.coroutines.CoroutineContext
 
 
 class SigninActivity : AppCompatActivity(), CoroutineScope {
+    ////////////Start Coroutine for Background Task../////////////
     private var job: Job = Job()
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main + job
 
+    //// Required variables///////////////
     lateinit var chktermns: CheckBox
     lateinit var textView: TextView
 
@@ -56,13 +57,14 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
 
     private lateinit var sharedPrefs: SharedPreferences
     private lateinit var countryCodePicker: CountryCodePicker
-    private lateinit var edit_phone: TextInputEditText
-    private lateinit var edit_countryCode: TextInputEditText
-    private lateinit var circulaProgressButton: CircularProgressButton
-    private lateinit var txt_privacy_msg: TextView
+    private lateinit var editPhone: TextInputEditText
+    private lateinit var editCountryCode: TextInputEditText
+    private lateinit var circularProgressButton: CircularProgressButton
+    private lateinit var txtPrivacyMsg: TextView
 
     lateinit var commonFunctions: CommonFunctions
     lateinit var apolloClient: ApolloClient
+    lateinit var view: CoordinatorLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,18 +80,16 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
         }
         /////////////Check if previously logged in user////////////
         if (sharedPrefs.isLoggedIn()) startMain()
-        else {
-            initialize()
-        }
+        else initialize()
+
     }
 
-    fun initialize() {
-        edit_phone = findViewById(R.id.edit_phone)
-        edit_countryCode = findViewById(R.id.edit_coutryCode)
-//        edit_countryCode.setText(getString(R.string.default_country))
+    private fun initialize() {
+        editPhone = findViewById(R.id.edit_phone)
+        editCountryCode = findViewById(R.id.edit_coutryCode)
         countryCodePicker = findViewById(R.id.ccp)
-        txt_privacy_msg = findViewById(R.id.txt_privacy_msg)
-        txt_privacy_msg.text = commonFunctions.spanTextWithColor(
+        txtPrivacyMsg = findViewById(R.id.txt_privacy_msg)
+        txtPrivacyMsg.text = commonFunctions.spanTextWithColor(
             getString(R.string.privacy_msg), Color.CYAN, 79, 93
         )
 
@@ -97,28 +97,31 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
         chktermns.setOnCheckedChangeListener { buttonView, isChecked ->
             isPrivacyChecked = isChecked
         }
-        txt_privacy_msg.setOnClickListener {
+        txtPrivacyMsg.setOnClickListener {
             showPrivacyPolicy()
         }
 
+        ///////////////Set default selected country code////////////////////
         var code = Integer.parseInt(getString(R.string.default_country))
-        edit_countryCode.setText(code.toString())
+        editCountryCode.setText(code.toString())
         @Suppress("DEPRECATION") countryCodePicker.setDefaultCountryUsingPhoneCode(code)
         countryCodePicker.setOnCountryChangeListener {
+            //////////////Change country code//////////////////////
             code = countryCodePicker.selectedCountryCodeAsInt
-            edit_countryCode.setText(code.toString())
+            editCountryCode.setText(code.toString())
         }
-
-        circulaProgressButton = findViewById(R.id.btn_generateOtp)
-        circulaProgressButton.run {
+        /////////////////Perform generate OTP operation////////////////////
+        circularProgressButton = findViewById(R.id.btn_generateOtp)
+        circularProgressButton.run {
             setOnClickListener {
-                if (isPrivacyChecked) if (edit_phone.text.toString().isNotEmpty()) {
-                    circulaProgressButton.isEnabled = false
+                ////////////////Data Validations////////////////////////////////
+                if (isPrivacyChecked) if (editPhone.text.toString().isNotEmpty()) {
+                    //circularProgressButton.isEnabled = false
                     //////////////////Initiate Login///////////////////
                     morphDoneAndRevert(this@SigninActivity)
                     /////////////////Call GetOTP Mutation /////////////
                     val getOTPMutation = GetOTPMutation(
-                        edit_phone.text.toString(), edit_countryCode.text.toString()
+                        editPhone.text.toString(), editCountryCode.text.toString()
                     )
                     ///////////Start background thread//////////
                     launch {
@@ -129,56 +132,38 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
                         if (response != null) afterResult(response)
                     }
 
-                } else Toast.makeText(
-                    this@SigninActivity, getString(R.string.enter_mobile), Toast.LENGTH_SHORT
-                ).show()
-                else Toast.makeText(
-                    this@SigninActivity, getString(R.string.error_privacy), Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
-    }
+                } else commonFunctions.showErrorSnackBar(
+                    this@SigninActivity,
+                    circularProgressButton,
+                    getString(R.string.enter_mobile)
+                )
+                else commonFunctions.showErrorSnackBar(
+                    this@SigninActivity,
+                    circularProgressButton,
+                    getString(R.string.error_privacy)
+                )
+            }//End onCLickListener
+        }//End Run
+    }//End Function
 
+    //////////////////////Handle Response from getOTP server operation////////////
     private fun afterResult(response: ApolloResponse<GetOTPMutation.Data>) {
         if (response.data?.getOTP!!.success) response.data!!.getOTP.request_id?.let {
             showOtpDialog(
                 it
-            )
+            )//////////////////Pass Request Id////////////////////////
         }
-        else Toast.makeText(
-            this, "Login Error" + " " + response.data?.getOTP!!.message, Toast.LENGTH_SHORT
-        ).show()
-    }
-
-
-    private fun startLogin() {
-        val bitmap = BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher_foreground)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            circulaProgressButton.doneLoadingAnimation(getColor(R.color.login_btn), bitmap)
-        }
-        Handler().postDelayed(Runnable {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-            finish()
-        }, 3000)
-
-    }
-
-    private fun signout() {
-        updateUI()
-    }
-
-    fun updateUI() {
-        /* if (null) {
-         } else {
-             startMain()
-         }*/
+        else commonFunctions.showErrorSnackBar(
+            this@SigninActivity,
+            circularProgressButton,
+            getString(R.string.login_error) + " " + response.data?.getOTP!!.message
+        )
     }
 
 
     private fun startMain() {
-        val mainintent = Intent(this, MainActivity::class.java)
-        startActivity(mainintent)
+        val mainIntent = Intent(this, MainActivity::class.java)
+        startActivity(mainIntent)
         finish()
     }
 
@@ -208,31 +193,33 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
             behavior.peekHeight = SAVE_FIT_TO_CONTENTS
         }
         var pinView = bottomSheetDialog.findViewById<PinView>(R.id.pinView)
+        view = bottomSheetDialog.findViewById<CoordinatorLayout>(R.id.cord_bottomsheet)!!
         bottomSheetDialog.findViewById<CircularProgressButton>(R.id.btnotp)?.run {
             setOnClickListener {
+                ///////////////Data validations/////////////////////////
                 if (pinView?.text.isNullOrEmpty()) {
-                    Toast.makeText(this@SigninActivity, "Enter OTP", Toast.LENGTH_SHORT).show()
+                    if (view != null) {
+                        commonFunctions.showErrorSnackBar(
+                            this@SigninActivity,
+                            view,
+                            getString(R.string.enter_otp)
+                        )
+                    }
                 } else if (pinView!!.text!!.length < 4) {
-                    Toast.makeText(
-                        this@SigninActivity, "OTP should be of 4 digit", Toast.LENGTH_SHORT
-                    ).show()
+                    if (view != null)
+                        commonFunctions.showErrorSnackBar(
+                            this@SigninActivity,
+                            circularProgressButton,
+                            getString(R.string.otp_lenght_error)
+                        )
                 } else {
                     //////////////////Initiate OTPVerification///////////////////
                     morphDoneAndRevert(this@SigninActivity)
                     /////////////////Call VerifyOTP Mutation /////////////
                     val otp = pinView?.text.toString()
-
-                    /* val verifyOtpMutation = VerifyOTPMutation(
-                         "336173624345383039333231",
-                         otp,
-                         edit_phone.text.toString(),
-                         edit_countryCode.text.toString()
-                     )*/
+                    ////////////////Object with required parameters/////////////
                     val verifyOtpMutation = VerifyOTPMutation(
-                        request_id,
-                        otp,
-                        edit_phone.text.toString(),
-                        edit_countryCode.text.toString()
+                        request_id, otp, editPhone.text.toString(), editCountryCode.text.toString()
                     )
 
                     ///////////Start background thread//////////
@@ -242,19 +229,20 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
                         if (responseVerify.data?.verifyOTP!!.success == true) startMain()
                         else afterResultVerify(responseVerify)
 
-                    }
-                }
-
-            }
-
-        }
-    }
+                    }//End Launch
+                }//End else
+            }// End onclick listener
+        }//End run
+    }//end of function
 
 
     private fun afterResultVerify(response: ApolloResponse<VerifyOTPMutation.Data>) {
-        Toast.makeText(
-            this, "Login Error " + response.data?.verifyOTP!!.message, Toast.LENGTH_SHORT
-        ).show()
+        commonFunctions.showErrorSnackBar(
+            this@SigninActivity,
+            view,
+            getString(R.string.login_error) + response.data?.verifyOTP!!.message
+        )
+
     }
 
 
@@ -309,22 +297,9 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
     ) {
         progressType = ProgressType.INDETERMINATE
         startAnimation()
-        /* Handler().run {
-             postDelayed({ doneLoadingAnimation(fillColor, bitmap) }, doneTime)
-             postDelayed(::revertAnimation, revertTime)
-         }*/
-    }
-
-    fun ProgressButton.morphAndRevert(
-        revertTime: Long = 3000, startAnimationCallback: () -> Unit = {}
-    ) {
-        startAnimation(startAnimationCallback)
-        Handler().postDelayed(::revertAnimation, revertTime)
-    }
-
-    fun ProgressButton.morphStopRevert(stopTime: Long = 1000, revertTime: Long = 2000) {
-        startAnimation()
-        Handler().postDelayed(::stopAnimation, stopTime)
-        Handler().postDelayed(::revertAnimation, revertTime)
+        Handler().run {
+            postDelayed({ doneLoadingAnimation(fillColor, bitmap) }, doneTime)
+            postDelayed(::revertAnimation, revertTime)
+        }
     }
 }

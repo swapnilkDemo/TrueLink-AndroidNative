@@ -35,6 +35,7 @@
     <style name="BottomSheetDialog" parent="Theme.Design.Light.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/bottomSheetStyleWrapper</item>
         <item name="behavior_draggable">false</item>
+        <item name="snackbarStyle">@style/BottomSheet.Snackbar</item>
     </style>
 
     <style name="CustomBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
@@ -53,5 +54,9 @@
         <item name="android:background">@android:color/transparent</item>
         <item name="behavior_peekHeight">2650dp</item>
         <item name="behavior_draggable">false</item>
+    </style>
+
+    <style name="BottomSheet.Snackbar" parent="Widget.MaterialComponents.Snackbar">
+        <item name="elevation">22dp</item>
     </style>
 </resources>

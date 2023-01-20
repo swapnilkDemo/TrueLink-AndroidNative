@@ -97,6 +97,6 @@ class IntroActivity : FragmentActivity() {
 
         }
 
-    }
+    }//End function
 
-}
+}// End Class
