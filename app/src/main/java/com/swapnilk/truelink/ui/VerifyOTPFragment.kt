@@ -102,8 +102,11 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
                     ///////////Start background thread//////////
                     launch {
                         val responseVerify: ApolloResponse<VerifyOTPMutation.Data> =
-                            apiHelper.apolloClient.mutation(verifyOtpMutation).execute()
-                        if (responseVerify.data?.verifyOTP!!.success == true) startMain()
+                            apiHelper.apolloClient.mutation(verifyOtpMutation!!).execute()
+                        if (responseVerify.data?.verifyOTP!!.success == true) {
+                            startMain()
+                            Log.d("verifyOTP Response :",responseVerify.data.toString())
+                        }
                         else afterResultVerify(responseVerify)
 
                     }//End Launch
@@ -196,4 +199,4 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
     }
 }
 
-}
+
