@@ -52,10 +52,10 @@ class CommonFunctions(context: Context) {
                 })
             val view = snackBarView.view
 
-            val params = view.layoutParams as FrameLayout.LayoutParams
+           /* val params = view.layoutParams as FrameLayout.LayoutParams
             params.gravity = Gravity.TOP
 //            params.topMargin = R.dimen.margin50
-            view.layoutParams = params
+            view.layoutParams = params*/
             view.background =
                 ContextCompat.getDrawable(context, R.drawable.rect_error) // for custom background
             snackBarView.animationMode = BaseTransientBottomBar.ANIMATION_MODE_FADE

@@ -34,4 +34,8 @@ class SharedPreferences(context: Context) {
         return sharedPreferences.getBoolean("isLoggedIn", false)
     }
 
+    fun isPrifileUpdate(): Boolean {
+        return sharedPreferences.getBoolean("isProfile", false)
+    }
+
 }

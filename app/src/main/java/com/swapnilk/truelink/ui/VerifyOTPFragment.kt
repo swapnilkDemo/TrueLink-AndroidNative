@@ -15,11 +15,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import br.com.simplepass.loadingbutton.animatedDrawables.ProgressType
 import br.com.simplepass.loadingbutton.customViews.CircularProgressButton
 import br.com.simplepass.loadingbutton.customViews.ProgressButton
+import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.ApolloResponse
 import com.apollographql.apollo3.exception.ApolloException
 import com.chaos.view.PinView
@@ -48,11 +48,18 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
     lateinit var viewL: View
     lateinit var commonFunctions: CommonFunctions
 
-    //lateinit var apolloClient: ApolloClient
+    lateinit var apolloClient: ApolloClient
     lateinit var apiHelper: ApiHelper
-    lateinit var view: CoordinatorLayout
+
+    //    lateinit var view: CoordinatorLayout
     lateinit var sharedPrefs: SharedPreferences
+    lateinit var pinView: PinView
     var bundleGet: Bundle = bundle
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(STYLE_NO_FRAME, R.style.BottomSheetDialog)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,31 +69,33 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
         sharedPrefs = activity?.let { SharedPreferences(it) }!!
         commonFunctions = activity?.let { CommonFunctions(it) }!!
         try {
-            apiHelper = ApiHelper(activity!!)
+            apolloClient =
+                ApolloClient.Builder().serverUrl("https://truelink.neki.dev/graphql/").build()
+//            apiHelper = ApiHelper(activity!!)
         } catch (e: ApolloException) {
             e.message?.let { Log.d("Exception ", it) }
         }
         // Inflate the layout for this fragment
         viewL = inflater.inflate(R.layout.bottom_sheet_otp, container, false)
-        var pinView = viewL.findViewById<PinView>(R.id.pinView)
+        pinView = viewL.findViewById<PinView>(R.id.pinView)
         viewL.findViewById<CircularProgressButton>(R.id.btnotp)?.run {
             setOnClickListener {
                 ///////////////Data validations/////////////////////////
                 if (pinView?.text.isNullOrEmpty()) {
                     commonFunctions.showErrorSnackBar(
-                        activity!!,
+                        requireActivity(),
                         pinView,
                         getString(R.string.enter_otp)
                     )
                 } else if (pinView!!.text!!.length < 4) {
                     commonFunctions.showErrorSnackBar(
-                        activity!!,
+                        requireActivity(),
                         pinView,
                         getString(R.string.otp_lenght_error)
                     )
                 } else {
                     //////////////////Initiate OTPVerification///////////////////
-                    morphDoneAndRevert(activity!!)
+                    morphDoneAndRevert(requireActivity())
                     /////////////////Call VerifyOTP Mutation /////////////
                     val otp = pinView?.text.toString()
                     ////////////////Object with required parameters/////////////
@@ -102,18 +111,17 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
                     ///////////Start background thread//////////
                     launch {
                         val responseVerify: ApolloResponse<VerifyOTPMutation.Data> =
-                            apiHelper.apolloClient.mutation(verifyOtpMutation!!).execute()
+                            apolloClient.mutation(verifyOtpMutation!!).execute()
                         if (responseVerify.data?.verifyOTP!!.success == true) {
+                            Log.d("verifyOTP Response :", responseVerify.data.toString())
                             startMain()
-                            Log.d("verifyOTP Response :",responseVerify.data.toString())
-                        }
-                        else afterResultVerify(responseVerify)
+                        } else afterResultVerify(responseVerify)
 
                     }//End Launch
                 }//End else
             }// End onclick listener
         }//End run
-        return view;
+        return viewL;
     }
 
     private fun afterResultVerify(response: ApolloResponse<VerifyOTPMutation.Data>) {
@@ -123,14 +131,21 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
                 viewL,
                 getString(R.string.login_error) + response.data?.verifyOTP!!.message
             )
+            pinView.setText("")
         }
 
     }
 
     private fun startMain() {
-        val mainIntent = Intent(activity, MainActivity::class.java)
-        startActivity(mainIntent)
-        activity?.finish()
+        if (sharedPrefs.isPrifileUpdate()) {
+            val mainIntent = Intent(activity, MainActivity::class.java)
+            startActivity(mainIntent)
+            activity?.finish()
+        } else {
+            val profileIntent = Intent(activity, UserProfileActivity::class.java)
+            startActivity(profileIntent)
+            activity?.finish()
+        }
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -151,12 +166,14 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
             behavior.skipCollapsed = true
             behavior.peekHeight = BottomSheetBehavior.SAVE_FIT_TO_CONTENTS
         }
-        val layoutParams = bottomSheet!!.layoutParams
+        val layoutParams = bottomSheet?.layoutParams
         val windowHeight = getWindowHeight()
         if (layoutParams != null) {
             layoutParams.height = windowHeight
         }
-        bottomSheet.layoutParams = layoutParams
+        if (bottomSheet != null) {
+            bottomSheet.layoutParams = layoutParams
+        }
 //        behavior.state = BottomSheetBehavior.STATE_EXPANDED
     }
 
