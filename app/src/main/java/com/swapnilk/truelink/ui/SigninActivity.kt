@@ -14,14 +14,12 @@ import android.view.View
 import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import br.com.simplepass.loadingbutton.animatedDrawables.ProgressType
 import br.com.simplepass.loadingbutton.customViews.CircularProgressButton
 import br.com.simplepass.loadingbutton.customViews.ProgressButton
-import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.ApolloResponse
 import com.apollographql.apollo3.exception.ApolloException
 import com.chaos.view.PinView
@@ -34,6 +32,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.hbb20.CountryCodePicker
 import com.swapnilk.truelink.MainActivity
 import com.swapnilk.truelink.R
+import com.swapnilk.truelink.data.online.ApiHelper
 import com.swapnilk.truelink.utils.CommonFunctions
 import com.swapnilk.truelink.utils.SharedPreferences
 import kotlinx.coroutines.CoroutineScope
@@ -63,7 +62,9 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
     private lateinit var txtPrivacyMsg: TextView
 
     lateinit var commonFunctions: CommonFunctions
-    lateinit var apolloClient: ApolloClient
+
+    //lateinit var apolloClient: ApolloClient
+    lateinit var apiHelper: ApiHelper
     lateinit var view: CoordinatorLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,8 +74,9 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
         sharedPrefs = SharedPreferences(applicationContext)
         commonFunctions = CommonFunctions(applicationContext)
         try {
-            apolloClient =
-                ApolloClient.Builder().serverUrl("https://truelink.neki.dev/graphql/").build()
+//             apolloClient =
+//                 ApolloClient.Builder().serverUrl("https://truelink.neki.dev/graphql/").build()
+            apiHelper = ApiHelper(this@SigninActivity)
         } catch (e: ApolloException) {
             e.message?.let { Log.d("Exception ", it) }
         }
@@ -125,10 +127,11 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
                     )
                     ///////////Start background thread//////////
                     launch {
-                        val response: ApolloResponse<GetOTPMutation.Data> = apolloClient.mutation(
-                            getOTPMutation
+                        val response: ApolloResponse<GetOTPMutation.Data> =
+                            apiHelper.apolloClient.mutation(
+                                getOTPMutation
 
-                        ).execute()
+                            ).execute()
                         if (response != null) afterResult(response)
                     }
 
@@ -149,9 +152,14 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
     //////////////////////Handle Response from getOTP server operation////////////
     private fun afterResult(response: ApolloResponse<GetOTPMutation.Data>) {
         if (response.data?.getOTP!!.success) response.data!!.getOTP.request_id?.let {
-            showOtpDialog(
-                it
-            )//////////////////Pass Request Id////////////////////////
+            /* showOtpDialog(
+                 it
+             )*///////////////////Pass Request Id////////////////////////
+            var bundle = Bundle()
+            bundle.putString("requestId", it)
+            bundle.putString("phone", editPhone.text.toString())
+            bundle.putString("dailCode", editCountryCode.text.toString())
+            VerifyOTPFragment(bundle).show(supportFragmentManager, VerifyOTPFragment.TAG);
         }
         else commonFunctions.showErrorSnackBar(
             this@SigninActivity,
@@ -176,7 +184,7 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
     }
 
 
-    protected open fun showOtpDialog(request_id: String) {
+    /*protected open fun showOtpDialog(request_id: String) {
         var bottomSheetDialog: BottomSheetDialog =
             BottomSheetDialog(this, R.style.BottomSheetDialog)
         val v: View = layoutInflater.inflate(R.layout.bottom_sheet_otp, null)
@@ -225,7 +233,7 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
                     ///////////Start background thread//////////
                     launch {
                         val responseVerify: ApolloResponse<VerifyOTPMutation.Data> =
-                            apolloClient.mutation(verifyOtpMutation).execute()
+                            apiHelper.apolloClient.mutation(verifyOtpMutation).execute()
                         if (responseVerify.data?.verifyOTP!!.success == true) startMain()
                         else afterResultVerify(responseVerify)
 
@@ -244,7 +252,7 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
         )
 
     }
-
+*/
 
     protected open fun showPrivacyPolicy() {
         var bottomSheetDialog: BottomSheetDialog =
@@ -281,7 +289,7 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
         job.cancel()
     }
 
-    ///////////////////////Generate OPT Button Animations/////////////////////////////
+    ///////////////////////Progress Button Animations/////////////////////////////
     private fun defaultColor(context: Context) =
         ContextCompat.getColor(context, android.R.color.black)
 

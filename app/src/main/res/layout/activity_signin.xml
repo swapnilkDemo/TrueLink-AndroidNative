@@ -143,6 +143,8 @@
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="@dimen/_16sdp"
+        app:finalCornerAngle="@dimen/_10sdp"
+        app:initialCornerAngle="@dimen/_10sdp"
         app:spinning_bar_color="@android:color/black"
         app:spinning_bar_padding="8dp"
         app:spinning_bar_width="4dp" />

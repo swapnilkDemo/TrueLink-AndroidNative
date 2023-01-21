@@ -1,7 +1,11 @@
 package com.swapnilk.truelink.utils
 
 import android.content.Context
+import android.content.res.Resources
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.os.Handler
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
@@ -11,6 +15,8 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import br.com.simplepass.loadingbutton.animatedDrawables.ProgressType
+import br.com.simplepass.loadingbutton.customViews.ProgressButton
 import com.google.android.datatransport.runtime.backends.BackendResponse.ok
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
@@ -59,4 +65,5 @@ class CommonFunctions(context: Context) {
             e.printStackTrace()
         }
     }
+
 }

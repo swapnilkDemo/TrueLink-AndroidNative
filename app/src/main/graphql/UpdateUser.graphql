@@ -1,9 +1,8 @@
-mutation VerifyOTP($requestId: String!, $otp: String!, $phone: String!, $dialCode: String!) {
-    verifyOTP(request_id: $requestId, otp: $otp, phone: $phone, dialCode: $dialCode) {
+mutation UpdateUser($form: updateUserInput!) {
+    updateUser(form: $form) {
         code
         message
         success
-        accessToken
         payload {
             uid
             fullname
