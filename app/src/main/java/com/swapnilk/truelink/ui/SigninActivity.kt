@@ -168,9 +168,15 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
 
 
     private fun startMain() {
-        val mainIntent = Intent(this, MainActivity::class.java)
-        startActivity(mainIntent)
-        finish()
+        if (sharedPrefs.isProfileUpdate()) {
+            val mainIntent = Intent(this, MainActivity::class.java)
+            startActivity(mainIntent)
+            finish()
+        } else {
+            val mainIntent = Intent(this, UserProfileActivity::class.java)
+            startActivity(mainIntent)
+            finish()
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

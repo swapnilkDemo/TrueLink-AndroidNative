@@ -34,7 +34,7 @@ class SharedPreferences(context: Context) {
         return sharedPreferences.getBoolean("isLoggedIn", false)
     }
 
-    fun isPrifileUpdate(): Boolean {
+    fun isProfileUpdate(): Boolean {
         return sharedPreferences.getBoolean("isProfile", false)
     }
 
@@ -42,6 +42,18 @@ class SharedPreferences(context: Context) {
         val editor = sharedPreferences.edit()
         editor.putString("accessToken", accessToken)
         editor.commit()
+    }
+
+    fun setFirstLaunch(b: Boolean) {
+        val editor = sharedPreferences.edit()
+        editor.putBoolean("firstlaunch", b)
+        editor.commit()
+    }
+
+    fun setLoggedIn(b: Boolean) {
+        val edotor = sharedPreferences.edit()
+        edotor.putBoolean("isLoggedIn", b)
+        edotor.commit()
     }
 
 }

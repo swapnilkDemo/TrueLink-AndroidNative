@@ -38,10 +38,11 @@
             android:layout_marginRight="@dimen/_10sdp"
             android:layout_weight="1"
             android:checkable="true"
-            android:elevation="@dimen/_5sdp"
+            android:elevation="@dimen/_10sdp"
             app:cardCornerRadius="@dimen/_8dp"
             app:cardUseCompatPadding="true"
-            app:checkedIcon="@drawable/ic_round_check_box_24">
+            app:checkedIcon="@drawable/ic_round_check_box_24"
+            app:checkedIconTint="@color/yellow_text">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -76,10 +77,12 @@
             android:layout_marginRight="@dimen/_10sdp"
             android:layout_weight="1"
             android:checkable="true"
-            android:elevation="@dimen/_5sdp"
+            android:elevation="@dimen/_10sdp"
             app:cardCornerRadius="@dimen/_8dp"
             app:cardUseCompatPadding="true"
-            app:checkedIcon="@drawable/ic_round_check_box_24">
+            app:checkedIcon="@drawable/ic_round_check_box_24"
+            app:checkedIconMargin="@dimen/margin30"
+            app:checkedIconTint="@color/yellow_text">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -117,7 +120,8 @@
             android:elevation="@dimen/_5sdp"
             app:cardCornerRadius="@dimen/_8dp"
             app:cardUseCompatPadding="true"
-            app:checkedIcon="@drawable/ic_round_check_box_24">
+            app:checkedIcon="@drawable/ic_round_check_box_24"
+            app:checkedIconTint="@color/yellow_text">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -131,7 +135,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:text="@string/gender_male"
+                    android:text="@string/gender_other"
                     android:textColor="@color/other_voilet"
                     android:textSize="@dimen/_16sdp" />
 
@@ -161,7 +165,7 @@
             android:background="@null"
             android:gravity="center_vertical"
             android:hint="@string/hint_name"
-            android:inputType="phone"
+            android:inputType="text"
             android:padding="@dimen/_10sdp"
             android:textColor="@color/gray_200"
             android:textColorHint="@color/gray_200"
@@ -187,23 +191,7 @@
             android:layout_height="@dimen/margin20"
             android:src="@drawable/ic_dob" />
 
-        <com.google.android.material.textfield.MaterialAutoCompleteTextView
-            android:id="@+id/autoTextDay"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/margin20"
-            android:layout_weight="1"
-            android:background="@null"
-            android:drawableEnd="@drawable/ic_round_arrow_drop_down_24"
-            android:gravity="center"
-            android:hint="@string/select_day"
-            android:textColor="@color/gray_200"
-            android:textColorHighlight="@color/colorSecondary"
-            android:textColorHint="@color/gray_200"
-            android:textSize="@dimen/_16sdp" />
-
-        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+        <Spinner
             android:id="@+id/autoTextMonth"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -214,12 +202,31 @@
             android:drawableEnd="@drawable/ic_round_arrow_drop_down_24"
             android:gravity="center"
             android:hint="@string/select_month"
+            android:inputType="text"
             android:textColor="@color/gray_200"
             android:textColorHighlight="@color/colorSecondary"
             android:textColorHint="@color/gray_200"
             android:textSize="@dimen/_16sdp" />
 
-        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+        <Spinner
+            android:id="@+id/autoTextDay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/margin20"
+            android:layout_weight="1"
+            android:background="@null"
+            android:drawableEnd="@drawable/ic_round_arrow_drop_down_24"
+            android:gravity="center"
+            android:hint="@string/select_day"
+            android:inputType="date"
+            android:textColor="@color/gray_200"
+            android:textColorHighlight="@color/colorSecondary"
+            android:textColorHint="@color/gray_200"
+            android:textSize="@dimen/_16sdp" />
+
+
+        <Spinner
             android:id="@+id/autoTextYear"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -230,6 +237,7 @@
             android:drawableEnd="@drawable/ic_round_arrow_drop_down_24"
             android:gravity="center"
             android:hint="@string/select_year"
+            android:inputType="date"
             android:textColor="@color/gray_200"
             android:textColorHighlight="@color/colorSecondary"
             android:textColorHint="@color/gray_200"
@@ -281,7 +289,7 @@
         android:backgroundTint="@color/login_btn"
         android:gravity="center"
         android:padding="10dp"
-        android:text="@string/update"
+        android:text="@string/finish"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="@dimen/_16sdp"
