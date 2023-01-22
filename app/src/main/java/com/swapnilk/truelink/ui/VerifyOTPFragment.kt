@@ -18,7 +18,6 @@ import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import br.com.simplepass.loadingbutton.animatedDrawables.ProgressType
 import br.com.simplepass.loadingbutton.customViews.CircularProgressButton
-import br.com.simplepass.loadingbutton.customViews.ProgressButton
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.ApolloResponse
 import com.apollographql.apollo3.exception.ApolloException
@@ -113,8 +112,10 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
                         val responseVerify: ApolloResponse<VerifyOTPMutation.Data> =
                             apolloClient.mutation(verifyOtpMutation!!).execute()
                         if (responseVerify.data?.verifyOTP!!.success == true) {
-                            Log.d("verifyOTP Response :", responseVerify.data.toString())
-                            startMain()
+//                            Log.d("verifyOTP Response :", responseVerify.data.toString())
+                            sharedPrefs.setAccessToken(responseVerify.data!!.verifyOTP.accessToken.toString())
+                            var uid:String = responseVerify.data!!.verifyOTP.payload?.uid.toString()
+                            startMain(uid)
                         } else afterResultVerify(responseVerify)
 
                     }//End Launch
@@ -136,13 +137,14 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
 
     }
 
-    private fun startMain() {
+    private fun startMain(uid:String) {
         if (sharedPrefs.isPrifileUpdate()) {
             val mainIntent = Intent(activity, MainActivity::class.java)
             startActivity(mainIntent)
             activity?.finish()
         } else {
             val profileIntent = Intent(activity, UserProfileActivity::class.java)
+            profileIntent.putExtra("userId", uid)
             startActivity(profileIntent)
             activity?.finish()
         }
@@ -200,7 +202,7 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
     private fun defaultDoneImage(resources: Resources): Bitmap =
         BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher_foreground)
 
-    fun ProgressButton.morphDoneAndRevert(
+    private fun CircularProgressButton.morphDoneAndRevert(
         context: Context,
         fillColor: Int = defaultColor(context),
         bitmap: Bitmap = defaultDoneImage(context.resources),

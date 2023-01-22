@@ -32,13 +32,16 @@
         android:orientation="horizontal">
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardViewMale"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/_10sdp"
             android:layout_weight="1"
+            android:checkable="true"
             android:elevation="@dimen/_5sdp"
             app:cardCornerRadius="@dimen/_8dp"
-            app:cardUseCompatPadding="true">
+            app:cardUseCompatPadding="true"
+            app:checkedIcon="@drawable/ic_round_check_box_24">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -67,13 +70,16 @@
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardViewFemale"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/_10sdp"
             android:layout_weight="1"
+            android:checkable="true"
             android:elevation="@dimen/_5sdp"
             app:cardCornerRadius="@dimen/_8dp"
-            app:cardUseCompatPadding="true">
+            app:cardUseCompatPadding="true"
+            app:checkedIcon="@drawable/ic_round_check_box_24">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -87,7 +93,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:text="@string/gender_male"
+                    android:text="@string/gender_female"
                     android:textColor="@color/female_marun"
                     android:textSize="@dimen/_16sdp" />
 
@@ -102,13 +108,16 @@
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardViewOther"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/_10sdp"
             android:layout_weight="1"
+            android:checkable="true"
             android:elevation="@dimen/_5sdp"
             app:cardCornerRadius="@dimen/_8dp"
-            app:cardUseCompatPadding="true">
+            app:cardUseCompatPadding="true"
+            app:checkedIcon="@drawable/ic_round_check_box_24">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -132,7 +141,7 @@
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/_10sdp"
                     android:background="@color/colorSecondary"
-                    android:src="@drawable/avatar_male" />
+                    android:src="@drawable/avatar_other" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
@@ -145,7 +154,7 @@
         android:background="@drawable/backround_outline_box">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edit_phone"
+            android:id="@+id/edit_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -154,7 +163,7 @@
             android:hint="@string/hint_name"
             android:inputType="phone"
             android:padding="@dimen/_10sdp"
-            android:textColor="@color/white"
+            android:textColor="@color/gray_200"
             android:textColorHint="@color/gray_200"
             android:textSize="@dimen/_16sdp" />
 
@@ -178,6 +187,53 @@
             android:layout_height="@dimen/margin20"
             android:src="@drawable/ic_dob" />
 
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/autoTextDay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/margin20"
+            android:layout_weight="1"
+            android:background="@null"
+            android:drawableEnd="@drawable/ic_round_arrow_drop_down_24"
+            android:gravity="center"
+            android:hint="@string/select_day"
+            android:textColor="@color/gray_200"
+            android:textColorHighlight="@color/colorSecondary"
+            android:textColorHint="@color/gray_200"
+            android:textSize="@dimen/_16sdp" />
+
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/autoTextMonth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/margin20"
+            android:layout_weight="1"
+            android:background="@null"
+            android:drawableEnd="@drawable/ic_round_arrow_drop_down_24"
+            android:gravity="center"
+            android:hint="@string/select_month"
+            android:textColor="@color/gray_200"
+            android:textColorHighlight="@color/colorSecondary"
+            android:textColorHint="@color/gray_200"
+            android:textSize="@dimen/_16sdp" />
+
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/autoTextYear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/margin20"
+            android:layout_weight="1"
+            android:background="@null"
+            android:drawableEnd="@drawable/ic_round_arrow_drop_down_24"
+            android:gravity="center"
+            android:hint="@string/select_year"
+            android:textColor="@color/gray_200"
+            android:textColorHighlight="@color/colorSecondary"
+            android:textColorHint="@color/gray_200"
+            android:textSize="@dimen/_16sdp" />
     </LinearLayout>
 
     <TextView
@@ -198,19 +254,19 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:background="@drawable/background_circle"
-            android:layout_marginRight="@dimen/margin20"
             android:layout_width="@dimen/margin30"
             android:layout_height="@dimen/margin30"
+            android:layout_marginRight="@dimen/margin20"
+            android:background="@drawable/background_circle"
             android:padding="@dimen/_5sdp"
             android:src="@drawable/ic_google" />
 
         <ImageView
-            android:layout_marginLeft="@dimen/margin20"
-            android:background="@drawable/background_circle"
-            android:layout_marginRight="@dimen/_5sdp"
             android:layout_width="@dimen/margin30"
             android:layout_height="@dimen/margin30"
+            android:layout_marginLeft="@dimen/margin20"
+            android:layout_marginRight="@dimen/_5sdp"
+            android:background="@drawable/background_circle"
             android:padding="@dimen/_5sdp"
             android:src="@drawable/ic_linkedin" />
 

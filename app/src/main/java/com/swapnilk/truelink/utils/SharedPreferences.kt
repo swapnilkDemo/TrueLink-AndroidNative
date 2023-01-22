@@ -38,4 +38,10 @@ class SharedPreferences(context: Context) {
         return sharedPreferences.getBoolean("isProfile", false)
     }
 
+    fun setAccessToken(accessToken: String) {
+        val editor = sharedPreferences.edit()
+        editor.putString("accessToken", accessToken)
+        editor.commit()
+    }
+
 }

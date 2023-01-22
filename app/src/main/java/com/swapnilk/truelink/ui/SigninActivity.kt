@@ -19,15 +19,12 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import br.com.simplepass.loadingbutton.animatedDrawables.ProgressType
 import br.com.simplepass.loadingbutton.customViews.CircularProgressButton
-import br.com.simplepass.loadingbutton.customViews.ProgressButton
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.ApolloResponse
 import com.apollographql.apollo3.exception.ApolloException
-import com.chaos.view.PinView
 import com.example.GetOTPMutation
-import com.example.VerifyOTPMutation
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetBehavior.*
+import com.google.android.material.bottomsheet.BottomSheetBehavior.SAVE_ALL
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.textfield.TextInputEditText
 import com.hbb20.CountryCodePicker
@@ -75,8 +72,8 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
         sharedPrefs = SharedPreferences(applicationContext)
         commonFunctions = CommonFunctions(applicationContext)
         try {
-             apolloClient =
-                 ApolloClient.Builder().serverUrl("https://truelink.neki.dev/graphql/").build()
+            apolloClient =
+                ApolloClient.Builder().serverUrl("https://truelink.neki.dev/graphql/").build()
 //            apiHelper = ApiHelper(this@SigninActivity)
         } catch (e: ApolloException) {
             e.message?.let { Log.d("Exception ", it) }
@@ -297,7 +294,7 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
     private fun defaultDoneImage(resources: Resources): Bitmap =
         BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher_foreground)
 
-    fun ProgressButton.morphDoneAndRevert(
+    private fun CircularProgressButton.morphDoneAndRevert(
         context: Context,
         fillColor: Int = defaultColor(context),
         bitmap: Bitmap = defaultDoneImage(context.resources),
