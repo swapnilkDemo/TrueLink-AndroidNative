@@ -68,4 +68,15 @@ class SharedPreferences(context: Context) {
 
     }
 
+    fun storeFCM(token: String?) {
+        val editor = sharedPreferences.edit()
+        editor.putString("fcmToken", token)
+        editor.commit()
+
+    }
+
+    fun getFCM(): String? {
+        return sharedPreferences.getString("fcmToken", "")
+    }
+
 }

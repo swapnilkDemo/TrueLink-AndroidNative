@@ -76,6 +76,13 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
         }
         // Inflate the layout for this fragment
         viewL = inflater.inflate(R.layout.bottom_sheet_otp, container, false)
+        /////////////////Initalize UI////////////////
+        initialize()
+        //////////////////////////////////////////////
+        return viewL;
+    }
+
+    private fun initialize() {
         pinView = viewL.findViewById<PinView>(R.id.pinView)
         viewL.findViewById<CircularProgressButton>(R.id.btnotp)?.run {
             setOnClickListener {
@@ -124,7 +131,6 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
                 }//End else
             }// End onclick listener
         }//End run
-        return viewL;
     }
 
     private fun afterResultVerify(response: ApolloResponse<VerifyOTPMutation.Data>) {
