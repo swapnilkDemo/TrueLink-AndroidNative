@@ -69,4 +69,8 @@ meaning regardless of whether they appear in singular or in plural.</span></div>
     <string name="gender_other">Other</string>
     <string name="finish">Finish Up</string>
     <string name="error">Something went wrong, please check logs</string>
+    <string name="select_dob">Select Your Date of Birth</string>
+    <string name="error_dob">Select your Date of Birth</string>
+    <string name="error_enter_full_name">Enter your full name</string>
+    <string name="error_select_gender">Select your Gender</string>
 </resources>

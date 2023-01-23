@@ -56,4 +56,16 @@ class SharedPreferences(context: Context) {
         edotor.commit()
     }
 
+    fun setProfileUpdate(b: Boolean) {
+        val editor = sharedPreferences.edit()
+        editor.putBoolean("isProfile", b)
+        editor.commit()
+
+    }
+
+    fun getAccessToken(): String? {
+        return sharedPreferences.getString("accessToken", "")
+
+    }
+
 }

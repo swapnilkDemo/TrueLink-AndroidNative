@@ -1,29 +1,23 @@
 package com.swapnilk.truelink.utils
 
 import android.content.Context
-import android.content.res.Resources
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Color
-import android.os.Handler
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
-import android.view.Gravity
 import android.view.View
-import android.view.ViewGroup
-import android.widget.FrameLayout
-import android.widget.TextView
 import androidx.core.content.ContextCompat
-import br.com.simplepass.loadingbutton.animatedDrawables.ProgressType
-import br.com.simplepass.loadingbutton.customViews.ProgressButton
-import com.google.android.datatransport.runtime.backends.BackendResponse.ok
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.swapnilk.truelink.R
+import java.security.Timestamp
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class CommonFunctions(context: Context) {
+    ////////////////////////Add color text between string...////////////////////
     fun spanTextWithColor(
         text: String, color: Int, start: Int, end: Int
     ): SpannableStringBuilder {
@@ -42,6 +36,7 @@ class CommonFunctions(context: Context) {
         return spannable
     }
 
+    /////////////////////////Show Common Snackbar////////////////////////////
     fun showErrorSnackBar(context: Context, view: View, str: String) {
         try {
             val snackBarView = Snackbar.make(view, str, Snackbar.LENGTH_LONG)
@@ -52,10 +47,10 @@ class CommonFunctions(context: Context) {
                 })
             val view = snackBarView.view
 
-           /* val params = view.layoutParams as FrameLayout.LayoutParams
-            params.gravity = Gravity.TOP
-//            params.topMargin = R.dimen.margin50
-            view.layoutParams = params*/
+            /* val params = view.layoutParams as FrameLayout.LayoutParams
+             params.gravity = Gravity.TOP
+ //            params.topMargin = R.dimen.margin50
+             view.layoutParams = params*/
             view.background =
                 ContextCompat.getDrawable(context, R.drawable.rect_error) // for custom background
             snackBarView.animationMode = BaseTransientBottomBar.ANIMATION_MODE_FADE
@@ -66,4 +61,10 @@ class CommonFunctions(context: Context) {
         }
     }
 
+    ////////////////////////Change String MM/dd/yyyy to timestamp/////////////////
+    fun convertDate2TimeStamp(date: String): Long {
+        val formatter: DateFormat = SimpleDateFormat("MM/dd/yyyy")
+        val date: Date = formatter.parse(date) as Date
+        return date.time
+    }
 }

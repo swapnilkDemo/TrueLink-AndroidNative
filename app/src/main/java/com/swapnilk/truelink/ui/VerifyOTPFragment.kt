@@ -114,7 +114,8 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
                         if (responseVerify.data?.verifyOTP!!.success == true) {
 //                            Log.d("verifyOTP Response :", responseVerify.data.toString())
                             sharedPrefs.setAccessToken(responseVerify.data!!.verifyOTP.accessToken.toString())
-                            var uid:String = responseVerify.data!!.verifyOTP.payload?.uid.toString()
+                            var uid: String =
+                                responseVerify.data!!.verifyOTP.payload?.uid.toString()
                             sharedPrefs.setLoggedIn(true)
                             startMain(uid)
                         } else afterResultVerify(responseVerify)
@@ -138,7 +139,7 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
 
     }
 
-    private fun startMain(uid:String) {
+    private fun startMain(uid: String) {
         if (sharedPrefs.isProfileUpdate()) {
             val mainIntent = Intent(activity, MainActivity::class.java)
             startActivity(mainIntent)

@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId "com.swapnilk.truelink"
-        minSdk 21
+        minSdk 23
         targetSdk 32
         versionCode 1
         versionName "1.0"
@@ -49,7 +49,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment-ktx:2.4.1'
     implementation 'androidx.navigation:navigation-ui-ktx:2.4.1'
     ///////////////////////////Third-party Libraries/////////////////////
-    ////////////////////////Circle Indicatior For View Pager/////////////
+    ////////////////////////Circle Indicator For View Pager/////////////
     implementation "me.relex:circleindicator:2.1.6"
     //////////////////Graph/Charts//////////////////////////
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
@@ -64,16 +64,14 @@ dependencies {
     ////////////////////////////////////////////////////////////
     ///////////....... GraphQL Queries.................////////
     implementation 'com.apollographql.apollo3:apollo-runtime:3.7.3'
-    /*implementation 'com.apollographql.apollo3:apollo-annotations-jvm:3.7.3'*/
     ////////////////////Firebase Tools////////////////////////
-    implementation 'com.google.firebase:firebase-analytics:17.2.2'
-    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.3.2'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.3.3'
     implementation 'com.google.firebase:firebase-analytics-ktx:21.2.0'
+    ///////////////////////DatePicker Wheel/////////////////////////
+    implementation 'com.github.OzcanAlasalvar:DatePicker:1.0.4'
+    //////////////////////////////////////////////////
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
-    //implementation 'com.apollographql.apollo3:apollo-coroutines-support:3.7.3'
-    //
-    //compileOnly('org.jetbrains:annotations:24.0.0')
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'

@@ -1,20 +1,38 @@
 package com.swapnilk.truelink.ui
 
+import android.content.Context
+import android.content.Intent
+import android.content.res.Resources
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.view.View
-import android.widget.*
+import android.os.Handler
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import br.com.simplepass.loadingbutton.animatedDrawables.ProgressType
 import br.com.simplepass.loadingbutton.customViews.CircularProgressButton
 import com.apollographql.apollo3.ApolloClient
+import com.apollographql.apollo3.api.ApolloResponse
+import com.apollographql.apollo3.api.Optional
+import com.example.UpdateUserMutation
+import com.example.type.Gender
+import com.example.type.UpdateUserInput
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.textfield.TextInputEditText
+import com.ozcanalasalvar.library.utils.DateUtils
+import com.ozcanalasalvar.library.view.popup.DatePickerPopup
+import com.ozcanalasalvar.library.view.popup.DatePickerPopup.OnDateSelectListener
+import com.swapnilk.truelink.MainActivity
 import com.swapnilk.truelink.R
 import com.swapnilk.truelink.utils.CommonFunctions
 import com.swapnilk.truelink.utils.SharedPreferences
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import java.util.*
+import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
 
@@ -23,32 +41,28 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main + job
 
-    lateinit var sharedPreferences: SharedPreferences
-    lateinit var commonFunctions: CommonFunctions
-    lateinit var apolloClient: ApolloClient
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var commonFunctions: CommonFunctions
+    private lateinit var apolloClient: ApolloClient
 
-    lateinit var cardViewMale: MaterialCardView
-    lateinit var cardViewFemale: MaterialCardView
-    lateinit var cardViewOther: MaterialCardView
+    private lateinit var cardViewMale: MaterialCardView
+    private lateinit var cardViewFemale: MaterialCardView
+    private lateinit var cardViewOther: MaterialCardView
 
-    lateinit var textViewMale: TextView
-    lateinit var textViewFemale: TextView
-    lateinit var textViewOther: TextView
 
-    lateinit var textInputName: TextInputEditText
-    lateinit var autotextDay: Spinner
-    lateinit var autoTextMonth: Spinner
-    lateinit var autoTextYear: Spinner
-    lateinit var ivGoogle: ImageView
-    lateinit var ivLinkedInL: ImageView
-    lateinit var progressButton: CircularProgressButton
+    private lateinit var editName: TextInputEditText
+    private lateinit var tvSelectDob: TextView
+
+    private lateinit var ivGoogle: ImageView
+    private lateinit var ivLinkedInL: ImageView
+    private lateinit var progressButton: CircularProgressButton
+    private lateinit var datePicker: LinearLayout
+    private var datePickerPopup: DatePickerPopup? = null
 
     var gender: String = ""
     var dob: String = ""
     var name: String = ""
-    var day: Int = 0
-    var monthh: String = ""
-    var yearh: String = ""
+    var dateOfBirth: Long? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,7 +75,7 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
             .build()
         /////////////////////Initialize UI//////////////
         Initialize()
-
+        ///////////////////////////////////////////////
 
     }
 
@@ -93,112 +107,122 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
             gender = "Other"
         }
 
-        textInputName = findViewById(R.id.edit_name)
+        editName = findViewById(R.id.edit_name)
+        tvSelectDob = findViewById(R.id.tv_select_dob)
 
-        autotextDay = findViewById(R.id.autoTextDay)
-        autoTextMonth = findViewById(R.id.autoTextMonth)
-        autoTextYear = findViewById(R.id.autoTextYear)
-
-        val calendar: Calendar = Calendar.getInstance()
-        var dayArray: ArrayList<Int> = ArrayList()
-        for (i in 0..30) {
-            //var day: Int = calendar.get(Calendar.DAY_OF_MONTH) +1
-            dayArray.add(i + 1)
+        datePickerPopup = DatePickerPopup.Builder()
+            .from(this@UserProfileActivity)
+            .offset(3)
+            .pickerMode(com.ozcanalasalvar.library.view.datePicker.DatePicker.MONTH_ON_FIRST)
+            .textSize(19)
+            .endDate(DateUtils.getCurrentTime())
+            .currentDate(DateUtils.getTimeMiles(1997, 7, 7))
+            .startDate(DateUtils.getTimeMiles(1900, 1, 1))
+            .build()
+        datePicker = findViewById(R.id.ll_select_dob)
+        datePicker.setOnClickListener {
+            datePickerPopup?.show()
         }
-        autotextDay.setAdapter(
-            ArrayAdapter(
-                this@UserProfileActivity,
-                android.R.layout.simple_dropdown_item_1line,
-                dayArray
-            )
-        )
-        autotextDay.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View,
-                position: Int,
-                id: Long
-            ) {
-                if (parent != null) {
-                    day = parent.getItemAtPosition(position) as Int
-                } else {
+
+        datePickerPopup?.setListener(OnDateSelectListener { dp, date, day, month, year ->
+            tvSelectDob.setText("$month/$day/$year")
+            dateOfBirth = commonFunctions.convertDate2TimeStamp("$month/$day/$year")
+        })
+
+
+        progressButton = findViewById(R.id.btn_finish)
+        progressButton.run {
+            setOnClickListener {
+                if (gender.isNullOrEmpty()) {
                     commonFunctions.showErrorSnackBar(
                         this@UserProfileActivity,
-                        view,
-                        getString(R.string.error)
+                        progressButton,
+                        getString(R.string.error_select_gender)
                     )
+                } else if (editName.text.isNullOrEmpty()) {
+                    commonFunctions.showErrorSnackBar(
+                        this@UserProfileActivity,
+                        progressButton,
+                        getString(R.string.error_enter_full_name)
+                    )
+                } else if (dateOfBirth == null) {
+                    commonFunctions.showErrorSnackBar(
+                        this@UserProfileActivity,
+                        progressButton,
+                        getString(R.string.error_dob)
+                    )
+                } else {
+                    //////////////////Initiate Login///////////////////
+                    morphDoneAndRevert(this@UserProfileActivity)
+                    /////////////////Call Update Mutation /////////////
+                    val genderEnum: Gender = Gender.safeValueOf(gender)
+                    val updateUserInput = UpdateUserInput(
+                        Optional.Present(editName.text.toString()),
+                        Optional.Absent,
+                        Optional.Absent,
+                        Optional.Absent,
+                        Optional.Absent,
+                        Optional.Absent,
+                        Optional.Absent,
+                        Optional.Absent,
+                        Optional.Present(sharedPreferences.getAccessToken()),
+                        Optional.Present(dateOfBirth)
+                        //,Optional.Present(genderEnum)
+                    )
+                    val updateUserMutation: UpdateUserMutation =
+                        UpdateUserMutation(
+                            updateUserInput
+
+                        )
+                    launch {
+                        val response: ApolloResponse<UpdateUserMutation.Data> =
+                            apolloClient.mutation(updateUserMutation).execute()
+                        afterResult(response)
+                    }
                 }
             }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                TODO("Not yet implemented")
-            }
-        }
-
-        val monthName = arrayOf(
-            "January", "February", "March", "April", "May", "June", "July",
-            "August", "September", "October", "November", "December"
-        )
-
-        val cal = Calendar.getInstance()
-        val month1 = monthName[cal[Calendar.MONTH]]
-
-        val mnth = arrayOf(
-            month1,
-            "January",
-            "February",
-            "March",
-            "April",
-            "May",
-            "June",
-            "July",
-            "August",
-            "September",
-            "October",
-            "November",
-            "December"
-        )
-
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, mnth)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        autoTextMonth.setAdapter(adapter)
-        autoTextMonth.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View,
-                position: Int,
-                id: Long
-            ) {
-                if (parent != null) {
-                    monthh = parent.getItemAtPosition(position).toString()
-                }
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
-        val years = ArrayList<String>()
-        val thisYear = Calendar.getInstance()[Calendar.YEAR]
-        for (i in 1900..thisYear) {
-            years.add(Integer.toString(i))
-        }
-        val adapterYear = ArrayAdapter(this, android.R.layout.simple_spinner_item, years)
-
-        autoTextYear.adapter = adapterYear
-
-        autoTextYear.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View,
-                position: Int,
-                id: Long
-            ) {
-                if (parent != null) {
-                    (parent.getChildAt(0) as TextView).setTextColor(getColor(R.color.gray_200))
-                    yearh = parent.getItemAtPosition(position).toString()
-                }
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
     }// End Initialize
+
+    private fun afterResult(response: ApolloResponse<UpdateUserMutation.Data>) {
+        if (response.data?.updateUser?.success == true) {
+            sharedPreferences.setProfileUpdate(true)
+            startMain()
+        } else {
+            commonFunctions.showErrorSnackBar(
+                this@UserProfileActivity,
+                progressButton,
+                response.data?.updateUser?.message.toString()
+            )
+        }
+
+    }
+
+    private fun startMain() {
+        val intent = Intent(this@UserProfileActivity, MainActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+    ///////////////////////Progress Button Animations/////////////////////////////
+    private fun defaultColor(context: Context) =
+        ContextCompat.getColor(context, android.R.color.black)
+
+    private fun defaultDoneImage(resources: Resources): Bitmap =
+        BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher_foreground)
+
+    private fun CircularProgressButton.morphDoneAndRevert(
+        context: Context,
+        fillColor: Int = defaultColor(context),
+        bitmap: Bitmap = defaultDoneImage(context.resources),
+        doneTime: Long = 3000,
+        revertTime: Long = 4000
+    ) {
+        progressType = ProgressType.INDETERMINATE
+        startAnimation()
+        Handler().run {
+            postDelayed({ doneLoadingAnimation(fillColor, bitmap) }, doneTime)
+            postDelayed(::revertAnimation, revertTime)
+        }
+    }
 }
