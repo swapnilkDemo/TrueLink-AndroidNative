@@ -26,7 +26,7 @@ import br.com.simplepass.loadingbutton.customViews.CircularProgressButton
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.ApolloResponse
 import com.apollographql.apollo3.api.Optional
-import com.apollographql.apollo3.network.ws.WebSocketNetworkTransport
+import com.apollographql.apollo3.network.okHttpClient
 import com.example.UpdateUserMutation
 import com.example.type.Gender
 import com.example.type.UpdateUserInput
@@ -49,6 +49,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import okhttp3.Interceptor
+import okhttp3.OkHttpClient
+import okhttp3.Response
 import kotlin.coroutines.CoroutineContext
 
 
@@ -101,21 +104,21 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
         permissionUtils = PermissionUtils(this@UserProfileActivity)
         sharedPreferences = SharedPreferences(this@UserProfileActivity)
         commonFunctions = CommonFunctions(this@UserProfileActivity)
+
+        ///////////////////////Initialize ApolloClient////////////////////////////
+        val okHttpClient = OkHttpClient.Builder()
+            .addInterceptor(AuthorizationInterceptor(this@UserProfileActivity))
+            .build()
         apolloClient = ApolloClient.Builder()
             .serverUrl("https://truelink.neki.dev/graphql/")
-            .subscriptionNetworkTransport(
-                WebSocketNetworkTransport.Builder()
-                    .serverUrl("wss://truelink.neki.dev/graphql/")
-                    .addHeader("Authorization", sharedPreferences.getAccessToken()!!)
-                    .build()
-            )
+            .okHttpClient(okHttpClient)
             .build()
         /////////////////Request Permissions////////////
         //Manifest.permission.POST_NOTIFICATIONS,  Manifest.permission.ACCESS_BACKGROUND_LOCATION
         if (hasPermission(Manifest.permission.POST_NOTIFICATIONS)) generateFCMToken() else
             askPermission(Manifest.permission.POST_NOTIFICATIONS)
-        if (hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)) getUserLocation() else
-            askPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+        if (hasPermission(Manifest.permission.ACCESS_COARSE_LOCATION)) getUserLocation() else
+            askPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
         /////////////////////Initialize UI//////////////
         initialize()
         ///////////////////////////////////////////////
@@ -363,5 +366,17 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
             e.printStackTrace()
         }
         return false
+    }
+
+    class AuthorizationInterceptor(context: Context) : Interceptor {
+        private val sharedPreferences: SharedPreferences = SharedPreferences(context)
+        override fun intercept(chain: Interceptor.Chain): Response {
+            val request = chain.request().newBuilder()
+                .addHeader("Authorization", sharedPreferences.getAccessToken()!!)
+                .build()
+
+            return chain.proceed(request)
+        }
+
     }
 }

@@ -1,0 +1,11 @@
+mutation TokenUpdate($rt: String!) {
+  tokenUpdate(RT: $rt) {
+    code
+    message
+    success
+    payload {
+      accessToken
+      refreshToken
+    }
+  }
+}

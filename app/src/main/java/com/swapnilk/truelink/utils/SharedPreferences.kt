@@ -79,4 +79,14 @@ class SharedPreferences(context: Context) {
         return sharedPreferences.getString("fcmToken", "")
     }
 
+    fun setRefreshToken(refreshToken: String) {
+        val editor = sharedPreferences.edit()
+        editor.putString("refreshToken", refreshToken)
+        editor.commit()
+    }
+
+    fun getRefreshToken(): String? {
+        return sharedPreferences.getString("refreshToken", "")
+    }
+
 }

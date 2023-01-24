@@ -4,7 +4,10 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.NavHostFragment
+import com.swapnilk.truelink.data.online.ApiHelper
 import com.swapnilk.truelink.databinding.ActivityMainBinding
+import com.swapnilk.truelink.utils.CommonFunctions
+import com.swapnilk.truelink.utils.SharedPreferences
 import com.tenclouds.fluidbottomnavigation.FluidBottomNavigation
 import com.tenclouds.fluidbottomnavigation.FluidBottomNavigationItem
 import com.tenclouds.fluidbottomnavigation.listener.OnTabSelectedListener
@@ -14,6 +17,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var fluidBottomNavigationItems: List<FluidBottomNavigationItem>
     private lateinit var navView: FluidBottomNavigation
+
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var commonFunctions: CommonFunctions
+    private lateinit var apiHelper: ApiHelper
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -123,6 +123,7 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
                             sharedPrefs.setAccessToken(responseVerify.data!!.verifyOTP.accessToken.toString())
                             var uid: String =
                                 responseVerify.data!!.verifyOTP.payload?.uid.toString()
+                            sharedPrefs.setRefreshToken(responseVerify.data!!.verifyOTP.payload!!.refreshToken.toString())
                             sharedPrefs.setLoggedIn(true)
                             startMain(uid)
                         } else afterResultVerify(responseVerify)
