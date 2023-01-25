@@ -67,4 +67,6 @@ class CommonFunctions(context: Context) {
         val date: Date = formatter.parse(date) as Date
         return date.time
     }
+
+
 }

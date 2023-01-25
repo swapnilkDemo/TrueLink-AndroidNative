@@ -28,7 +28,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.swapnilk.truelink.MainActivity
 import com.swapnilk.truelink.R
-import com.swapnilk.truelink.data.online.ApiHelper
+import com.swapnilk.truelink.data.online.ApolloHelper
 import com.swapnilk.truelink.utils.CommonFunctions
 import com.swapnilk.truelink.utils.SharedPreferences
 import kotlinx.coroutines.CoroutineScope
@@ -48,7 +48,7 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
     lateinit var commonFunctions: CommonFunctions
 
     lateinit var apolloClient: ApolloClient
-    lateinit var apiHelper: ApiHelper
+    lateinit var apiHelper: ApolloHelper
 
     //    lateinit var view: CoordinatorLayout
     lateinit var sharedPrefs: SharedPreferences

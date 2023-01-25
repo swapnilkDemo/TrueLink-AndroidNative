@@ -30,7 +30,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.hbb20.CountryCodePicker
 import com.swapnilk.truelink.MainActivity
 import com.swapnilk.truelink.R
-import com.swapnilk.truelink.data.online.ApiHelper
+import com.swapnilk.truelink.data.online.ApolloHelper
 import com.swapnilk.truelink.utils.CommonFunctions
 import com.swapnilk.truelink.utils.SharedPreferences
 import kotlinx.coroutines.CoroutineScope
@@ -62,13 +62,13 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
     lateinit var commonFunctions: CommonFunctions
 
     lateinit var apolloClient: ApolloClient
-    lateinit var apiHelper: ApiHelper
+    lateinit var apiHelper: ApolloHelper
     lateinit var view: CoordinatorLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signin)
-        //////////////////////////Initialize required objects//////
+        //////////////////////////Initialize required classes//////
         sharedPrefs = SharedPreferences(applicationContext)
         commonFunctions = CommonFunctions(applicationContext)
         try {

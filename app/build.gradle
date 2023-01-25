@@ -70,7 +70,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:23.1.1'
     ///////////////////////DatePicker Wheel/////////////////////////
     implementation 'com.github.OzcanAlasalvar:DatePicker:1.0.4'
-    //////////////////////////////////////////////////
+    //////////////////////JWT Decode Library////////////////////////////
+    implementation 'com.auth0.android:jwtdecode:2.0.2'
+    ////////////////////////////////////////////////////////////////
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation 'androidx.work:work-runtime-ktx:2.7.1'

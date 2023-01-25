@@ -255,7 +255,7 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
                     val updateUserInput = UpdateUserInput(
                         Optional.Present(editName.text.toString()),
                         Optional.Absent,
-                        Optional.Present(latLang),
+                        Optional.Absent,
                         Optional.Absent,
                         Optional.Absent,
                         Optional.Absent,

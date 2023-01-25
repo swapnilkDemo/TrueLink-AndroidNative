@@ -1,18 +1,31 @@
 package com.swapnilk.truelink
 
+import android.media.session.MediaSession.Token
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.NavHostFragment
-import com.swapnilk.truelink.data.online.ApiHelper
+import com.apollographql.apollo3.api.ApolloResponse
+import com.auth0.android.jwt.JWT
+import com.example.TokenUpdateMutation
+import com.swapnilk.truelink.data.online.ApolloHelper
 import com.swapnilk.truelink.databinding.ActivityMainBinding
 import com.swapnilk.truelink.utils.CommonFunctions
 import com.swapnilk.truelink.utils.SharedPreferences
 import com.tenclouds.fluidbottomnavigation.FluidBottomNavigation
 import com.tenclouds.fluidbottomnavigation.FluidBottomNavigationItem
 import com.tenclouds.fluidbottomnavigation.listener.OnTabSelectedListener
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), CoroutineScope {
+    ////////////Start Coroutine for Background Task../////////////
+    private var job: Job = Job()
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var fluidBottomNavigationItems: List<FluidBottomNavigationItem>
@@ -20,46 +33,32 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var commonFunctions: CommonFunctions
-    private lateinit var apiHelper: ApiHelper
+    private lateinit var apolloHelper: ApolloHelper
 
+    override fun onDestroy() {
+        super.onDestroy()
+        job.cancel()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        ////////////////////Initialize common classes////////////////
+        sharedPreferences = SharedPreferences(this@MainActivity)
+        commonFunctions = CommonFunctions(this@MainActivity)
+        apolloHelper = ApolloHelper(this@MainActivity)
+        //////////////////////////////////////////////////////////////
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        navView = binding.fluidBottomNavigation
-
-      /*  val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-         val appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications
-            )
-        )
-        setupActionBarWithNavController(navController, appBarConfiguration)*/
-        // navView.setupWithNavController(navController)
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        //////////////////Fragment Navigation//////////////////////////////
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
+        /////////////Set Navigation Menus////////////////
+        navView = binding.fluidBottomNavigation
         setNavigation()
-
-        //appPref.putString(appPref.INCIDENT_ID, "");
-        ////////////////////////////////////////////
-        // setupTabIcons(0);
-        // bottomNavigationView.getMenu().findItem(R.id.navigation_Notification).setChecked(true);
         navView.selectTab(1)
-
         navView.onTabSelectedListener
-
-        ///////////////////////////////////////////////////////////////////
-
-        //////////////////////TAb Bar Style///////////////
-        //  fluidBottomNavigation.setBackColor(ContextCompat.getColor(this, R.color.backColor));
-        //fluidBottomNavigation.ba
-
-        // createTabs();
         navView.onTabSelectedListener = object : OnTabSelectedListener {
             override fun onTabSelected(i: Int) {
                 try {
@@ -102,5 +101,38 @@ class MainActivity : AppCompatActivity() {
                 )
             )
         navView.items = fluidBottomNavigationItems
+
+        val refreshToken = sharedPreferences.getRefreshToken();
+        if (!refreshToken.isNullOrEmpty())
+            refreshAccessToken(refreshToken)
+    }
+
+
+    private fun refreshAccessToken(refreshToken: String) {
+        val jwt = JWT(sharedPreferences.getAccessToken().toString())
+        if (jwt.isExpired(10)) {
+            var tokenRefresh = TokenUpdateMutation(
+                refreshToken
+            )
+
+            launch {
+                var response: ApolloResponse<TokenUpdateMutation.Data> =
+                    apolloHelper.apolloClient.mutation(tokenRefresh).execute()
+                afterResponse(response)
+            }
+        }
+
+    }
+
+    private fun afterResponse(response: ApolloResponse<TokenUpdateMutation.Data>) {
+        if (response?.data?.tokenUpdate?.success == true) {
+            sharedPreferences.setAccessToken(response?.data?.tokenUpdate!!.payload!!.accessToken.toString())
+            sharedPreferences.setRefreshToken(response?.data?.tokenUpdate!!.payload!!.refreshToken.toString())
+            commonFunctions.showErrorSnackBar(
+                this@MainActivity,
+                navView,
+                getString(R.string.token_refresh)
+            )
+        }
     }
 }
