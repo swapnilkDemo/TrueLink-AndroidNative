@@ -10,7 +10,6 @@ import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.swapnilk.truelink.R
-import java.security.Timestamp
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -66,6 +65,20 @@ class CommonFunctions(context: Context) {
         val formatter: DateFormat = SimpleDateFormat("MM/dd/yyyy")
         val date: Date = formatter.parse(date) as Date
         return date.time
+    }
+
+    /////////////////Change Timestamp string to date///////////////////
+    fun convertTimeStamp2Date(timestamp: String): String {
+        var strDate = ""
+        try {
+            val original: DateFormat = SimpleDateFormat("yyyy-mm-dd'T'hh:mm:ss.SSSZ")
+            val date = original.format(timestamp)
+            val formatter: DateFormat = SimpleDateFormat("MM/dd/yyyy")
+            strDate = formatter.format(date).toString();
+        } catch (e: Exception) {
+            e.stackTrace
+        }
+        return strDate
     }
 
 

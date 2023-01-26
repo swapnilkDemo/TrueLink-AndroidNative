@@ -29,6 +29,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.swapnilk.truelink.MainActivity
 import com.swapnilk.truelink.R
 import com.swapnilk.truelink.data.online.ApolloHelper
+import com.swapnilk.truelink.data.online.model.UserModel
 import com.swapnilk.truelink.utils.CommonFunctions
 import com.swapnilk.truelink.utils.SharedPreferences
 import kotlinx.coroutines.CoroutineScope
@@ -123,9 +124,20 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
                             sharedPrefs.setAccessToken(responseVerify.data!!.verifyOTP.accessToken.toString())
                             var uid: String =
                                 responseVerify.data!!.verifyOTP.payload?.uid.toString()
+                            var userModel = UserModel(
+                                responseVerify.data!!.verifyOTP.payload?.uid.toString(),
+                                responseVerify.data!!.verifyOTP.payload?.fullname.toString(),
+                                responseVerify.data!!.verifyOTP.payload?.phone.toString(),
+                                responseVerify.data!!.verifyOTP.payload?.dialcode.toString(),
+                                responseVerify.data!!.verifyOTP.payload?.email.toString(),
+                                responseVerify.data!!.verifyOTP.payload?.dob.toString(),
+                                null,
+                                responseVerify.data!!.verifyOTP.payload?.gender
+
+                            );
                             sharedPrefs.setRefreshToken(responseVerify.data!!.verifyOTP.payload!!.refreshToken.toString())
                             sharedPrefs.setLoggedIn(true)
-                            startMain(uid)
+                            startMain(uid, userModel)
                         } else afterResultVerify(responseVerify)
 
                     }//End Launch
@@ -146,14 +158,17 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
 
     }
 
-    private fun startMain(uid: String) {
+    private fun startMain(uid: String, userModel: UserModel?) {
         if (sharedPrefs.isProfileUpdate()) {
             val mainIntent = Intent(activity, MainActivity::class.java)
             startActivity(mainIntent)
             activity?.finish()
         } else {
             val profileIntent = Intent(activity, UserProfileActivity::class.java)
-            profileIntent.putExtra("userId", uid)
+            profileIntent.putExtra("uId", userModel?.uId)
+            profileIntent.putExtra("fullName", userModel?.uName)
+            profileIntent.putExtra("gender", userModel?.uGender)
+            profileIntent.putExtra("dob", userModel?.uDOB)
             startActivity(profileIntent)
             activity?.finish()
         }

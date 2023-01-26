@@ -1,6 +1,5 @@
 package com.swapnilk.truelink
 
-import android.media.session.MediaSession.Token
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -9,6 +8,7 @@ import com.apollographql.apollo3.api.ApolloResponse
 import com.auth0.android.jwt.JWT
 import com.example.TokenUpdateMutation
 import com.swapnilk.truelink.data.online.ApolloHelper
+import com.swapnilk.truelink.data.online.model.UserModel
 import com.swapnilk.truelink.databinding.ActivityMainBinding
 import com.swapnilk.truelink.utils.CommonFunctions
 import com.swapnilk.truelink.utils.SharedPreferences

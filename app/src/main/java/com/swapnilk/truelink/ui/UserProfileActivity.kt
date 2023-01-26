@@ -78,7 +78,7 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
     private lateinit var datePicker: LinearLayout
     private var datePickerPopup: DatePickerPopup? = null
 
-    var gender: String = ""
+    var gender: Gender? = null
     var dob: String = ""
     var name: String = ""
     var dateOfBirth: Long? = null
@@ -121,8 +121,20 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
             askPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
         /////////////////////Initialize UI//////////////
         initialize()
-        ///////////////////////////////////////////////
+        ////////////////////Get Extras//////////////////
+        if (intent.extras != null) {
+            gender = intent.extras!!.getSerializable("gender") as Gender?
+            dob = intent.extras!!.getString("dob").toString()
+            name = intent.extras!!.getString("fullName").toString()
 
+            ///////////////////Set Values///////////////////////
+            if (gender?.rawValue.equals("Male")) cardViewMale.isChecked = true
+            else if (gender?.rawValue.equals("Female")) cardViewFemale.isChecked = true
+            else cardViewOther.isChecked = true
+
+            tvSelectDob.text = commonFunctions.convertTimeStamp2Date(dob)
+            editName.setText(name)
+        }
     }
 
     private fun getUserLocation() {
@@ -184,14 +196,14 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
             cardViewMale.toggle()
             cardViewFemale.isChecked = false
             cardViewOther.isChecked = false
-            gender = "Male"
+            gender = Gender.MALE
         }
 
         cardViewFemale.setOnClickListener {
             cardViewFemale.toggle()
             cardViewMale.isChecked = false
             cardViewOther.isChecked = false
-            gender = "Female"
+            gender = Gender.FEMALE
 
         }
 
@@ -199,7 +211,7 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
             cardViewOther.toggle()
             cardViewMale.isChecked = false
             cardViewFemale.isChecked = false
-            gender = "Other"
+            gender = Gender.OTHERS
         }
 
         editName = findViewById(R.id.edit_name)
@@ -221,7 +233,7 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
 
         datePickerPopup?.setListener(OnDateSelectListener { dp, date, day, month, year ->
             val monthName: Int = (month + 1)
-            tvSelectDob.setText("$monthName/$day/$year")
+            tvSelectDob.text = "$monthName/$day/$year"
             dateOfBirth = commonFunctions.convertDate2TimeStamp("$monthName/$day/$year")
         })
 
@@ -229,7 +241,7 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
         progressButton = findViewById(R.id.btn_finish)
         progressButton.run {
             setOnClickListener {
-                if (gender.isNullOrEmpty()) {
+                if (gender == null) {
                     commonFunctions.showErrorSnackBar(
                         this@UserProfileActivity,
                         progressButton,
@@ -251,7 +263,6 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
                     //////////////////Initiate Login///////////////////
                     morphDoneAndRevert(this@UserProfileActivity)
                     /////////////////Call Update Mutation /////////////
-                    val genderEnum: Gender = Gender.safeValueOf(gender)
                     val updateUserInput = UpdateUserInput(
                         Optional.Present(editName.text.toString()),
                         Optional.Absent,
@@ -262,8 +273,7 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
                         Optional.Absent,
                         Optional.Absent,
                         Optional.Present(sharedPreferences.getFCM()),
-                        Optional.Present(dateOfBirth)
-                        //,Optional.Present(genderEnum)
+                        Optional.Present(dateOfBirth), Optional.Present(gender)
                     )
                     val updateUserMutation: UpdateUserMutation =
                         UpdateUserMutation(
