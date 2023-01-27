@@ -4,9 +4,11 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="_16sdp">16dp</dimen>
+    <dimen name="margin180">180dp</dimen>
     <dimen name="margin200">200dp</dimen>
     <dimen name="margin70">70dp</dimen>
     <dimen name="margin10">10dp</dimen>
+    <dimen name="margin250">250dp</dimen>
     <dimen name="margin350">350dp</dimen>
     <dimen name="margin400">400dp</dimen>
     <dimen name="text16">16sp</dimen>

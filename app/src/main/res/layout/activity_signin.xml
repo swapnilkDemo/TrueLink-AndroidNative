@@ -1,62 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
-    android:orientation="vertical"
-    android:padding="@dimen/margin10">
+    android:background="@color/colorPrimary">
 
-    <ImageView
-        android:layout_width="@dimen/margin200"
-        android:layout_height="@dimen/margin70"
-        android:layout_gravity="center"
-        android:layout_margin="@dimen/margin10"
-        android:src="@drawable/ic_logo_white_tgline" />
-
-    <ImageView
-        android:layout_width="@dimen/margin200"
-        android:layout_height="@dimen/margin200"
-        android:layout_gravity="center"
-        android:layout_marginTop="@dimen/margin70"
-        android:layout_marginBottom="@dimen/margin10"
-        android:src="@drawable/ic_login_screen" />
-
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="@dimen/_2sdp"
-        android:gravity="center"
-        android:text="@string/login_text"
-        android:textColor="@color/gray_200"
-        android:textSize="@dimen/_16sdp" />
+        android:orientation="vertical"
+        android:padding="@dimen/margin10">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="@dimen/_2sdp"
-        android:gravity="center"
-        android:text="@string/login_subtext"
-        android:textColor="@color/gray_200"
-        android:textSize="@dimen/_12sdp" />
+        <ImageView
+            android:layout_width="@dimen/margin180"
+            android:layout_height="@dimen/margin50"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/margin10"
+            android:src="@drawable/ic_logo_white_tgline" />
 
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin20"
-        app:cardBackgroundColor="@color/gray_200"
-        app:cardCornerRadius="@dimen/_8dp"
-        app:cardElevation="@dimen/margin10">
+        <ImageView
+            android:layout_width="@dimen/margin200"
+            android:layout_height="@dimen/margin200"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/margin10"
+            android:layout_marginBottom="@dimen/margin10"
+            android:src="@drawable/ic_login_screen" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/_2sdp"
+            android:gravity="center"
+            android:text="@string/login_text"
+            android:textColor="@color/gray_200"
+            android:textSize="@dimen/_16sdp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/_2sdp"
+            android:gravity="center"
+            android:text="@string/login_subtext"
+            android:textColor="@color/gray_200"
+            android:textSize="@dimen/_12sdp" />
+
 
         <LinearLayout
             android:id="@+id/ll_login_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="@dimen/_2sdp"
-            android:background="@color/colorPrimary"
+            android:layout_margin="20dp"
+            android:background="@drawable/backround_outline_box"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -64,8 +62,11 @@
                 android:id="@+id/ccp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/gray_200"
+                android:layout_margin="1.7dp"
+                android:background="@drawable/rounded_left_corners"
                 android:padding="@dimen/_5sdp"
+                app:ccp_contentColor="@color/gray_200"
+                app:ccp_showNameCode="false"
                 app:ccp_textSize="@dimen/_16sdp" />
 
             <com.google.android.material.textfield.TextInputEditText
@@ -100,53 +101,53 @@
                 android:textSize="@dimen/_16sdp" />
 
         </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/margin20"
-        android:layout_marginRight="@dimen/margin20"
-        android:orientation="horizontal">
-
-        <CheckBox
-            android:id="@+id/chk_privacy"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center"
-            android:text="" />
+            android:layout_marginLeft="@dimen/margin20"
+            android:layout_marginRight="@dimen/margin20"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/txt_privacy_msg"
+            <CheckBox
+                android:id="@+id/chk_privacy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/txt_privacy_msg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/gray_200"
+                android:textSize="@dimen/_10sdp" />
+
+        </LinearLayout>
+
+
+        <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
+            android:id="@+id/btn_generateOtp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="1"
+            android:layout_margin="@dimen/margin20"
+            android:backgroundTint="@color/login_btn"
             android:gravity="center"
-            android:textColor="@color/gray_200"
-            android:textSize="@dimen/_10sdp" />
-
+            android:padding="10dp"
+            android:text="@string/generate_otp"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_16sdp"
+            app:spinning_bar_color="@android:color/black"
+            app:spinning_bar_padding="8dp"
+            app:spinning_bar_width="4dp" />
+        <!--  app:spinning_bar_width="4dp" &lt;!&ndash; Optional &ndash;&gt;
+          app:spinning_bar_color="#FFF" &lt;!&ndash; Optional &ndash;&gt;
+          app:spinning_bar_padding="6dp" &lt;!&ndash; Optional &ndash;&gt;-->
     </LinearLayout>
-
-
-    <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
-        android:id="@+id/btn_generateOtp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="@dimen/margin20"
-        android:backgroundTint="@color/login_btn"
-        android:gravity="center"
-        android:padding="10dp"
-        android:text="@string/generate_otp"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textSize="@dimen/_16sdp"
-        app:spinning_bar_color="@android:color/black"
-        app:spinning_bar_padding="8dp"
-        app:spinning_bar_width="4dp" />
-    <!--  app:spinning_bar_width="4dp" &lt;!&ndash; Optional &ndash;&gt;
-      app:spinning_bar_color="#FFF" &lt;!&ndash; Optional &ndash;&gt;
-      app:spinning_bar_padding="6dp" &lt;!&ndash; Optional &ndash;&gt;-->
-</LinearLayout>
+</FrameLayout>
