@@ -11,7 +11,7 @@
         android:layout_alignParentTop="true"
         android:background="@color/colorPrimary"
         android:orientation="vertical"
-        android:padding="@dimen/_10sdp"
+        android:padding="@dimen/margin10"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <TextView
@@ -36,7 +36,7 @@
 
         <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
             android:id="@+id/btn_accept"
-            style="@style/textViewFontSora"
+            style="@style/textViewFontInter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

@@ -36,18 +36,18 @@
             android:gravity="center"
             android:text="@string/login_text"
             android:textColor="@color/gray_200"
-            android:textSize="@dimen/text12" />
+            android:textSize="@dimen/text16" />
 
         <TextView
             style="@style/textViewFontSora"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="@dimen/_2sdp"
+            android:layout_margin="@dimen/margin2"
             android:gravity="center"
             android:text="@string/login_subtext"
             android:textColor="@color/gray_200"
-            android:textSize="@dimen/text8" />
+            android:textSize="@dimen/text12" />
 
 
         <LinearLayout
@@ -82,7 +82,7 @@
                 android:focusable="false"
                 android:gravity="center_vertical"
                 android:inputType="phone"
-                android:padding="@dimen/_2sdp"
+                android:padding="@dimen/margin2"
                 android:textColor="@color/white"
                 android:textColorHint="@color/gray_200"
                 android:textSize="@dimen/text16"

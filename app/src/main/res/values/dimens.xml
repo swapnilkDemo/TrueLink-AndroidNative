@@ -14,9 +14,10 @@
     <dimen name="margin15">15dp</dimen>
     <dimen name="margin20">20dp</dimen>
     <dimen name="margin30">30dp</dimen>
+    <dimen name="margin40">40dp</dimen>
     <dimen name="margin48">48dp</dimen>
     <dimen name="margin50">50dp</dimen>
-    <dimen name="margin40">40dp</dimen>
+    <dimen name="margin60">60dp</dimen>
     <dimen name="margin70">70dp</dimen>
     <dimen name="margin180">180dp</dimen>
     <dimen name="margin200">200dp</dimen>

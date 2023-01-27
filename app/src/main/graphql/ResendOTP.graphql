@@ -1,0 +1,8 @@
+mutation ResendOTP($phone: String!, $dialCode: String!, $resendType: resendType!) {
+    resendOTP(phone: $phone, dialCode: $dialCode, resendType: $resendType) {
+        code
+        message
+        success
+        request_id
+    }
+}

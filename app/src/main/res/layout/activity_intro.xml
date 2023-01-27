@@ -48,7 +48,7 @@
         android:id="@+id/button_login_main"
         style="@style/textViewFontSora"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_48sdp"
+        android:layout_height="@dimen/margin48"
         android:layout_margin="@dimen/fab_margin"
         android:padding="0dp"
         android:paddingBottom="@dimen/margin10"

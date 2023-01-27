@@ -60,7 +60,7 @@ meaning regardless of whether they appear in singular or in plural.</span></div>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="hint_name">Your Name</string>
-    <string name="fill"><![CDATA[--------------            Continue with            ---------------]]></string>
+    <string name="fill"><![CDATA[-----------            Continue with            -----------]]></string>
     <string name="update">Update</string>
     <string name="select_day">Day</string>
     <string name="select_year">Year</string>
@@ -79,4 +79,5 @@ meaning regardless of whether they appear in singular or in plural.</span></div>
     <string name="otp_not_receive">Didn\'t Received OTP Yet?</string>
     <string name="resend_otp">Resend OTP in </string>
     <string name="seconds">Seconds</string>
+    <string name="click_resend">Click here to Resend OTP</string>
 </resources>

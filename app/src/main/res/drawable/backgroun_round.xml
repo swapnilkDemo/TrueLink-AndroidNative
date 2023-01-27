@@ -11,5 +11,5 @@
         android:bottom="1dp"
         />
 
-    <corners android:radius="@dimen/_8dp" />
+    <corners android:radius="@dimen/margin8" />
 </shape>

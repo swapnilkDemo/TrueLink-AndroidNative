@@ -50,6 +50,29 @@
       },
       {
         "kind": "ENUM",
+        "name": "resendType",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "text",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "Voice",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
         "name": "ScanTriggerType",
         "description": null,
         "fields": null,
@@ -523,6 +546,16 @@
                   "ofType": null
                 },
                 "defaultValue": null
+              },
+              {
+                "name": "appType",
+                "description": "App Type (SocialMedia Browser or Other)",
+                "type": {
+                  "kind": "ENUM",
+                  "name": "AppType",
+                  "ofType": null
+                },
+                "defaultValue": null
               }
             ],
             "type": {
@@ -549,11 +582,15 @@
               },
               {
                 "name": "sender",
-                "description": "Name of the sender",
+                "description": "list of the names of sender",
                 "type": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
                 },
                 "defaultValue": null
               },
@@ -566,11 +603,49 @@
                   "ofType": null
                 },
                 "defaultValue": null
+              },
+              {
+                "name": "skip",
+                "description": "skip the first n results from the list",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "FilterSkip",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "limit",
+                "description": "limit the number of results",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "FilterLimit",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "days",
+                "description": "No of days for which you want to see the scan history default is 30",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                },
+                "defaultValue": null
               }
             ],
             "type": {
               "kind": "OBJECT",
-              "name": "RecentScans",
+              "name": "RecentScansRes",
               "ofType": null
             },
             "isDeprecated": false,
@@ -1765,6 +1840,65 @@
             "deprecationReason": null
           },
           {
+            "name": "resendOTP",
+            "description": "Resend OTP for phone number verification.",
+            "args": [
+              {
+                "name": "phone",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "dialCode",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "resendType",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "ENUM",
+                    "name": "resendType",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "getOTPres",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "tokenUpdate",
             "description": "Update Access Token using Refresh Token, Save new Refresh Token in local storage",
             "args": [
@@ -1948,8 +2082,8 @@
             "description": null,
             "args": [
               {
-                "name": "link",
-                "description": null,
+                "name": "reportId",
+                "description": "Report Id",
                 "type": {
                   "kind": "NON_NULL",
                   "name": null,
@@ -2006,6 +2140,47 @@
             "type": {
               "kind": "OBJECT",
               "name": "reportReactionResp",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "uploadFileToReport",
+            "description": "Use this to get the upload URL for a report file",
+            "args": [
+              {
+                "name": "reportId",
+                "description": "report id to upload file to",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "slotNumber",
+                "description": "slot number to upload file to (1-4) e.g. file1: 1, file2: 2, file3: 3, file4: 4",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              }
+            ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "uploadFileToReportRes",
               "ofType": null
             },
             "isDeprecated": false,
@@ -4548,7 +4723,7 @@
           },
           {
             "name": "severity",
-            "description": null,
+            "description": "Severity of the report (0-4)\n\n0: Safe\n\n1: Warning\n\n2: Medium\n\n3: Dangerous\n\n4: Critical",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -4775,7 +4950,7 @@
           },
           {
             "name": "severity",
-            "description": null,
+            "description": "Severity of the report (0-4)\n\n0: Safe\n\n1: Warning\n\n2: Medium\n\n3: Dangerous\n\n4: Critical",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -5438,13 +5613,9 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Float",
-                "ofType": null
-              }
+              "kind": "OBJECT",
+              "name": "Location",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -5527,6 +5698,77 @@
           },
           {
             "name": "reportId",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "files",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "ReportFiles",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "ReportFiles",
+        "description": null,
+        "fields": [
+          {
+            "name": "file1",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "file2",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "file3",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "file4",
             "description": null,
             "args": [],
             "type": {
@@ -5621,8 +5863,8 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "link",
-            "description": null,
+            "name": "link_hash",
+            "description": "Link hash",
             "type": {
               "kind": "NON_NULL",
               "name": null,
@@ -5662,19 +5904,15 @@
             "name": "location",
             "description": null,
             "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Float",
-                "ofType": null
-              }
+              "kind": "INPUT_OBJECT",
+              "name": "LocationInput",
+              "ofType": null
             },
             "defaultValue": null
           },
           {
             "name": "severity",
-            "description": null,
+            "description": "Severity of the report (0-4)\n\n0: Safe\n\n1: Warning\n\n2: Medium\n\n3: Dangerous\n\n4: Critical",
             "type": {
               "kind": "NON_NULL",
               "name": null,
@@ -5945,36 +6183,83 @@
       },
       {
         "kind": "OBJECT",
+        "name": "uploadFileToReportRes",
+        "description": null,
+        "fields": [
+          {
+            "name": "code",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "message",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "success",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "payload",
+            "description": "Upload URL",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
         "name": "Apps",
         "description": null,
         "fields": [
           {
             "name": "packageName",
             "description": "Name of the app in format com.appname",
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "appName",
-            "description": "Name of the app",
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "icon",
-            "description": "Icon of the app",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -6023,7 +6308,36 @@
           {
             "name": "senders",
             "description": "List of senders of the links scanned from this app",
-            "args": [],
+            "args": [
+              {
+                "name": "skip",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "FilterSkip",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "limit",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "FilterLimit",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              }
+            ],
             "type": {
               "kind": "LIST",
               "name": null,
@@ -6048,7 +6362,7 @@
         "description": null,
         "fields": [
           {
-            "name": "senderName",
+            "name": "sender",
             "description": "Name of the sender",
             "args": [],
             "type": {
@@ -6062,6 +6376,30 @@
           {
             "name": "linksCount",
             "description": "Number of links that were sent by this sender",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "safeLinks",
+            "description": "safe links that were sent by this sender",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "suspiciousLinks",
+            "description": "suspicious links that were sent by this sender",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -6257,8 +6595,20 @@
         "description": null,
         "fields": [
           {
-            "name": "fullUrl",
+            "name": "full_url",
             "description": "Full URL of the link scanned",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "hash",
+            "description": "Hash of the link scanned",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -6309,13 +6659,9 @@
             "description": "Overall summary of users reported",
             "args": [],
             "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "ReportSummary",
-                "ofType": null
-              }
+              "kind": "OBJECT",
+              "name": "ReportSummary",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -6394,46 +6740,7 @@
           {
             "name": "results",
             "description": null,
-            "args": [
-              {
-                "name": "skip",
-                "description": "skip the first n results from the list",
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "FilterSkip",
-                    "ofType": null
-                  }
-                },
-                "defaultValue": null
-              },
-              {
-                "name": "limit",
-                "description": "limit the number of results",
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "FilterLimit",
-                    "ofType": null
-                  }
-                },
-                "defaultValue": null
-              },
-              {
-                "name": "days",
-                "description": "No of days for which you want to see the scan history default is 30",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                },
-                "defaultValue": null
-              }
-            ],
+            "args": [],
             "type": {
               "kind": "LIST",
               "name": null,
@@ -6520,6 +6827,18 @@
           {
             "name": "clickedLinks",
             "description": "Total number of links which were clicked from inside an app like WhatsApp",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "verifiedLinks",
+            "description": "Links that are associated with a verified domain",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -6752,6 +7071,65 @@
             "type": {
               "kind": "OBJECT",
               "name": "Action",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "RecentScansRes",
+        "description": null,
+        "fields": [
+          {
+            "name": "code",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "success",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "message",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "payload",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "RecentScans",
               "ofType": null
             },
             "isDeprecated": false,

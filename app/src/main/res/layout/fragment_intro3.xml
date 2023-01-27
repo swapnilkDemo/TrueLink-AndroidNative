@@ -1,48 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:background="@color/colorPrimary"
-    android:orientation="vertical"
-    android:padding="@dimen/text16">
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary">
 
-    <ImageView
-        android:layout_width="@dimen/margin180"
-        android:layout_height="@dimen/margin50"
-        android:layout_gravity="center"
-        android:layout_margin="@dimen/margin10"
-        android:src="@drawable/ic_logo_white_tgline" />
-
-    <ImageView
-        android:layout_width="@dimen/margin250"
-        android:layout_height="@dimen/margin250"
-        android:layout_gravity="center"
-        android:layout_margin="@dimen/margin10"
-        android:src="@drawable/ic_welcome_screen_3" />
-
-    <TextView
-        android:id="@+id/txt_header"
-        style="@style/textViewFontSora"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="@dimen/margin10"
-        android:padding="@dimen/margin10"
-        android:text="@string/stat"
-        android:textColor="@color/white"
-        android:textSize="@dimen/text12" />
+        android:background="@color/colorPrimary"
+        android:orientation="vertical"
+        android:padding="@dimen/text16">
 
-    <TextView
-        android:id="@+id/txt__description"
-        style="@style/textViewFontSora"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:text="@string/welcome_text_3"
-        android:textColor="@color/white"
-        android:textSize="@dimen/text12" />
+        <ImageView
+            android:layout_width="@dimen/margin180"
+            android:layout_height="@dimen/margin50"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/margin10"
+            android:src="@drawable/ic_logo_white_tgline" />
+
+        <ImageView
+            android:layout_width="@dimen/margin250"
+            android:layout_height="@dimen/margin250"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/margin30"
+            android:src="@drawable/ic_welcome_screen_3" />
+
+        <TextView
+            android:id="@+id/txt_header"
+            style="@style/textViewFontSora"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/margin10"
+            android:padding="@dimen/margin10"
+            android:text="@string/stat"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text16" />
+
+        <TextView
+            android:id="@+id/txt__description"
+            style="@style/textViewFontSora"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/welcome_text_3"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text16" />
 
 
-</LinearLayout>
+    </LinearLayout>
+</FrameLayout>

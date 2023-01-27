@@ -109,18 +109,17 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
 
         ///////////////////////Initialize ApolloClient////////////////////////////
         val okHttpClient = OkHttpClient.Builder()
-            .addInterceptor(AuthorizationInterceptor(this@UserProfileActivity))
-            .build()
-        apolloClient = ApolloClient.Builder()
-            .serverUrl("https://truelink.neki.dev/graphql/")
-            .okHttpClient(okHttpClient)
-            .build()
+            .addInterceptor(AuthorizationInterceptor(this@UserProfileActivity)).build()
+        apolloClient = ApolloClient.Builder().serverUrl("https://truelink.neki.dev/graphql/")
+            .okHttpClient(okHttpClient).build()
         /////////////////Request Permissions////////////
         //Manifest.permission.POST_NOTIFICATIONS,  Manifest.permission.ACCESS_BACKGROUND_LOCATION
-        if (hasPermission(Manifest.permission.POST_NOTIFICATIONS)) generateFCMToken() else
-            askPermission(Manifest.permission.POST_NOTIFICATIONS)
-        if (hasPermission(Manifest.permission.ACCESS_COARSE_LOCATION)) getUserLocation() else
-            askPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
+        if (hasPermission(Manifest.permission.POST_NOTIFICATIONS)) generateFCMToken() else askPermission(
+            Manifest.permission.POST_NOTIFICATIONS
+        )
+        if (hasPermission(Manifest.permission.ACCESS_COARSE_LOCATION)) getUserLocation() else askPermission(
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        )
         /////////////////////Initialize UI//////////////
         initialize()
         ////////////////////Get Extras//////////////////
@@ -130,9 +129,24 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
             name = intent.extras!!.getString("fullName").toString()
 
             ///////////////////Set Values///////////////////////
-            if (gender?.rawValue.equals("Male")) cardViewMale.isChecked = true
-            else if (gender?.rawValue.equals("Female")) cardViewFemale.isChecked = true
-            else cardViewOther.isChecked = true
+            if (gender == Gender.MALE) setSelected(
+                cardViewMale,
+                llCardmMale,
+                getColor(R.color.colorSecondary),
+                getColor(R.color.male_blue)
+            )
+            else if (gender == Gender.FEMALE) setSelected(
+                cardViewFemale,
+                llCardFemale,
+                getColor(R.color.colorSecondary),
+                getColor(R.color.female_marun)
+            )
+            else if (gender == Gender.OTHERS) setSelected(
+                cardViewOther,
+                llCardOther,
+                getColor(R.color.colorSecondary),
+                getColor(R.color.other_voilet)
+            )
 
             tvSelectDob.text = commonFunctions.convertTimeStamp2Date(dob)
             editName.setText(name)
@@ -142,11 +156,9 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
     private fun getUserLocation() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
+                this, Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_COARSE_LOCATION
+                this, Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             // TODO: Consider calling
@@ -158,14 +170,13 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
             // for ActivityCompat#requestPermissions for more details.
             return
         }
-        fusedLocationClient.lastLocation
-            .addOnSuccessListener { location: Location? ->
-                // Got last known location. In some rare situations this can be null.
-                if (location != null) {
-                    latLang = latLang?.plus(location.latitude)
-                    latLang = latLang?.plus(location.longitude)
-                }
+        fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+            // Got last known location. In some rare situations this can be null.
+            if (location != null) {
+                latLang = latLang?.plus(location.latitude)
+                latLang = latLang?.plus(location.longitude)
             }
+        }
     }
 
     @SuppressLint("StringFormatInvalid")
@@ -181,8 +192,7 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
 
             // Log and toast
             val msg = getString(R.string.msg_token_fmt, token)
-            if (msg.isNotEmpty())
-                sharedPreferences.storeFCM(token)
+            if (msg.isNotEmpty()) sharedPreferences.storeFCM(token)
             Log.d(TAG, msg)
 //            Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
         })
@@ -205,14 +215,10 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
                 getColor(R.color.male_blue)
             )
             setDeselected(
-                cardViewFemale,
-                llCardFemale,
-                getColor(R.color.light_background)
+                cardViewFemale, llCardFemale, getColor(R.color.light_background)
             )
             setDeselected(
-                cardViewOther,
-                llCardOther,
-                getColor(R.color.light_background)
+                cardViewOther, llCardOther, getColor(R.color.light_background)
             )
             gender = Gender.MALE
         }
@@ -225,14 +231,10 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
                 getColor(R.color.female_marun)
             )
             setDeselected(
-                cardViewMale,
-                llCardmMale,
-                getColor(R.color.light_background)
+                cardViewMale, llCardmMale, getColor(R.color.light_background)
             )
             setDeselected(
-                cardViewOther,
-                llCardOther,
-                getColor(R.color.light_background)
+                cardViewOther, llCardOther, getColor(R.color.light_background)
             )
             gender = Gender.FEMALE
 
@@ -246,14 +248,10 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
                 getColor(R.color.other_voilet)
             )
             setDeselected(
-                cardViewMale,
-                llCardmMale,
-                getColor(R.color.light_background)
+                cardViewMale, llCardmMale, getColor(R.color.light_background)
             )
             setDeselected(
-                cardViewFemale,
-                llCardFemale,
-                getColor(R.color.light_background)
+                cardViewFemale, llCardFemale, getColor(R.color.light_background)
             )
             gender = Gender.OTHERS
         }
@@ -261,15 +259,11 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
         editName = findViewById(R.id.edit_name)
         tvSelectDob = findViewById(R.id.tv_select_dob)
 
-        datePickerPopup = DatePickerPopup.Builder()
-            .from(this@UserProfileActivity)
-            .offset(3)
+        datePickerPopup = DatePickerPopup.Builder().from(this@UserProfileActivity).offset(3)
             .pickerMode(com.ozcanalasalvar.library.view.datePicker.DatePicker.MONTH_ON_FIRST)
-            .textSize(19)
-            .endDate(DateUtils.getCurrentTime())
+            .textSize(19).endDate(DateUtils.getCurrentTime())
             .currentDate(DateUtils.getTimeMiles(1997, 7, 7))
-            .startDate(DateUtils.getTimeMiles(1900, 1, 1))
-            .build()
+            .startDate(DateUtils.getTimeMiles(1900, 1, 1)).build()
         datePicker = findViewById(R.id.ll_select_dob)
         datePicker.setOnClickListener {
             datePickerPopup?.show()
@@ -285,58 +279,52 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
         progressButton = findViewById(R.id.btn_finish)
         progressButton.run {
             setOnClickListener {
-                if (commonFunctions.checkConnection(this@UserProfileActivity))
-                    if (gender == null) {
-                        commonFunctions.showErrorSnackBar(
-                            this@UserProfileActivity,
-                            progressButton,
-                            getString(R.string.error_select_gender)
-                        )
-                    } else if (editName.text.isNullOrEmpty()) {
-                        commonFunctions.showErrorSnackBar(
-                            this@UserProfileActivity,
-                            progressButton,
-                            getString(R.string.error_enter_full_name)
-                        )
-                    } else if (dateOfBirth == null) {
-                        commonFunctions.showErrorSnackBar(
-                            this@UserProfileActivity,
-                            progressButton,
-                            getString(R.string.error_dob)
-                        )
-                    } else {
-                        //////////////////Initiate Login///////////////////
-                        morphDoneAndRevert(this@UserProfileActivity)
-                        /////////////////Call Update Mutation /////////////
-                        val updateUserInput = UpdateUserInput(
-                            Optional.Present(editName.text.toString()),
-                            Optional.Absent,
-                            Optional.Absent,
-                            Optional.Absent,
-                            Optional.Absent,
-                            Optional.Absent,
-                            Optional.Absent,
-                            Optional.Absent,
-                            Optional.Present(sharedPreferences.getFCM()),
-                            Optional.Present(dateOfBirth), Optional.Present(gender)
-                        )
-                        val updateUserMutation: UpdateUserMutation =
-                            UpdateUserMutation(
-                                updateUserInput
-
-                            )
-                        launch {
-                            val response: ApolloResponse<UpdateUserMutation.Data> =
-                                apolloClient.mutation(updateUserMutation).execute()
-                            afterResult(response)
-                        }
-                    }
-                else
+                if (commonFunctions.checkConnection(this@UserProfileActivity)) if (gender == null) {
                     commonFunctions.showErrorSnackBar(
                         this@UserProfileActivity,
                         progressButton,
-                        getString(R.string.no_internet)
+                        getString(R.string.error_select_gender)
                     )
+                } else if (editName.text.isNullOrEmpty()) {
+                    commonFunctions.showErrorSnackBar(
+                        this@UserProfileActivity,
+                        progressButton,
+                        getString(R.string.error_enter_full_name)
+                    )
+                } else if (dateOfBirth == null) {
+                    commonFunctions.showErrorSnackBar(
+                        this@UserProfileActivity, progressButton, getString(R.string.error_dob)
+                    )
+                } else {
+                    //////////////////Initiate Login///////////////////
+                    morphDoneAndRevert(this@UserProfileActivity)
+                    /////////////////Call Update Mutation /////////////
+                    val updateUserInput = UpdateUserInput(
+                        Optional.Present(editName.text.toString()),
+                        Optional.Absent,
+                        Optional.Absent,
+                        Optional.Absent,
+                        Optional.Absent,
+                        Optional.Absent,
+                        Optional.Absent,
+                        Optional.Absent,
+                        Optional.Present(sharedPreferences.getFCM()),
+                        Optional.Present(dateOfBirth),
+                        Optional.Present(gender)
+                    )
+                    val updateUserMutation: UpdateUserMutation = UpdateUserMutation(
+                        updateUserInput
+
+                    )
+                    launch {
+                        val response: ApolloResponse<UpdateUserMutation.Data> =
+                            apolloClient.mutation(updateUserMutation).execute()
+                        afterResult(response)
+                    }
+                }
+                else commonFunctions.showErrorSnackBar(
+                    this@UserProfileActivity, progressButton, getString(R.string.no_internet)
+                )
             }
         }
     }// End Initialize
@@ -353,10 +341,7 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
 
     /////////////////////Select CardView /////////////////////////////////
     private fun setSelected(
-        cardView: MaterialCardView?,
-        linearLayout: LinearLayout,
-        color: Int,
-        color1: Int
+        cardView: MaterialCardView?, linearLayout: LinearLayout, color: Int, color1: Int
     ) {
         if (cardView != null) {
             linearLayout.setBackgroundColor(color)
@@ -412,15 +397,12 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
         // This is only necessary for API level >= 33 (TIRAMISU)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             if (ContextCompat.checkSelfPermission(
-                    this@UserProfileActivity,
-                    permissionName
-                ) ==
-                PackageManager.PERMISSION_GRANTED
+                    this@UserProfileActivity, permissionName
+                ) == PackageManager.PERMISSION_GRANTED
             ) {
                 // FCM SDK (and your app) can post notifications.
             } else if (ActivityCompat.shouldShowRequestPermissionRationale(
-                    this@UserProfileActivity,
-                    permissionName
+                    this@UserProfileActivity, permissionName
                 )
             ) {
                 // TODO: display an educational UI explaining to the user the features that will be enabled
@@ -438,8 +420,7 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
     private fun hasPermission(permission: String): Boolean {
         try {
             val info: PackageInfo = packageManager.getPackageInfo(
-                packageName,
-                PackageManager.GET_PERMISSIONS
+                packageName, PackageManager.GET_PERMISSIONS
             )
             if (info.requestedPermissions != null) {
                 for (p in info.requestedPermissions) {
@@ -458,8 +439,7 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
         private val sharedPreferences: SharedPreferences = SharedPreferences(context)
         override fun intercept(chain: Interceptor.Chain): Response {
             val request = chain.request().newBuilder()
-                .addHeader("Authorization", sharedPreferences.getAccessToken()!!)
-                .build()
+                .addHeader("Authorization", sharedPreferences.getAccessToken()!!).build()
 
             return chain.proceed(request)
         }

@@ -10,6 +10,6 @@
     <!--android:bottom="4dp"-->
     <!--android:right="13dp"-->
     <!--/>-->
-    <corners android:radius="@dimen/_4dp" />
+    <corners android:radius="@dimen/margin4" />
     <solid android:color="@color/orange_text" />
 </shape>

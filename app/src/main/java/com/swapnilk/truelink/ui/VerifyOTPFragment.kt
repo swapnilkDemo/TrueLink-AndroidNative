@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
@@ -15,7 +16,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
+import android.widget.FrameLayout
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import br.com.simplepass.loadingbutton.animatedDrawables.ProgressType
 import br.com.simplepass.loadingbutton.customViews.CircularProgressButton
@@ -23,7 +25,9 @@ import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.ApolloResponse
 import com.apollographql.apollo3.exception.ApolloException
 import com.chaos.view.PinView
+import com.example.ResendOTPMutation
 import com.example.VerifyOTPMutation
+import com.example.type.resendType
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -55,6 +59,7 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
     //    lateinit var view: CoordinatorLayout
     lateinit var sharedPrefs: SharedPreferences
     lateinit var pinView: PinView
+    lateinit var textResendOTP: TextView
     var bundleGet: Bundle = bundle
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,8 +68,7 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         //////////////////////////Initialize required objects//////
         sharedPrefs = activity?.let { SharedPreferences(it) }!!
@@ -86,88 +90,114 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
     }
 
     private fun startTimer() {
+        object : CountDownTimer(30000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                textResendOTP.isEnabled = false
+                textResendOTP.text =
+                    getString(R.string.resend_otp) + " " + millisUntilFinished / 1000 + " " + getString(
+                        R.string.seconds
+                    )
+                textResendOTP.setTextColor(Color.WHITE)
+                // logic to set the EditText could go here
+            }
 
-
+            override fun onFinish() {
+                textResendOTP.isEnabled = true
+                textResendOTP.text = getString(R.string.click_resend)
+                textResendOTP.setTextColor(Color.CYAN)
+            }
+        }.start()
     }
 
     private fun initialize() {
+        textResendOTP = viewL.findViewById<TextView>(R.id.txt_resend)
         pinView = viewL.findViewById<PinView>(R.id.pinView)
         viewL.findViewById<CircularProgressButton>(R.id.btnotp)?.run {
             setOnClickListener {
                 ///////////////Data validations/////////////////////////
-                if (activity?.let { it1 -> commonFunctions.checkConnection(it1) } == true)
-                    if (pinView?.text.isNullOrEmpty()) {
-                        commonFunctions.showErrorSnackBar(
-                            requireActivity(),
-                            pinView,
-                            getString(R.string.enter_otp)
-                        )
-                    } else if (pinView!!.text!!.length < 4) {
-                        commonFunctions.showErrorSnackBar(
-                            requireActivity(),
-                            pinView,
-                            getString(R.string.otp_lenght_error)
-                        )
-                    } else {
-                        //////////////////Initiate OTPVerification///////////////////
-                        morphDoneAndRevert(requireActivity())
-                        /////////////////Call VerifyOTP Mutation /////////////
-                        val otp = pinView?.text.toString()
-                        ////////////////Object with required parameters/////////////
-                        val verifyOtpMutation = bundleGet.getString("requestId")?.let { it1 ->
-                            VerifyOTPMutation(
-                                it1,
-                                otp,
-                                bundleGet.getString("phone")!!,
-                                bundleGet.getString("dailCode")!!
-                            )
-                        }
-
-                        ///////////Start background thread//////////
-                        launch {
-                            val responseVerify: ApolloResponse<VerifyOTPMutation.Data> =
-                                apolloClient.mutation(verifyOtpMutation!!).execute()
-                            if (responseVerify.data?.verifyOTP!!.success == true) {
-//                            Log.d("verifyOTP Response :", responseVerify.data.toString())
-                                sharedPrefs.setAccessToken(responseVerify.data!!.verifyOTP.accessToken.toString())
-                                var uid: String =
-                                    responseVerify.data!!.verifyOTP.payload?.uid.toString()
-                                var userModel = UserModel(
-                                    responseVerify.data!!.verifyOTP.payload?.uid.toString(),
-                                    responseVerify.data!!.verifyOTP.payload?.fullname.toString(),
-                                    responseVerify.data!!.verifyOTP.payload?.phone.toString(),
-                                    responseVerify.data!!.verifyOTP.payload?.dialcode.toString(),
-                                    responseVerify.data!!.verifyOTP.payload?.email.toString(),
-                                    responseVerify.data!!.verifyOTP.payload?.dob.toString(),
-                                    null,
-                                    responseVerify.data!!.verifyOTP.payload?.gender
-
-                                );
-                                sharedPrefs.setRefreshToken(responseVerify.data!!.verifyOTP.payload!!.refreshToken.toString())
-                                sharedPrefs.setLoggedIn(true)
-                                startMain(uid, userModel)
-                            } else afterResultVerify(responseVerify)
-
-                        }//End Launch
-                    }//End else
-                else
-                    activity?.let { it1 ->
-                        commonFunctions.showErrorSnackBar(
+                if (activity?.let { it1 -> commonFunctions.checkConnection(it1) } == true) if (pinView?.text.isNullOrEmpty()) {
+                    commonFunctions.showErrorSnackBar(
+                        requireActivity(), pinView, getString(R.string.enter_otp)
+                    )
+                } else if (pinView!!.text!!.length < 4) {
+                    commonFunctions.showErrorSnackBar(
+                        requireActivity(), pinView, getString(R.string.otp_lenght_error)
+                    )
+                } else {
+                    //////////////////Initiate OTPVerification///////////////////
+                    morphDoneAndRevert(requireActivity())
+                    /////////////////Call VerifyOTP Mutation /////////////
+                    val otp = pinView?.text.toString()
+                    ////////////////Object with required parameters/////////////
+                    val verifyOtpMutation = bundleGet.getString("requestId")?.let { it1 ->
+                        VerifyOTPMutation(
                             it1,
-                            pinView,
-                            getString(R.string.no_internet)
+                            otp,
+                            bundleGet.getString("phone")!!,
+                            bundleGet.getString("dailCode")!!
                         )
                     }
+
+                    ///////////Start background thread//////////
+                    launch {
+                        val responseVerify: ApolloResponse<VerifyOTPMutation.Data> =
+                            apolloClient.mutation(verifyOtpMutation!!).execute()
+                        if (responseVerify.data?.verifyOTP!!.success == true) {
+//                            Log.d("verifyOTP Response :", responseVerify.data.toString())
+                            sharedPrefs.setAccessToken(responseVerify.data!!.verifyOTP.accessToken.toString())
+                            var uid: String =
+                                responseVerify.data!!.verifyOTP.payload?.uid.toString()
+                            var userModel = UserModel(
+                                responseVerify.data!!.verifyOTP.payload?.uid.toString(),
+                                responseVerify.data!!.verifyOTP.payload?.fullname.toString(),
+                                responseVerify.data!!.verifyOTP.payload?.phone.toString(),
+                                responseVerify.data!!.verifyOTP.payload?.dialcode.toString(),
+                                responseVerify.data!!.verifyOTP.payload?.email.toString(),
+                                responseVerify.data!!.verifyOTP.payload?.dob.toString(),
+                                null,
+                                responseVerify.data!!.verifyOTP.payload?.gender
+
+                            );
+                            sharedPrefs.setRefreshToken(responseVerify.data!!.verifyOTP.payload!!.refreshToken.toString())
+                            sharedPrefs.setLoggedIn(true)
+                            startMain(uid, userModel)
+                        } else afterResultVerify(responseVerify)
+
+                    }//End Launch
+                }//End else
+                else activity?.let { it1 ->
+                    commonFunctions.showErrorSnackBar(
+                        it1, pinView, getString(R.string.no_internet)
+                    )
+                }
             }// End onclick listener
         }//End run
+
+        textResendOTP.run {
+            setOnClickListener {
+                val resendOTPMutation = ResendOTPMutation(
+                    bundleGet.getString("phone")!!,
+                    bundleGet.getString("dailCode")!!,
+                    resendType.text
+                )
+                launch {
+                    val responseResendOPT: ApolloResponse<ResendOTPMutation.Data> =
+                        apolloClient.mutation(resendOTPMutation).execute()
+                    startTimer()
+                    activity?.let { it1 ->
+                        commonFunctions.showErrorSnackBar(
+                            it1, textResendOTP, responseResendOPT.data!!.resendOTP.message
+                        )
+                    }
+                }
+            }
+        }
     }
 
     private fun afterResultVerify(response: ApolloResponse<VerifyOTPMutation.Data>) {
         activity?.let {
             commonFunctions.showErrorSnackBar(
-                it,
-                viewL,
-                getString(R.string.login_error) + response.data?.verifyOTP!!.message
+                it, viewL, getString(R.string.login_error) + response.data?.verifyOTP!!.message
             )
             pinView.setText("")
         }
@@ -175,7 +205,7 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
     }
 
     private fun startMain(uid: String, userModel: UserModel?) {
-        if (sharedPrefs.isProfileUpdate()) {
+        if (sharedPrefs.isProfileUpdate() || userModel?.uDOB?.isNotEmpty() == true) {
             val mainIntent = Intent(activity, MainActivity::class.java)
             startActivity(mainIntent)
             activity?.finish()
@@ -200,8 +230,7 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
     }
 
     private fun setupFullHeight(bottomSheetDialog: BottomSheetDialog) {
-        val bottomSheet =
-            bottomSheetDialog.findViewById<View>(R.id.ll_child) as LinearLayout?
+        val bottomSheet = bottomSheetDialog.findViewById<View>(R.id.ll_child) as FrameLayout?
         val behavior = bottomSheet?.let { BottomSheetBehavior.from(it) }
         if (behavior != null) {
             behavior.state = BottomSheetBehavior.STATE_EXPANDED
@@ -256,6 +285,7 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
             postDelayed(::revertAnimation, revertTime)
         }
     }
+
 }
 
 
