@@ -115,34 +115,39 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
         circularProgressButton.run {
             setOnClickListener {
                 ////////////////Data Validations////////////////////////////////
-                if (isPrivacyChecked) if (editPhone.text.toString().isNotEmpty()) {
-                    //circularProgressButton.isEnabled = false
-                    //////////////////Initiate Login///////////////////
-                    morphDoneAndRevert(this@SigninActivity)
-                    /////////////////Call GetOTP Mutation /////////////
-                    val getOTPMutation = GetOTPMutation(
-                        editPhone.text.toString(), editCountryCode.text.toString()
+                if (commonFunctions.checkConnection(this@SigninActivity))
+                    if (isPrivacyChecked) if (editPhone.text.toString().isNotEmpty()) {
+                        //circularProgressButton.isEnabled = false
+                        //////////////////Initiate Login///////////////////
+                        morphDoneAndRevert(this@SigninActivity)
+                        /////////////////Call GetOTP Mutation /////////////
+                        val getOTPMutation = GetOTPMutation(
+                            editPhone.text.toString(), editCountryCode.text.toString()
+                        )
+                        ///////////Start background thread//////////
+                        launch {
+                            val response: ApolloResponse<GetOTPMutation.Data> =
+                                apolloClient.mutation(
+                                    getOTPMutation
+
+                                ).execute()
+                            if (response != null) afterResult(response)
+                        }
+
+                    } else commonFunctions.showErrorSnackBar(
+                        this@SigninActivity,
+                        circularProgressButton,
+                        getString(R.string.enter_mobile)
                     )
-                    ///////////Start background thread//////////
-                    launch {
-                        val response: ApolloResponse<GetOTPMutation.Data> =
-                            apolloClient.mutation(
-                                getOTPMutation
-
-                            ).execute()
-                        if (response != null) afterResult(response)
-                    }
-
-                } else commonFunctions.showErrorSnackBar(
-                    this@SigninActivity,
+                    else commonFunctions.showErrorSnackBar(
+                        this@SigninActivity,
+                        circularProgressButton,
+                        getString(R.string.error_privacy)
+                    )
+                else
+                    commonFunctions.showErrorSnackBar(this@SigninActivity,
                     circularProgressButton,
-                    getString(R.string.enter_mobile)
-                )
-                else commonFunctions.showErrorSnackBar(
-                    this@SigninActivity,
-                    circularProgressButton,
-                    getString(R.string.error_privacy)
-                )
+                    getString(R.string.no_internet))
             }//End onCLickListener
         }//End Run
     }//End Function

@@ -1,261 +1,265 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
-    android:orientation="vertical"
-    android:padding="@dimen/margin10">
-
-    <ImageView
-        android:layout_width="@dimen/margin200"
-        android:layout_height="@dimen/margin70"
-        android:layout_gravity="center"
-        android:layout_margin="@dimen/margin10"
-        android:src="@drawable/ic_logo_white_tgline" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="@dimen/margin50"
-        android:layout_marginBottom="@dimen/_10sdp"
-        android:gravity="center"
-        android:text="@string/about_you"
-        android:textColor="@color/gray_200"
-        android:textSize="@dimen/_16sdp" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_10sdp"
-        android:orientation="horizontal">
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardViewMale"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/_10sdp"
-            android:layout_weight="1"
-            android:checkable="true"
-            android:elevation="@dimen/_10sdp"
-            app:cardCornerRadius="@dimen/_8dp"
-            app:cardUseCompatPadding="true"
-            app:checkedIcon="@drawable/ic_round_check_box_24"
-            app:checkedIconTint="@color/yellow_text">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/colorSecondary"
-                android:orientation="vertical"
-                android:padding="@dimen/_10sdp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="@string/gender_male"
-                    android:textColor="@color/male_blue"
-                    android:textSize="@dimen/_16sdp" />
-
-                <ImageView
-                    android:layout_width="@dimen/margin70"
-                    android:layout_height="@dimen/margin70"
-                    android:layout_gravity="center"
-                    android:layout_margin="@dimen/_10sdp"
-                    android:background="@color/colorSecondary"
-                    android:src="@drawable/avatar_male" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardViewFemale"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/_10sdp"
-            android:layout_weight="1"
-            android:checkable="true"
-            android:elevation="@dimen/_10sdp"
-            app:cardCornerRadius="@dimen/_8dp"
-            app:cardUseCompatPadding="true"
-            app:checkedIcon="@drawable/ic_round_check_box_24"
-            app:checkedIconMargin="@dimen/margin30"
-            app:checkedIconTint="@color/yellow_text">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/colorSecondary"
-                android:orientation="vertical"
-                android:padding="@dimen/_10sdp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="@string/gender_female"
-                    android:textColor="@color/female_marun"
-                    android:textSize="@dimen/_16sdp" />
-
-                <ImageView
-                    android:layout_width="@dimen/margin70"
-                    android:layout_height="@dimen/margin70"
-                    android:layout_gravity="center"
-                    android:layout_margin="@dimen/_10sdp"
-                    android:background="@color/colorSecondary"
-                    android:src="@drawable/avatar_female" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardViewOther"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/_10sdp"
-            android:layout_weight="1"
-            android:checkable="true"
-            android:elevation="@dimen/_5sdp"
-            app:cardCornerRadius="@dimen/_8dp"
-            app:cardUseCompatPadding="true"
-            app:checkedIcon="@drawable/ic_round_check_box_24"
-            app:checkedIconTint="@color/yellow_text">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/colorSecondary"
-                android:orientation="vertical"
-                android:padding="@dimen/_10sdp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="@string/gender_other"
-                    android:textColor="@color/other_voilet"
-                    android:textSize="@dimen/_16sdp" />
-
-                <ImageView
-                    android:layout_width="@dimen/margin70"
-                    android:layout_height="@dimen/margin70"
-                    android:layout_gravity="center"
-                    android:layout_margin="@dimen/_10sdp"
-                    android:background="@color/colorSecondary"
-                    android:src="@drawable/avatar_other" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-    </LinearLayout>
+    android:background="@color/colorPrimary">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="@dimen/margin20"
-        android:background="@drawable/backround_outline_box">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edit_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@null"
-            android:gravity="center_vertical"
-            android:hint="@string/hint_name"
-            android:inputType="text"
-            android:padding="@dimen/_10sdp"
-            android:textColor="@color/gray_200"
-            android:textColorHint="@color/gray_200"
-            android:textSize="@dimen/_16sdp" />
-
-
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:id="@+id/ll_select_dob"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginLeft="@dimen/margin20"
-        android:layout_marginRight="@dimen/margin20"
-        android:layout_marginBottom="@dimen/margin20"
-        android:background="@drawable/backround_outline_box"
-        android:orientation="horizontal"
+        android:background="@color/colorPrimary"
+        android:orientation="vertical"
         android:padding="@dimen/margin10">
 
         <ImageView
-            android:layout_width="@dimen/margin20"
-            android:layout_height="@dimen/margin20"
-            android:src="@drawable/ic_dob" />
+            android:layout_width="@dimen/margin180"
+            android:layout_height="@dimen/margin50"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/margin10"
+            android:src="@drawable/ic_logo_white_tgline" />
 
         <TextView
-            android:id="@+id/tv_select_dob"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawableEnd="@drawable/ic_round_arrow_drop_down_24"
-            android:paddingLeft="@dimen/_10sdp"
-            android:text="@string/select_dob"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/margin20"
+            android:layout_marginBottom="@dimen/margin10"
+            android:gravity="center"
+            android:text="@string/about_you"
+            android:textColor="@color/gray_200"
+            android:textSize="@dimen/text16" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin10"
+            android:orientation="horizontal">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardViewMale"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/margin10"
+                android:layout_weight="1"
+                android:checkable="true"
+                android:elevation="@dimen/margin10"
+                app:cardBackgroundColor="@color/light_background"
+                app:cardCornerRadius="@dimen/margin15"
+                app:cardUseCompatPadding="true"
+                app:strokeColor="@color/male_blue">
+
+                <LinearLayout
+                    android:id="@+id/ll_card_male"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="@dimen/margin10">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="@string/gender_male"
+                        android:textColor="@color/male_blue"
+                        android:textSize="@dimen/text16" />
+
+                    <ImageView
+                        android:layout_width="@dimen/margin50"
+                        android:layout_height="@dimen/margin50"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/margin10"
+                        android:src="@drawable/avatar_male" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardViewFemale"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/margin10"
+                android:layout_weight="1"
+                android:checkable="true"
+                android:elevation="@dimen/margin10"
+                app:cardBackgroundColor="@color/light_background"
+                app:cardCornerRadius="@dimen/margin15"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:id="@+id/ll_card_female"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="@dimen/margin10">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="@string/gender_female"
+                        android:textColor="@color/female_marun"
+                        android:textSize="@dimen/text16" />
+
+                    <ImageView
+                        android:layout_width="@dimen/margin50"
+                        android:layout_height="@dimen/margin50"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/margin10"
+                        android:src="@drawable/avatar_female" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardViewOther"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/margin10"
+                android:layout_weight="1"
+                android:checkable="true"
+                android:elevation="@dimen/margin5"
+                app:cardBackgroundColor="@color/light_background"
+                app:cardCornerRadius="@dimen/margin15"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:id="@+id/ll_card_other"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="@dimen/margin10">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="@string/gender_other"
+                        android:textColor="@color/other_voilet"
+                        android:textSize="@dimen/text16" />
+
+                    <ImageView
+                        android:layout_width="@dimen/margin50"
+                        android:layout_height="@dimen/margin50"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/margin10"
+                        android:src="@drawable/avatar_other" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/margin20"
+            android:background="@drawable/backround_outline_box">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@null"
+                android:gravity="center_vertical"
+                android:hint="@string/hint_name"
+                android:inputType="text"
+                android:padding="@dimen/margin10"
+                android:textColor="@color/gray_200"
+                android:textColorHint="@color/gray_200"
+                android:textSize="@dimen/text16" />
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/ll_select_dob"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/margin20"
+            android:layout_marginRight="@dimen/margin20"
+            android:layout_marginBottom="@dimen/margin20"
+            android:background="@drawable/backround_outline_box"
+            android:orientation="horizontal"
+            android:padding="@dimen/margin10">
+
+            <ImageView
+                android:layout_width="@dimen/margin20"
+                android:layout_height="@dimen/margin20"
+                android:src="@drawable/ic_dob" />
+
+            <TextView
+                android:id="@+id/tv_select_dob"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableEnd="@drawable/ic_round_arrow_drop_down_24"
+                android:paddingLeft="@dimen/margin10"
+                android:text="@string/select_dob"
+                android:textColor="@color/gray_200" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/margin10"
+            android:gravity="center"
+            android:text="@string/fill"
             android:textColor="@color/gray_200" />
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/margin10"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/margin40"
+                android:layout_height="@dimen/margin40"
+                android:layout_marginRight="@dimen/margin20"
+                android:background="@drawable/background_circle"
+                android:padding="@dimen/margin10"
+                android:src="@drawable/ic_google" />
+
+            <ImageView
+                android:layout_width="@dimen/margin40"
+                android:layout_height="@dimen/margin40"
+                android:layout_marginLeft="@dimen/margin20"
+                android:layout_marginRight="@dimen/margin5"
+                android:background="@drawable/background_circle"
+                android:padding="@dimen/margin10"
+                android:src="@drawable/ic_linkedin" />
+
+        </LinearLayout>
+
+        <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
+            android:id="@+id/btn_finish"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/margin20"
+            android:backgroundTint="@color/login_btn"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="@string/finish"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text16"
+            app:spinning_bar_color="@android:color/black"
+            app:spinning_bar_padding="8dp"
+            app:spinning_bar_width="4dp" />
+        <!--  app:spinning_bar_width="4dp" &lt;!&ndash; Optional &ndash;&gt;
+          app:spinning_bar_color="#FFF" &lt;!&ndash; Optional &ndash;&gt;
+          app:spinning_bar_padding="6dp" &lt;!&ndash; Optional &ndash;&gt;-->
     </LinearLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="@dimen/margin20"
-        android:gravity="center"
-        android:text="@string/fill"
-        android:textColor="@color/gray_200" />
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="@dimen/margin20"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="@dimen/margin30"
-            android:layout_height="@dimen/margin30"
-            android:layout_marginRight="@dimen/margin20"
-            android:background="@drawable/background_circle"
-            android:padding="@dimen/_5sdp"
-            android:src="@drawable/ic_google" />
-
-        <ImageView
-            android:layout_width="@dimen/margin30"
-            android:layout_height="@dimen/margin30"
-            android:layout_marginLeft="@dimen/margin20"
-            android:layout_marginRight="@dimen/_5sdp"
-            android:background="@drawable/background_circle"
-            android:padding="@dimen/_5sdp"
-            android:src="@drawable/ic_linkedin" />
-
-    </LinearLayout>
-
-    <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
-        android:id="@+id/btn_finish"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="@dimen/margin20"
-        android:backgroundTint="@color/login_btn"
-        android:gravity="center"
-        android:padding="10dp"
-        android:text="@string/finish"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textSize="@dimen/_16sdp"
-        app:spinning_bar_color="@android:color/black"
-        app:spinning_bar_padding="8dp"
-        app:spinning_bar_width="4dp" />
-    <!--  app:spinning_bar_width="4dp" &lt;!&ndash; Optional &ndash;&gt;
-      app:spinning_bar_color="#FFF" &lt;!&ndash; Optional &ndash;&gt;
-      app:spinning_bar_padding="6dp" &lt;!&ndash; Optional &ndash;&gt;-->
-</LinearLayout>
+</FrameLayout>

@@ -13,11 +13,11 @@
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="welcome">Welcome</string>
-    <string name="fact">Fact:</string>
+    <string name="fact">Fact :</string>
     <string name="welcome_text_1">99% of hacking is occur due to clicking on fake links</string>
-    <string name="hacking_alert">Hacking Alert!</string>
+    <string name="hacking_alert">HACKING ALERT</string>
     <string name="welcome_text_2">Truelink is your best friend to protect you against hackers</string>
-    <string name="stat">Stats:</string>
+    <string name="stat">Stats :</string>
     <string name="welcome_text_3">Truelink scans over 2 million links daily to keep you safe from hacking and phishing attacks!</string>
     <string name="hint_phone">Enter mobile number</string>
     <string name="privacy_msg"><![CDATA[By checking this  you are confirming that you have read and agree to Truelink\'s Privacy Policy  and & Term of Use]]></string>
@@ -60,7 +60,7 @@ meaning regardless of whether they appear in singular or in plural.</span></div>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="hint_name">Your Name</string>
-    <string name="fill">-------------- Or fill with ---------------</string>
+    <string name="fill"><![CDATA[--------------            Continue with            ---------------]]></string>
     <string name="update">Update</string>
     <string name="select_day">Day</string>
     <string name="select_year">Year</string>
@@ -75,4 +75,8 @@ meaning regardless of whether they appear in singular or in plural.</span></div>
     <string name="error_select_gender">Select your Gender</string>
     <string name="msg_token_fmt">FCM Token : </string>
     <string name="token_refresh">Access Token Refreshed</string>
+    <string name="no_internet">You are not connected to internet, please check your connection and try again.</string>
+    <string name="otp_not_receive">Didn\'t Received OTP Yet?</string>
+    <string name="resend_otp">Resend OTP in </string>
+    <string name="seconds">Seconds</string>
 </resources>

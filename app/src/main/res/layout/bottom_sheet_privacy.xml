@@ -16,38 +16,41 @@
 
         <TextView
             android:id="@+id/txt_privacy_header"
+            style="@style/textViewFontInter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawableRight="@android:drawable/ic_menu_close_clear_cancel"
-            android:padding="@dimen/_5sdp"
+            android:padding="@dimen/margin5"
             android:text="@string/title_privacy"
             android:textColor="@color/gray_200"
             android:textSize="@dimen/text24" />
 
         <TextView
             android:id="@+id/txt_privacy"
+            style="@style/textViewFontInter"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:padding="@dimen/_5sdp"
+            android:padding="@dimen/margin5"
             android:textColor="@color/gray_200" />
 
         <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
             android:id="@+id/btn_accept"
+            style="@style/textViewFontSora"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="@dimen/margin20"
             android:backgroundTint="@color/login_btn"
             android:gravity="center"
-            android:padding="10dp"
+            android:padding="@dimen/margin10"
             android:text="@string/accept"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="@dimen/_16sdp"
+            android:textSize="@dimen/text16"
             app:spinning_bar_color="@android:color/black"
-            app:spinning_bar_padding="8dp"
-            app:spinning_bar_width="4dp" />
+            app:spinning_bar_padding="@dimen/margin8"
+            app:spinning_bar_width="@dimen/margin4" />
 
     </LinearLayout>
 

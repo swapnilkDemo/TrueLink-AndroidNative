@@ -2,6 +2,8 @@ package com.swapnilk.truelink.utils
 
 import android.content.Context
 import android.graphics.Color
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
@@ -79,6 +81,23 @@ class CommonFunctions(context: Context) {
             e.stackTrace
         }
         return strDate
+    }
+
+    ////////////////////Check Internet Connection//////////////////////////
+    fun checkConnection(context: Context): Boolean {
+        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        if (cm != null) {
+            val capabilities = cm.getNetworkCapabilities(cm.activeNetwork)
+            if (capabilities != null) {
+                if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR))
+                    return true
+                else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI))
+                    return true
+                else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET))
+                    return true
+            }
+        }
+        return false
     }
 
 

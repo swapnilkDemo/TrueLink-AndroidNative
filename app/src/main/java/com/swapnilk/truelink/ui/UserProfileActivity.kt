@@ -67,7 +67,9 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
     private lateinit var cardViewMale: MaterialCardView
     private lateinit var cardViewFemale: MaterialCardView
     private lateinit var cardViewOther: MaterialCardView
-
+    private lateinit var llCardmMale: LinearLayout
+    private lateinit var llCardFemale: LinearLayout
+    private lateinit var llCardOther: LinearLayout
 
     private lateinit var editName: TextInputEditText
     private lateinit var tvSelectDob: TextView
@@ -191,26 +193,68 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
         cardViewMale = findViewById(R.id.cardViewMale)
         cardViewFemale = findViewById(R.id.cardViewFemale)
         cardViewOther = findViewById(R.id.cardViewOther)
+        llCardmMale = findViewById(R.id.ll_card_male)
+        llCardFemale = findViewById(R.id.ll_card_female)
+        llCardOther = findViewById(R.id.ll_card_other)
 
         cardViewMale.setOnClickListener {
-            cardViewMale.toggle()
-            cardViewFemale.isChecked = false
-            cardViewOther.isChecked = false
+            setSelected(
+                cardViewMale,
+                llCardmMale,
+                getColor(R.color.colorSecondary),
+                getColor(R.color.male_blue)
+            )
+            setDeselected(
+                cardViewFemale,
+                llCardFemale,
+                getColor(R.color.light_background)
+            )
+            setDeselected(
+                cardViewOther,
+                llCardOther,
+                getColor(R.color.light_background)
+            )
             gender = Gender.MALE
         }
 
         cardViewFemale.setOnClickListener {
-            cardViewFemale.toggle()
-            cardViewMale.isChecked = false
-            cardViewOther.isChecked = false
+            setSelected(
+                cardViewFemale,
+                llCardFemale,
+                getColor(R.color.colorSecondary),
+                getColor(R.color.female_marun)
+            )
+            setDeselected(
+                cardViewMale,
+                llCardmMale,
+                getColor(R.color.light_background)
+            )
+            setDeselected(
+                cardViewOther,
+                llCardOther,
+                getColor(R.color.light_background)
+            )
             gender = Gender.FEMALE
 
         }
 
         cardViewOther.setOnClickListener {
-            cardViewOther.toggle()
-            cardViewMale.isChecked = false
-            cardViewFemale.isChecked = false
+            setSelected(
+                cardViewOther,
+                llCardOther,
+                getColor(R.color.colorSecondary),
+                getColor(R.color.other_voilet)
+            )
+            setDeselected(
+                cardViewMale,
+                llCardmMale,
+                getColor(R.color.light_background)
+            )
+            setDeselected(
+                cardViewFemale,
+                llCardFemale,
+                getColor(R.color.light_background)
+            )
             gender = Gender.OTHERS
         }
 
@@ -241,54 +285,86 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
         progressButton = findViewById(R.id.btn_finish)
         progressButton.run {
             setOnClickListener {
-                if (gender == null) {
-                    commonFunctions.showErrorSnackBar(
-                        this@UserProfileActivity,
-                        progressButton,
-                        getString(R.string.error_select_gender)
-                    )
-                } else if (editName.text.isNullOrEmpty()) {
-                    commonFunctions.showErrorSnackBar(
-                        this@UserProfileActivity,
-                        progressButton,
-                        getString(R.string.error_enter_full_name)
-                    )
-                } else if (dateOfBirth == null) {
-                    commonFunctions.showErrorSnackBar(
-                        this@UserProfileActivity,
-                        progressButton,
-                        getString(R.string.error_dob)
-                    )
-                } else {
-                    //////////////////Initiate Login///////////////////
-                    morphDoneAndRevert(this@UserProfileActivity)
-                    /////////////////Call Update Mutation /////////////
-                    val updateUserInput = UpdateUserInput(
-                        Optional.Present(editName.text.toString()),
-                        Optional.Absent,
-                        Optional.Absent,
-                        Optional.Absent,
-                        Optional.Absent,
-                        Optional.Absent,
-                        Optional.Absent,
-                        Optional.Absent,
-                        Optional.Present(sharedPreferences.getFCM()),
-                        Optional.Present(dateOfBirth), Optional.Present(gender)
-                    )
-                    val updateUserMutation: UpdateUserMutation =
-                        UpdateUserMutation(
-                            updateUserInput
-
+                if (commonFunctions.checkConnection(this@UserProfileActivity))
+                    if (gender == null) {
+                        commonFunctions.showErrorSnackBar(
+                            this@UserProfileActivity,
+                            progressButton,
+                            getString(R.string.error_select_gender)
                         )
-                    launch {
-                        val response: ApolloResponse<UpdateUserMutation.Data> =
-                            apolloClient.mutation(updateUserMutation).execute()
-                        afterResult(response)
+                    } else if (editName.text.isNullOrEmpty()) {
+                        commonFunctions.showErrorSnackBar(
+                            this@UserProfileActivity,
+                            progressButton,
+                            getString(R.string.error_enter_full_name)
+                        )
+                    } else if (dateOfBirth == null) {
+                        commonFunctions.showErrorSnackBar(
+                            this@UserProfileActivity,
+                            progressButton,
+                            getString(R.string.error_dob)
+                        )
+                    } else {
+                        //////////////////Initiate Login///////////////////
+                        morphDoneAndRevert(this@UserProfileActivity)
+                        /////////////////Call Update Mutation /////////////
+                        val updateUserInput = UpdateUserInput(
+                            Optional.Present(editName.text.toString()),
+                            Optional.Absent,
+                            Optional.Absent,
+                            Optional.Absent,
+                            Optional.Absent,
+                            Optional.Absent,
+                            Optional.Absent,
+                            Optional.Absent,
+                            Optional.Present(sharedPreferences.getFCM()),
+                            Optional.Present(dateOfBirth), Optional.Present(gender)
+                        )
+                        val updateUserMutation: UpdateUserMutation =
+                            UpdateUserMutation(
+                                updateUserInput
+
+                            )
+                        launch {
+                            val response: ApolloResponse<UpdateUserMutation.Data> =
+                                apolloClient.mutation(updateUserMutation).execute()
+                            afterResult(response)
+                        }
                     }
-                }
+                else
+                    commonFunctions.showErrorSnackBar(
+                        this@UserProfileActivity,
+                        progressButton,
+                        getString(R.string.no_internet)
+                    )
             }
         }
     }// End Initialize
+
+    //////////////////Deselect CardView////////////////////////////
+    private fun setDeselected(cardView: MaterialCardView?, linearLayout: LinearLayout, color: Int) {
+        if (cardView != null) {
+            linearLayout.setBackgroundColor(color)
+            cardView.strokeColor = color
+            cardView.strokeWidth = 0
+        }
+
+    }
+
+    /////////////////////Select CardView /////////////////////////////////
+    private fun setSelected(
+        cardView: MaterialCardView?,
+        linearLayout: LinearLayout,
+        color: Int,
+        color1: Int
+    ) {
+        if (cardView != null) {
+            linearLayout.setBackgroundColor(color)
+            cardView.strokeColor = color1
+            cardView.strokeWidth = 2
+        }
+
+    }
 
     private fun afterResult(response: ApolloResponse<UpdateUserMutation.Data>) {
         if (response.data?.updateUser?.success == true) {

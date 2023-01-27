@@ -5,7 +5,7 @@
     android:layout_gravity="center"
     android:background="@color/colorPrimary"
     android:orientation="vertical"
-    android:padding="@dimen/_16sdp">
+    android:padding="@dimen/text16">
 
     <ImageView
         android:layout_width="@dimen/margin180"
@@ -23,6 +23,7 @@
 
     <TextView
         android:id="@+id/txt_header"
+        style="@style/textViewFontSora"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -30,17 +31,18 @@
         android:padding="@dimen/margin10"
         android:text="@string/stat"
         android:textColor="@color/white"
-        android:textSize="@dimen/text16" />
+        android:textSize="@dimen/text12" />
 
     <TextView
         android:id="@+id/txt__description"
+        style="@style/textViewFontSora"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
         android:text="@string/welcome_text_3"
         android:textColor="@color/white"
-        android:textSize="@dimen/text16" />
+        android:textSize="@dimen/text12" />
 
 
 </LinearLayout>

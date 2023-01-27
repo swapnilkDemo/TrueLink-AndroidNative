@@ -28,16 +28,18 @@
             android:src="@drawable/ic_login_screen" />
 
         <TextView
+            style="@style/textViewFontSora"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="@dimen/_2sdp"
+            android:layout_margin="@dimen/margin2"
             android:gravity="center"
             android:text="@string/login_text"
             android:textColor="@color/gray_200"
-            android:textSize="@dimen/_16sdp" />
+            android:textSize="@dimen/text12" />
 
         <TextView
+            style="@style/textViewFontSora"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -45,7 +47,7 @@
             android:gravity="center"
             android:text="@string/login_subtext"
             android:textColor="@color/gray_200"
-            android:textSize="@dimen/_12sdp" />
+            android:textSize="@dimen/text8" />
 
 
         <LinearLayout
@@ -60,14 +62,15 @@
 
             <com.hbb20.CountryCodePicker
                 android:id="@+id/ccp"
+                style="@style/textViewFontSora"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="1.7dp"
                 android:background="@drawable/rounded_left_corners"
-                android:padding="@dimen/_5sdp"
+                android:padding="@dimen/margin5"
                 app:ccp_contentColor="@color/gray_200"
                 app:ccp_showNameCode="false"
-                app:ccp_textSize="@dimen/_16sdp" />
+                app:ccp_textSize="@dimen/margin16" />
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edit_coutryCode"
@@ -82,11 +85,12 @@
                 android:padding="@dimen/_2sdp"
                 android:textColor="@color/white"
                 android:textColorHint="@color/gray_200"
-                android:textSize="@dimen/_16sdp"
+                android:textSize="@dimen/text16"
                 android:visibility="gone" />
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edit_phone"
+                style="@style/textViewFontSora"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
@@ -95,10 +99,10 @@
                 android:gravity="center_vertical"
                 android:hint="@string/hint_phone"
                 android:inputType="phone"
-                android:padding="@dimen/_5sdp"
+                android:padding="@dimen/margin5"
                 android:textColor="@color/white"
                 android:textColorHint="@color/gray_200"
-                android:textSize="@dimen/_16sdp" />
+                android:textSize="@dimen/text16" />
 
         </LinearLayout>
 
@@ -119,19 +123,21 @@
 
             <TextView
                 android:id="@+id/txt_privacy_msg"
+                style="@style/textViewFontSora"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:textColor="@color/gray_200"
-                android:textSize="@dimen/_10sdp" />
+                android:textSize="@dimen/text10" />
 
         </LinearLayout>
 
 
         <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
             android:id="@+id/btn_generateOtp"
+            style="@style/textViewFontSora"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -142,10 +148,10 @@
             android:text="@string/generate_otp"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="@dimen/_16sdp"
+            android:textSize="@dimen/text16"
             app:spinning_bar_color="@android:color/black"
-            app:spinning_bar_padding="8dp"
-            app:spinning_bar_width="4dp" />
+            app:spinning_bar_padding="@dimen/margin8"
+            app:spinning_bar_width="@dimen/margin4" />
         <!--  app:spinning_bar_width="4dp" &lt;!&ndash; Optional &ndash;&gt;
           app:spinning_bar_color="#FFF" &lt;!&ndash; Optional &ndash;&gt;
           app:spinning_bar_padding="6dp" &lt;!&ndash; Optional &ndash;&gt;-->

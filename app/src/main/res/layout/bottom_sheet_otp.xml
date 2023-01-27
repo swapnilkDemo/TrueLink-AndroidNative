@@ -31,21 +31,13 @@
             android:layout_margin="@dimen/margin20"
             android:src="@drawable/ic_login_screen" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="@dimen/_2sdp"
-            android:gravity="center"
-            android:text="@string/otp_verification"
-            android:textColor="@color/gray_200"
-            android:textSize="@dimen/_16sdp" />
 
         <TextView
+            style="@style/textViewFontInter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="@dimen/_2sdp"
+            android:layout_margin="@dimen/margin2"
             android:gravity="center"
             android:text="@string/enter_otp"
             android:textColor="@color/gray_200"
@@ -65,36 +57,59 @@
             android:itemBackground="@color/gray_200"
             android:padding="@dimen/_5sdp"
             android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/_16sdp"
+            android:textSize="@dimen/text16"
             android:textStyle="bold"
             app:cursorColor="@color/black"
-            app:cursorWidth="@dimen/_2sdp"
+            app:cursorWidth="@dimen/margin2"
             app:hideLineWhenFilled="true"
             app:itemCount="4"
             app:itemHeight="@dimen/margin50"
-            app:itemRadius="@dimen/_4dp"
+            app:itemRadius="@dimen/margin4"
             app:itemSpacing="@dimen/margin10"
             app:itemWidth="@dimen/margin50"
             app:lineColor="@color/gray_200"
-            app:lineWidth="@dimen/_2sdp"
+            app:lineWidth="@dimen/margin2"
             app:viewType="rectangle" />
+
+        <TextView
+            style="@style/textViewFontInter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/margin2"
+            android:gravity="center"
+            android:text="@string/otp_not_receive"
+            android:textColor="@color/gray_200"
+            android:textSize="@dimen/text10" />
+
+        <TextView
+            style="@style/textViewFontInter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/margin2"
+            android:gravity="center"
+            android:text="@string/resend_otp"
+            android:textColor="@color/gray_200"
+            android:textSize="@dimen/text12" />
 
         <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
             android:id="@+id/btnotp"
+            style="@style/textViewFontInter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="@dimen/margin20"
             android:backgroundTint="@color/login_btn"
             android:gravity="center"
-            android:padding="10dp"
+            android:padding="@dimen/margin10"
             android:text="@string/verify"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="@dimen/_16sdp"
+            android:textSize="@dimen/text16"
             app:spinning_bar_color="@android:color/black"
-            app:spinning_bar_padding="@dimen/_8dp"
-            app:spinning_bar_width="@dimen/_4dp" />
+            app:spinning_bar_padding="@dimen/margin8"
+            app:spinning_bar_width="@dimen/margin4" />
         <!--  app:spinning_bar_width="4dp" &lt;!&ndash; Optional &ndash;&gt;
           app:spinning_bar_color="#FFF" &lt;!&ndash; Optional &ndash;&gt;
           app:spinning_bar_padding="6dp" &lt;!&ndash; Optional &ndash;&gt;-->
