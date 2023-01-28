@@ -145,9 +145,11 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
                         getString(R.string.error_privacy)
                     )
                 else
-                    commonFunctions.showErrorSnackBar(this@SigninActivity,
-                    circularProgressButton,
-                    getString(R.string.no_internet))
+                    commonFunctions.showErrorSnackBar(
+                        this@SigninActivity,
+                        circularProgressButton,
+                        getString(R.string.no_internet)
+                    )
             }//End onCLickListener
         }//End Run
     }//End Function

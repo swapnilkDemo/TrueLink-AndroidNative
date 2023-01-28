@@ -61,6 +61,7 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
     lateinit var pinView: PinView
     lateinit var textResendOTP: TextView
     var bundleGet: Bundle = bundle
+    private var timer: CountDownTimer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,7 +91,7 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
     }
 
     private fun startTimer() {
-        object : CountDownTimer(30000, 1000) {
+        timer = object : CountDownTimer(30000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 textResendOTP.isEnabled = false
                 textResendOTP.text =
@@ -101,12 +102,15 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
                 // logic to set the EditText could go here
             }
 
+
             override fun onFinish() {
                 textResendOTP.isEnabled = true
                 textResendOTP.text = getString(R.string.click_resend)
                 textResendOTP.setTextColor(Color.CYAN)
             }
         }.start()
+
+
     }
 
     private fun initialize() {
@@ -160,6 +164,7 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
                             );
                             sharedPrefs.setRefreshToken(responseVerify.data!!.verifyOTP.payload!!.refreshToken.toString())
                             sharedPrefs.setLoggedIn(true)
+                            timer?.cancel()
                             startMain(uid, userModel)
                         } else afterResultVerify(responseVerify)
 
@@ -206,6 +211,7 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
 
     private fun startMain(uid: String, userModel: UserModel?) {
         if (sharedPrefs.isProfileUpdate() || userModel?.uDOB?.isNotEmpty() == true) {
+            sharedPrefs.setProfileUpdate(true)
             val mainIntent = Intent(activity, MainActivity::class.java)
             startActivity(mainIntent)
             activity?.finish()

@@ -1,7 +1,12 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <!--Bottom navigation label text size-->
+    <dimen name="design_bottom_navigation_text_size" tools:override="true">@dimen/text8</dimen>
+    <dimen name="design_bottom_navigation_active_text_size" tools:overrride="true">@dimen/text12
+    </dimen>
+    <!--   ################################################      -->
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="margin16">16dp</dimen>
     <dimen name="margin1">1dp</dimen>
@@ -9,14 +14,17 @@
     <dimen name="margin4">4dp</dimen>
     <dimen name="margin5">5dp</dimen>
     <dimen name="margin8">8dp</dimen>
+    <dimen name="margin9">9dp</dimen>
     <dimen name="margin10">10dp</dimen>
     <dimen name="margin12">12dp</dimen>
     <dimen name="margin15">15dp</dimen>
     <dimen name="margin20">20dp</dimen>
+    <dimen name="margin24">24dp</dimen>
     <dimen name="margin30">30dp</dimen>
     <dimen name="margin40">40dp</dimen>
     <dimen name="margin48">48dp</dimen>
     <dimen name="margin50">50dp</dimen>
+    <dimen name="margin55">55dp</dimen>
     <dimen name="margin60">60dp</dimen>
     <dimen name="margin70">70dp</dimen>
     <dimen name="margin180">180dp</dimen>

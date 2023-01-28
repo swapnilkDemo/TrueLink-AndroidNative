@@ -80,4 +80,9 @@ meaning regardless of whether they appear in singular or in plural.</span></div>
     <string name="resend_otp">Resend OTP in </string>
     <string name="seconds">Seconds</string>
     <string name="click_resend">Click here to Resend OTP</string>
+
+    <string name="title_bulk_scan">Bulk Scan</string>
+    <string name="title_threat_control">Threat Control</string>
+    <string name="title_url_shortener">Shortener</string>
+    <string name="title_alert">Alert</string>
 </resources>

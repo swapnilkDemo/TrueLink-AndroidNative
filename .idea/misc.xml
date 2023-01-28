@@ -14,6 +14,7 @@
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/ic_notifications_black_24dp.xml" value="0.1495" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/ic_round_arrow_drop_down_24.xml" value="0.1495" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/ic_round_check_box_24.xml" value="0.1495" />
+        <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/ic_search.xml" value="0.144" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/rect.xml" value="0.144" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/rect_error.xml" value="0.144" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/rounded_left_corners.xml" value="0.144" />
@@ -24,10 +25,15 @@
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/activity_user_profile.xml" value="0.22" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/bottom_sheet_otp.xml" value="0.1765625" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/bottom_sheet_privacy.xml" value="0.1390625" />
+        <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/fragment_bulk_scan.xml" value="0.19114583333333332" />
+        <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/fragment_dashboard.xml" value="0.1765625" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/fragment_intro.xml" value="0.25" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/fragment_intro2.xml" value="0.1921875" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/fragment_intro3.xml" value="0.1921875" />
+        <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/fragment_threat_comtrol.xml" value="0.1921875" />
+        <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/fragment_url_shortener.xml" value="0.19114583333333332" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/fragment_verify_o_t_p.xml" value="0.1921875" />
+        <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/toolbar_main.xml" value="0.1921875" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/menu/bottom_nav_menu.xml" value="0.1765625" />
       </map>
     </option>

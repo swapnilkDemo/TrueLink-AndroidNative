@@ -25,8 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="@dimen/margin20"
-            android:layout_marginBottom="@dimen/margin10"
+            android:layout_margin="@dimen/margin10"
             android:gravity="center"
             android:text="@string/about_you"
             android:textColor="@color/gray_200"
@@ -71,7 +70,7 @@
 
                     <ImageView
                         android:layout_width="@dimen/margin50"
-                        android:layout_height="@dimen/margin60"
+                        android:layout_height="@dimen/margin55"
                         android:layout_gravity="center"
                         android:layout_margin="@dimen/margin10"
                         android:src="@drawable/avatar_male" />
@@ -110,7 +109,7 @@
 
                     <ImageView
                         android:layout_width="@dimen/margin50"
-                        android:layout_height="@dimen/margin60"
+                        android:layout_height="@dimen/margin55"
                         android:layout_gravity="center"
                         android:layout_margin="@dimen/margin10"
                         android:src="@drawable/avatar_female" />
@@ -149,7 +148,7 @@
 
                     <ImageView
                         android:layout_width="@dimen/margin50"
-                        android:layout_height="@dimen/margin60"
+                        android:layout_height="@dimen/margin55"
                         android:layout_gravity="center"
                         android:layout_margin="@dimen/margin10"
                         android:src="@drawable/avatar_other" />

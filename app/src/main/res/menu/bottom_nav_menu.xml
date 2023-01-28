@@ -2,18 +2,27 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigation_home"
-        android:icon="@drawable/ic_home_black_24dp"
-        android:title="@string/title_home" />
-
-    <item
-        android:id="@+id/navigation_dashboard"
-        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:id="@+id/nav_dashboard"
+        android:icon="@drawable/ic_nav_dashboard"
         android:title="@string/title_dashboard" />
 
     <item
-        android:id="@+id/navigation_notifications"
-        android:icon="@drawable/ic_notifications_black_24dp"
-        android:title="@string/title_notifications" />
+        android:id="@+id/nav_bulk_scan"
+        android:icon="@drawable/ic_nav_bulk"
+        android:title="@string/title_bulk_scan" />
+
+    <item
+        android:id="@+id/nav_threat_control"
+        android:icon="@drawable/ic_nav_threat"
+        android:title="@string/title_threat_control" />
+
+    <item
+        android:id="@+id/nav_shortener"
+        android:icon="@drawable/ic_nav_shortner"
+        android:title="@string/title_url_shortener" />
+    <item
+        android:id="@+id/nav_alert"
+        android:icon="@drawable/ic_nav_alert"
+        android:title="@string/title_alert" />
 
 </menu>

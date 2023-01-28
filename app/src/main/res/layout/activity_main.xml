@@ -6,11 +6,14 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorPrimary"
         android:orientation="vertical">
+
+        <include layout="@layout/toolbar_main" />
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/nav_host_fragment"
@@ -19,15 +22,31 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             app:defaultNavHost="true"
-            app:navGraph="@navigation/mobile_navigation"></androidx.fragment.app.FragmentContainerView>
+            app:navGraph="@navigation/mobile_navigation" />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:itemBackground="@color/colorPrimary"
+            app:itemHorizontalTranslationEnabled="true"
+            app:itemIconTint="@drawable/bnv_active_foreground"
+            app:itemPaddingBottom="@dimen/margin4"
+            app:itemTextAppearanceActive="@color/selected_color"
+            app:itemTextColor="@drawable/bnv_active_foreground"
+            app:labelVisibilityMode="selected"
+            app:menu="@menu/bottom_nav_menu" />
     </LinearLayout>
 
-    <com.tenclouds.fluidbottomnavigation.FluidBottomNavigation
-        android:id="@+id/fluidBottomNavigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:accentColor="@color/colorPrimary"
-        app:iconSelectedColor="@color/iconSelectedColor"
+    <!-- <com.tenclouds.fluidbottomnavigation.FluidBottomNavigation
+         android:id="@+id/fluidBottomNavigation"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         app:accentColor="@color/colorPrimary"
+         app:backColor="@color/colorSecondary"
+         app:iconColor="@color/bottom_nav_color"
+         app:iconSelectedColor="@color/selected_color"
+         app:textColor="@color/bottom_nav_color" />-->
 
-        app:textColor="@color/textColor" />
+
 </androidx.drawerlayout.widget.DrawerLayout>

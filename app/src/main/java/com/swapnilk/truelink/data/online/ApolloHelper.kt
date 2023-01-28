@@ -15,7 +15,7 @@ class ApolloHelper(context: Context) {
         .addInterceptor(AuthorizationInterceptor(context))
         .build()
 
-    public val apolloClient = ApolloClient.Builder()
+    val apolloClient = ApolloClient.Builder()
         .serverUrl("https://tuelink.neki.dev/graphql")
         .okHttpClient(okHttpClient)
         .build()

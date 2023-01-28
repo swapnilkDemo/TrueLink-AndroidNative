@@ -13,6 +13,7 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
         <item name="backgroundColor">@color/colorPrimary</item>
+        <item name="homeAsUpIndicator">@drawable/ic_logo_white_tgline</item>
         <!--  <item name="checkboxStyle">@style/Widget.App.CheckBox</item>
           <item name="switchStyle">@style/Widget.App.Switch</item>
           <item name="radioButtonStyle">@style/Widget.App.RadioButton</item>

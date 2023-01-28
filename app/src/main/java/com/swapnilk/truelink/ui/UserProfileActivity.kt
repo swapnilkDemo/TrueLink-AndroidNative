@@ -52,6 +52,8 @@ import kotlinx.coroutines.launch
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
+import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.coroutines.CoroutineContext
 
 
@@ -87,6 +89,7 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
     private var latLang: List<Double?>? = null
     lateinit var permissionUtils: PermissionUtils
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private val calendar = Calendar.getInstance()
 
     // Declare the launcher at the top of your Activity/Fragment:
     private val requestPermissionLauncher = registerForActivityResult(
@@ -260,10 +263,12 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
         tvSelectDob = findViewById(R.id.tv_select_dob)
 
         datePickerPopup = DatePickerPopup.Builder().from(this@UserProfileActivity).offset(3)
+            .darkModeEnabled(true)
             .pickerMode(com.ozcanalasalvar.library.view.datePicker.DatePicker.MONTH_ON_FIRST)
             .textSize(19).endDate(DateUtils.getCurrentTime())
             .currentDate(DateUtils.getTimeMiles(1997, 7, 7))
-            .startDate(DateUtils.getTimeMiles(1900, 1, 1)).build()
+            .startDate(DateUtils.getTimeMiles(1900, 1, 1))
+            .build()
         datePicker = findViewById(R.id.ll_select_dob)
         datePicker.setOnClickListener {
             datePickerPopup?.show()
@@ -271,7 +276,10 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
 
         datePickerPopup?.setListener(OnDateSelectListener { dp, date, day, month, year ->
             val monthName: Int = (month + 1)
-            tvSelectDob.text = "$monthName/$day/$year"
+            calendar.set(Calendar.MONTH, month)
+            val sdf = SimpleDateFormat("MMM")
+            var monthStr = sdf.format(calendar.time)
+            tvSelectDob.text = "$monthStr, $day   $year"
             dateOfBirth = commonFunctions.convertDate2TimeStamp("$monthName/$day/$year")
         })
 

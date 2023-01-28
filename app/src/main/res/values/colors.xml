@@ -18,5 +18,7 @@
     <color name="female_marun">#F44983</color>
     <color name="other_voilet">#A959A3</color>
     <color name="light_background">#323239</color>
+    <color name="bottom_nav_color">#A5A5A5</color>
+    <color name="selected_color">#40B3E0</color>
 
 </resources>

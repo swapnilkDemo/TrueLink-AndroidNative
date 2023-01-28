@@ -63,17 +63,24 @@ class CommonFunctions(context: Context) {
     }
 
     ////////////////////////Change String MM/dd/yyyy to timestamp/////////////////
-    fun convertDate2TimeStamp(date: String): Long {
-        val formatter: DateFormat = SimpleDateFormat("mmm, dd yyyy")
-        val date: Date = formatter.parse(date) as Date
-        return date.time
+    fun convertDate2TimeStamp(dateStr: String): Long? {
+        var timestamp: Long? = null
+        try {
+            val formatter: DateFormat = SimpleDateFormat("mm/dd/yyyy")
+            val date: Date = formatter.parse(dateStr) as Date
+            timestamp = date.time
+
+        } catch (e: Exception) {
+            e.stackTrace
+        }
+        return timestamp
     }
 
     /////////////////Change Timestamp string to date///////////////////
     fun convertTimeStamp2Date(timestamp: String): String {
         var strDate = ""
         try {
-            val original: DateFormat = SimpleDateFormat("yyyy-mm-dd'T'hh:mm:ss.SSSZ")
+            val original: DateFormat = SimpleDateFormat("yyyy-mm-dd hh:mm:ss.SSSz")
             val date = original.format(timestamp)
             val formatter: DateFormat = SimpleDateFormat("mmm dd, yyyy")
             strDate = formatter.format(date).toString();

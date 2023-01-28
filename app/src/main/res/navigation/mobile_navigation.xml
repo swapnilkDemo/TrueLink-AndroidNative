@@ -3,22 +3,34 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@id/nav_dashboard">
 
     <fragment
-        android:id="@+id/navigation_home"
-        android:name="com.swapnilk.truelink.ui.home.HomeFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
-
-    <fragment
-        android:id="@+id/navigation_dashboard"
+        android:id="@+id/nav_dashboard"
         android:name="com.swapnilk.truelink.ui.dashboard.DashboardFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_dashboard" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
+        android:id="@+id/nav_bulk_scan"
+        android:name="com.swapnilk.truelink.ui.bulk_scan.BulkScanFragment"
+        android:label="@string/title_bulk_scan"
+        tools:layout="@layout/fragment_bulk_scan" />
+
+    <fragment
+        android:id="@+id/nav_threat_control"
+        android:name="com.swapnilk.truelink.ui.home.HomeFragment"
+        android:label="@string/title_threat_control"
+        tools:layout="@layout/fragment_threat_control" />
+
+    <fragment
+        android:id="@+id/nav_shortener"
+        android:name="com.swapnilk.truelink.ui.shortner.ShortnerFragment"
+        android:label="@string/title_url_shortener"
+        tools:layout="@layout/fragment_url_shortener" />
+
+    <fragment
+        android:id="@+id/nav_alert"
         android:name="com.swapnilk.truelink.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
