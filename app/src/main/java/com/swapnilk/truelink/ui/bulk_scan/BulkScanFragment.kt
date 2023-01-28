@@ -7,11 +7,12 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.swapnilk.truelink.databinding.FragmentBulkScanBinding
 import com.swapnilk.truelink.databinding.FragmentDashboardBinding
 
 class BulkScanFragment : Fragment() {
 
-    private var _binding: FragmentDashboardBinding? = null
+    private var _binding: FragmentBulkScanBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -23,9 +24,9 @@ class BulkScanFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View {
         val dashboardViewModel =
-                ViewModelProvider(this).get(BulkScanViewModel::class.java)
+            ViewModelProvider(this)[BulkScanViewModel::class.java]
 
-        _binding = FragmentDashboardBinding.inflate(inflater, container, false)
+        _binding = FragmentBulkScanBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         val textView: TextView = binding.textDashboard

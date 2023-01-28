@@ -91,6 +91,9 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val calendar = Calendar.getInstance()
 
+    ///////////////////////required Permissions/////////////
+    private lateinit var permissionsArray: Array<String>
+
     // Declare the launcher at the top of your Activity/Fragment:
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -115,16 +118,21 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
             .addInterceptor(AuthorizationInterceptor(this@UserProfileActivity)).build()
         apolloClient = ApolloClient.Builder().serverUrl("https://truelink.neki.dev/graphql/")
             .okHttpClient(okHttpClient).build()
-        /////////////////Request Permissions////////////
-        //Manifest.permission.POST_NOTIFICATIONS,  Manifest.permission.ACCESS_BACKGROUND_LOCATION
-        if (hasPermission(Manifest.permission.POST_NOTIFICATIONS)) generateFCMToken() else askPermission(
-            Manifest.permission.POST_NOTIFICATIONS
-        )
-        if (hasPermission(Manifest.permission.ACCESS_COARSE_LOCATION)) getUserLocation() else askPermission(
-            Manifest.permission.ACCESS_COARSE_LOCATION
-        )
+
         /////////////////////Initialize UI//////////////
         initialize()
+        /////////////////Request Permissions////////////
+        permissionsArray = arrayOf(
+            "Manifest.permission.POST_NOTIFICATIONS",
+            "Manifest.permission.ACCESS_BACKGROUND_LOCATION"
+        )
+
+        askPermission(
+            Manifest.permission.POST_NOTIFICATIONS
+        )
+        askPermission(
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        )
         ////////////////////Get Extras//////////////////
         if (intent.extras != null) {
             gender = intent.extras!!.getSerializable("gender") as Gender?
@@ -164,13 +172,11 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
                 this, Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+            commonFunctions.showErrorSnackBar(
+                this@UserProfileActivity,
+                progressButton,
+                getString(R.string.required_permissions)
+            )
             return
         }
         fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
@@ -401,7 +407,7 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
         }
     }
 
-    fun askPermission(permissionName: String) {
+    private fun askPermission(permissionName: String) {
         // This is only necessary for API level >= 33 (TIRAMISU)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             if (ContextCompat.checkSelfPermission(
@@ -409,18 +415,27 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
                 ) == PackageManager.PERMISSION_GRANTED
             ) {
                 // FCM SDK (and your app) can post notifications.
+                generateFCMToken()
+                getUserLocation()
             } else if (ActivityCompat.shouldShowRequestPermissionRationale(
                     this@UserProfileActivity, permissionName
                 )
             ) {
-                // TODO: display an educational UI explaining to the user the features that will be enabled
-                //       by them granting the POST_NOTIFICATION permission. This UI should provide the user
-                //       "OK" and "No thanks" buttons. If the user selects "OK," directly request the permission.
-                //       If the user selects "No thanks," allow the user to continue without notifications.
+                ActivityCompat.requestPermissions(
+                    this@UserProfileActivity,
+                    arrayOf(permissionName),
+                    0
+                )
             } else {
                 // Directly ask for the permission
                 requestPermissionLauncher.launch(permissionName)
             }
+        } else {
+            // Directly ask for the permission
+            (ActivityCompat.shouldShowRequestPermissionRationale(
+                this@UserProfileActivity, permissionName
+            ))
+
         }
 
     }
@@ -433,6 +448,7 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
             if (info.requestedPermissions != null) {
                 for (p in info.requestedPermissions) {
                     if (p == permission) {
+                        PackageManager.PERMISSION_GRANTED
                         return true
                     }
                 }

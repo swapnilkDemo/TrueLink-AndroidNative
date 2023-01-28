@@ -1,6 +1,8 @@
 package com.swapnilk.truelink
 
 import android.os.Bundle
+import android.widget.ImageView
+import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.NavHostFragment
@@ -29,6 +31,9 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
     private lateinit var binding: ActivityMainBinding
     private lateinit var fluidBottomNavigationItems: List<FluidBottomNavigationItem>
     private lateinit var navView: BottomNavigationView
+    private lateinit var toolbar: Toolbar
+    private lateinit var ivProfile: ImageView
+    private lateinit var ivSearch: ImageView
 
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var commonFunctions: CommonFunctions
@@ -66,9 +71,9 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         navView.setupWithNavController(navController)
         navView.selectedItemId = R.id.nav_threat_control
         ///////////Set Badge to Alert/////////////////
-        var badge = navView.getOrCreateBadge(R.id.nav_alert)
-        badge.number = 11
-        badge.maxCharacterCount = 2
+        setBadgeToAlert()
+
+
         /*setNavigation()
         navView.selectTab(2)
         navView.onTabSelectedListener
@@ -89,6 +94,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
             }
         }*/
     }
+
 
     private fun setNavigation() {
         fluidBottomNavigationItems = ArrayList()
@@ -138,6 +144,11 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
 
     }
 
+    private fun setBadgeToAlert() {
+        var badge = navView.getOrCreateBadge(R.id.nav_alert)
+        badge.number = 11
+        badge.maxCharacterCount = 2
+    }
 
     private fun refreshAccessToken(refreshToken: String) {
         val jwt = JWT(sharedPreferences.getAccessToken().toString())

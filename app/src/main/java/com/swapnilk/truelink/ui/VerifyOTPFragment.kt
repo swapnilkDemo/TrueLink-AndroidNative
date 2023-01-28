@@ -210,12 +210,12 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
     }
 
     private fun startMain(uid: String, userModel: UserModel?) {
-        if (sharedPrefs.isProfileUpdate() || userModel?.uDOB?.isNotEmpty() == true) {
+       /* if (sharedPrefs.isProfileUpdate() || userModel?.uDOB?.isNotEmpty() == true) {
             sharedPrefs.setProfileUpdate(true)
             val mainIntent = Intent(activity, MainActivity::class.java)
             startActivity(mainIntent)
             activity?.finish()
-        } else {
+        } else {*/
             val profileIntent = Intent(activity, UserProfileActivity::class.java)
             profileIntent.putExtra("uId", userModel?.uId)
             profileIntent.putExtra("fullName", userModel?.uName)
@@ -223,7 +223,7 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
             profileIntent.putExtra("dob", userModel?.uDOB)
             startActivity(profileIntent)
             activity?.finish()
-        }
+        //}
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
