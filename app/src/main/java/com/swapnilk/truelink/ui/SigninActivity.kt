@@ -6,6 +6,7 @@ import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.text.Html
@@ -14,6 +15,7 @@ import android.view.View
 import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
@@ -65,12 +67,14 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
     lateinit var apiHelper: ApolloHelper
     lateinit var view: CoordinatorLayout
 
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signin)
         //////////////////////////Initialize required classes//////
         sharedPrefs = SharedPreferences(applicationContext)
         commonFunctions = CommonFunctions(applicationContext)
+        commonFunctions.setStatusBar(this)
         try {
             apolloClient =
                 ApolloClient.Builder().serverUrl("https://truelink.neki.dev/graphql/").build()
@@ -120,19 +124,7 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
                         //circularProgressButton.isEnabled = false
                         //////////////////Initiate Login///////////////////
                         morphDoneAndRevert(this@SigninActivity)
-                        /////////////////Call GetOTP Mutation /////////////
-                        val getOTPMutation = GetOTPMutation(
-                            editPhone.text.toString(), editCountryCode.text.toString()
-                        )
-                        ///////////Start background thread//////////
-                        launch {
-                            val response: ApolloResponse<GetOTPMutation.Data> =
-                                apolloClient.mutation(
-                                    getOTPMutation
-
-                                ).execute()
-                            if (response != null) afterResult(response)
-                        }
+                        login()
 
                     } else commonFunctions.showErrorSnackBar(
                         this@SigninActivity,
@@ -154,12 +146,30 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
         }//End Run
     }//End Function
 
+    ////////////////////Login using mobile number/////////////////
+    private fun login() {
+        /////////////////Call GetOTP Mutation /////////////
+        val getOTPMutation = GetOTPMutation(
+            editPhone.text.toString(), editCountryCode.text.toString()
+        )
+        ///////////Start background thread//////////
+        launch {
+            val response: ApolloResponse<GetOTPMutation.Data> =
+                apolloClient.mutation(
+                    getOTPMutation
+
+                ).execute()
+            if (response != null) afterResult(response)
+        }
+    }
+
     //////////////////////Handle Response from getOTP server operation////////////
     private fun afterResult(response: ApolloResponse<GetOTPMutation.Data>) {
         if (response.data?.getOTP!!.success) response.data!!.getOTP.request_id?.let {
-            /* showOtpDialog(
-                 it
-             )*///////////////////Pass Request Id////////////////////////
+            commonFunctions.showErrorSnackBar(
+                this@SigninActivity,
+                circularProgressButton, response.data?.getOTP!!.message
+            )
             var bundle = Bundle()
             bundle.putString("requestId", it)
             bundle.putString("phone", editPhone.text.toString())
@@ -173,7 +183,7 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
         )
     }
 
-
+    ///////////////Start Mani Activity////////////////////////
     private fun startMain() {
         if (sharedPrefs.isProfileUpdate()) {
             val mainIntent = Intent(this, MainActivity::class.java)
@@ -186,86 +196,8 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode === 123) {
-            // The Task returned from this call is always completed, no need to attach
-            // a listener.
-        }
-    }
-
-
-    /*protected open fun showOtpDialog(request_id: String) {
-        var bottomSheetDialog: BottomSheetDialog =
-            BottomSheetDialog(this, R.style.BottomSheetDialog)
-        val v: View = layoutInflater.inflate(R.layout.bottom_sheet_otp, null)
-        bottomSheetDialog.setContentView(v)
-        bottomSheetDialog.setCancelable(false)
-        bottomSheetDialog.show()
-
-        val linearLayout: LinearLayout? =
-            bottomSheetDialog.findViewById<LinearLayout>(R.id.ll_child)
-        val behavior = linearLayout?.let { BottomSheetBehavior.from(it) }
-        if (behavior != null) {
-            behavior.state = BottomSheetBehavior.STATE_EXPANDED
-            behavior.skipCollapsed = true
-            behavior.peekHeight = SAVE_FIT_TO_CONTENTS
-        }
-        var pinView = bottomSheetDialog.findViewById<PinView>(R.id.pinView)
-        view = bottomSheetDialog.findViewById<CoordinatorLayout>(R.id.cord_bottomsheet)!!
-        bottomSheetDialog.findViewById<CircularProgressButton>(R.id.btnotp)?.run {
-            setOnClickListener {
-                ///////////////Data validations/////////////////////////
-                if (pinView?.text.isNullOrEmpty()) {
-                    if (view != null) {
-                        commonFunctions.showErrorSnackBar(
-                            this@SigninActivity,
-                            view,
-                            getString(R.string.enter_otp)
-                        )
-                    }
-                } else if (pinView!!.text!!.length < 4) {
-                    if (view != null)
-                        commonFunctions.showErrorSnackBar(
-                            this@SigninActivity,
-                            circularProgressButton,
-                            getString(R.string.otp_lenght_error)
-                        )
-                } else {
-                    //////////////////Initiate OTPVerification///////////////////
-                    morphDoneAndRevert(this@SigninActivity)
-                    /////////////////Call VerifyOTP Mutation /////////////
-                    val otp = pinView?.text.toString()
-                    ////////////////Object with required parameters/////////////
-                    val verifyOtpMutation = VerifyOTPMutation(
-                        request_id, otp, editPhone.text.toString(), editCountryCode.text.toString()
-                    )
-
-                    ///////////Start background thread//////////
-                    launch {
-                        val responseVerify: ApolloResponse<VerifyOTPMutation.Data> =
-                            apiHelper.apolloClient.mutation(verifyOtpMutation).execute()
-                        if (responseVerify.data?.verifyOTP!!.success == true) startMain()
-                        else afterResultVerify(responseVerify)
-
-                    }//End Launch
-                }//End else
-            }// End onclick listener
-        }//End run
-    }//end of function
-
-
-    private fun afterResultVerify(response: ApolloResponse<VerifyOTPMutation.Data>) {
-        commonFunctions.showErrorSnackBar(
-            this@SigninActivity,
-            view,
-            getString(R.string.login_error) + response.data?.verifyOTP!!.message
-        )
-
-    }
-*/
-
-    protected open fun showPrivacyPolicy() {
+    //////////////////Show Privacy Policy/////////////////////////
+    private fun showPrivacyPolicy() {
         var bottomSheetDialog: BottomSheetDialog =
             BottomSheetDialog(this, R.style.BottomSheetDialog)
         val v: View = layoutInflater.inflate(R.layout.bottom_sheet_privacy, null)

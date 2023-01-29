@@ -1,10 +1,11 @@
 package com.swapnilk.truelink
 
+import android.os.Build
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.Toolbar
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.apollographql.apollo3.ApolloClient
@@ -15,7 +16,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.swapnilk.truelink.databinding.ActivityMainBinding
 import com.swapnilk.truelink.utils.CommonFunctions
 import com.swapnilk.truelink.utils.SharedPreferences
-import com.tenclouds.fluidbottomnavigation.FluidBottomNavigationItem
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -29,7 +29,6 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         get() = Dispatchers.Main + job
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var fluidBottomNavigationItems: List<FluidBottomNavigationItem>
     private lateinit var navView: BottomNavigationView
     private lateinit var toolbar: Toolbar
     private lateinit var ivProfile: ImageView
@@ -46,11 +45,13 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         job.cancel()
     }
 
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ////////////////////Initialize common classes////////////////
         sharedPreferences = SharedPreferences(this@MainActivity)
         commonFunctions = CommonFunctions(this@MainActivity)
+        commonFunctions.setStatusBar(this)
         try {
             //apolloHelper = ApolloHelper(this@MainActivity)
             apolloClient =
@@ -73,83 +74,19 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         ///////////Set Badge to Alert/////////////////
         setBadgeToAlert()
 
-
-        /*setNavigation()
-        navView.selectTab(2)
-        navView.onTabSelectedListener
-        navView.onTabSelectedListener = object : OnTabSelectedListener {
-            override fun onTabSelected(i: Int) {
-                try {
-                    if (i == 0) {
-                        navController.navigate(R.id.navigation_dashboard)
-                    } else if (i == 1) {
-                        navController.navigate(R.id.navigation_home)
-                    } else {
-                        navController.navigate(R.id.navigation_notifications)
-                    }
-
-                } catch (e: Exception) {
-                    e.stackTrace
-                }
-            }
-        }*/
-    }
-
-
-    private fun setNavigation() {
-        fluidBottomNavigationItems = ArrayList()
-        (fluidBottomNavigationItems as ArrayList<FluidBottomNavigationItem>)
-            .add(
-                FluidBottomNavigationItem(
-                    getString(R.string.title_dashboard),
-                    ContextCompat.getDrawable(this, R.drawable.ic_nav_dashboard)
-                )
-            )
-        (fluidBottomNavigationItems as ArrayList<FluidBottomNavigationItem>)
-            .add(
-                FluidBottomNavigationItem(
-                    getString(R.string.title_bulk_scan),
-                    ContextCompat.getDrawable(this, R.drawable.ic_nav_bulk)
-                )
-            )
-        (fluidBottomNavigationItems as ArrayList<FluidBottomNavigationItem>)
-            .add(
-                FluidBottomNavigationItem(
-                    getString(R.string.title_threat_control),
-                    ContextCompat.getDrawable(this, R.drawable.ic_nav_threat)
-                )
-            )
-
-        (fluidBottomNavigationItems as ArrayList<FluidBottomNavigationItem>)
-            .add(
-                FluidBottomNavigationItem(
-                    getString(R.string.title_url_shortener),
-                    ContextCompat.getDrawable(this, R.drawable.ic_nav_shortner)
-                )
-            )
-        (fluidBottomNavigationItems as ArrayList<FluidBottomNavigationItem>)
-            .add(
-                FluidBottomNavigationItem(
-                    getString(R.string.title_alert),
-                    ContextCompat.getDrawable(
-                        this, R.drawable.ic_nav_alert
-                    )
-                )
-            )
-        //  navView.items = fluidBottomNavigationItems
-
         val refreshToken = sharedPreferences.getRefreshToken();
         if (!refreshToken.isNullOrEmpty() && commonFunctions.checkConnection(this@MainActivity))
             refreshAccessToken(refreshToken)
-
     }
 
+    ///////////////Set Badge to alert navigation/////////////////
     private fun setBadgeToAlert() {
         var badge = navView.getOrCreateBadge(R.id.nav_alert)
         badge.number = 11
         badge.maxCharacterCount = 2
     }
 
+    /////////////////Refresh token if expired/////////////////
     private fun refreshAccessToken(refreshToken: String) {
         val jwt = JWT(sharedPreferences.getAccessToken().toString())
         if (jwt.isExpired(10)) {
@@ -166,6 +103,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
 
     }
 
+    ////////////////////handle refresh token response//////////////////
     private fun afterResponse(response: ApolloResponse<TokenUpdateMutation.Data>) {
         if (response?.data?.tokenUpdate?.success == true) {
             sharedPreferences.setAccessToken(response?.data?.tokenUpdate!!.payload!!.accessToken.toString())

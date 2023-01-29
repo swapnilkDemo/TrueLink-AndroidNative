@@ -59,7 +59,7 @@
                 android:id="@+id/imageView"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/margin30"
-                android:layout_marginEnd="@dimen/margin70"
+                android:layout_marginEnd="@dimen/margin60"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/iv_search"
                 app:layout_constraintTop_toTopOf="parent"

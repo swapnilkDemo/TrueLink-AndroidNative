@@ -4,12 +4,12 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.location.Location
+import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -17,7 +17,7 @@ import android.util.Log
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -27,8 +27,12 @@ import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.ApolloResponse
 import com.apollographql.apollo3.api.Optional
 import com.apollographql.apollo3.network.okHttpClient
+import com.auth0.android.jwt.JWT
+import com.example.TokenUpdateMutation
 import com.example.UpdateUserMutation
 import com.example.type.Gender
+import com.example.type.LocationInput
+import com.example.type.LocationType
 import com.example.type.UpdateUserInput
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -38,9 +42,9 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.messaging.FirebaseMessaging
 import com.ozcanalasalvar.library.utils.DateUtils
 import com.ozcanalasalvar.library.view.popup.DatePickerPopup
-import com.ozcanalasalvar.library.view.popup.DatePickerPopup.OnDateSelectListener
 import com.swapnilk.truelink.MainActivity
 import com.swapnilk.truelink.R
+import com.swapnilk.truelink.data.online.AuthorizationInterceptor
 import com.swapnilk.truelink.ui.VerifyOTPFragment.Companion.TAG
 import com.swapnilk.truelink.utils.CommonFunctions
 import com.swapnilk.truelink.utils.PermissionUtils
@@ -49,9 +53,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.Response
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.coroutines.CoroutineContext
@@ -80,13 +82,13 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
     private lateinit var ivLinkedInL: ImageView
     private lateinit var progressButton: CircularProgressButton
     private lateinit var datePicker: LinearLayout
-    private var datePickerPopup: DatePickerPopup? = null
+    private lateinit var datePickerPopup: DatePickerPopup
 
     var gender: Gender? = null
     var dob: String = ""
     var name: String = ""
     var dateOfBirth: Long? = null
-    private var latLang: List<Double?>? = null
+    private var latLang: List<Double>? = null
     lateinit var permissionUtils: PermissionUtils
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val calendar = Calendar.getInstance()
@@ -94,17 +96,7 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
     ///////////////////////required Permissions/////////////
     private lateinit var permissionsArray: Array<String>
 
-    // Declare the launcher at the top of your Activity/Fragment:
-    private val requestPermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { isGranted: Boolean ->
-        if (isGranted) {
-            // FCM SDK (and your app) can post notifications.
-        } else {
-            // TODO: Inform user that that your app will not show notifications.
-        }
-    }
-
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_profile)
@@ -112,7 +104,7 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
         permissionUtils = PermissionUtils(this@UserProfileActivity)
         sharedPreferences = SharedPreferences(this@UserProfileActivity)
         commonFunctions = CommonFunctions(this@UserProfileActivity)
-
+        commonFunctions.setStatusBar(this)
         ///////////////////////Initialize ApolloClient////////////////////////////
         val okHttpClient = OkHttpClient.Builder()
             .addInterceptor(AuthorizationInterceptor(this@UserProfileActivity)).build()
@@ -121,18 +113,13 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
 
         /////////////////////Initialize UI//////////////
         initialize()
+        //////////////////////refresh Token if Expired///////////////////////
+        val refreshToken = sharedPreferences.getRefreshToken();
+        if (!refreshToken.isNullOrEmpty() && commonFunctions.checkConnection(this@UserProfileActivity))
+            refreshAccessToken(refreshToken)
         /////////////////Request Permissions////////////
-        permissionsArray = arrayOf(
-            "Manifest.permission.POST_NOTIFICATIONS",
-            "Manifest.permission.ACCESS_BACKGROUND_LOCATION"
-        )
-
-        askPermission(
-            Manifest.permission.POST_NOTIFICATIONS
-        )
-        askPermission(
-            Manifest.permission.ACCESS_COARSE_LOCATION
-        )
+        getUserLocation()
+        generateFCMToken()
         ////////////////////Get Extras//////////////////
         if (intent.extras != null) {
             gender = intent.extras!!.getSerializable("gender") as Gender?
@@ -165,25 +152,62 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
     }
 
     private fun getUserLocation() {
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        if (ActivityCompat.checkSelfPermission(
-                this, Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                this, Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            commonFunctions.showErrorSnackBar(
-                this@UserProfileActivity,
-                progressButton,
-                getString(R.string.required_permissions)
-            )
-            return
+        if (checkPermission()) {
+            if (isLocationEnabled()) {
+                fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+                fusedLocationClient.lastLocation.addOnCompleteListener(this) {
+                    val location: Location? = it.result
+                    if (location != null) {
+                        latLang?.plus(location.longitude)
+                        latLang?.plus(location.longitude)
+                    }
+                }
+            }
+        } else {
+            requestPermissions()
         }
-        fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-            // Got last known location. In some rare situations this can be null.
-            if (location != null) {
-                latLang = latLang?.plus(location.latitude)
-                latLang = latLang?.plus(location.longitude)
+    }
+
+    private fun isLocationEnabled(): Boolean {
+        val locationManager: LocationManager =
+            getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+    }
+
+    private fun checkPermission(): Boolean {
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            return true
+        }
+        return false
+    }
+
+    private fun requestPermissions() {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ), 1
+        )
+    }
+
+    @SuppressLint("MissingSuperCall")
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        if (requestCode == 1) {
+            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                getUserLocation()
             }
         }
     }
@@ -269,7 +293,7 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
         tvSelectDob = findViewById(R.id.tv_select_dob)
 
         datePickerPopup = DatePickerPopup.Builder().from(this@UserProfileActivity).offset(3)
-            .darkModeEnabled(true)
+            //.darkModeEnabled(true)
             .pickerMode(com.ozcanalasalvar.library.view.datePicker.DatePicker.MONTH_ON_FIRST)
             .textSize(19).endDate(DateUtils.getCurrentTime())
             .currentDate(DateUtils.getTimeMiles(1997, 7, 7))
@@ -280,7 +304,7 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
             datePickerPopup?.show()
         }
 
-        datePickerPopup?.setListener(OnDateSelectListener { dp, date, day, month, year ->
+        datePickerPopup?.setListener(DatePickerPopup.OnDateSelectListener { dp, date, day, month, year ->
             val monthName: Int = (month + 1)
             calendar.set(Calendar.MONTH, month)
             val sdf = SimpleDateFormat("MMM")
@@ -289,6 +313,33 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
             dateOfBirth = commonFunctions.convertDate2TimeStamp("$monthName/$day/$year")
         })
 
+        /* val calendar = Calendar.getInstance()
+         calendar.set(1900, 1, 1)
+         val dateTimeSelectedListener =
+             object : OnDateTimeSelectedListener {
+                 override fun onDateTimeSelected(selectedDateTime: Calendar) {
+                     val month = selectedDateTime.time.month
+                     val day = selectedDateTime.time.day
+                     val year = selectedDateTime.time.year
+                     dateOfBirth = commonFunctions.convertDate2TimeStamp("$month/$day/$year")
+                 }
+             }
+         val dateTimePickerDialog = DialogDateTimePicker(
+             this,
+             calendar,
+             1440,
+             dateTimeSelectedListener,
+             getString(R.string.select_dob)
+         )
+         dateTimePickerDialog.setCancelBtnColor(R.color.login_btn)
+         dateTimePickerDialog.setSubmitBtnColor(R.color.login_btn)
+         dateTimePickerDialog.setSubmitBtnText(getString(R.string.ok))
+         dateTimePickerDialog.setCancelBtnTextColor(R.color.gray_200)
+         dateTimePickerDialog.setSubmitBtnTextColor(R.color.gray_200)
+         datePicker = findViewById(R.id.ll_select_dob)
+         datePicker.setOnClickListener {
+             dateTimePickerDialog.show()
+         }*/
 
         progressButton = findViewById(R.id.btn_finish)
         progressButton.run {
@@ -310,31 +361,9 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
                         this@UserProfileActivity, progressButton, getString(R.string.error_dob)
                     )
                 } else {
-                    //////////////////Initiate Login///////////////////
+                    //////////////////Initiate Update///////////////////
                     morphDoneAndRevert(this@UserProfileActivity)
-                    /////////////////Call Update Mutation /////////////
-                    val updateUserInput = UpdateUserInput(
-                        Optional.Present(editName.text.toString()),
-                        Optional.Absent,
-                        Optional.Absent,
-                        Optional.Absent,
-                        Optional.Absent,
-                        Optional.Absent,
-                        Optional.Absent,
-                        Optional.Absent,
-                        Optional.Present(sharedPreferences.getFCM()),
-                        Optional.Present(dateOfBirth),
-                        Optional.Present(gender)
-                    )
-                    val updateUserMutation: UpdateUserMutation = UpdateUserMutation(
-                        updateUserInput
-
-                    )
-                    launch {
-                        val response: ApolloResponse<UpdateUserMutation.Data> =
-                            apolloClient.mutation(updateUserMutation).execute()
-                        afterResult(response)
-                    }
+                    updateUser()
                 }
                 else commonFunctions.showErrorSnackBar(
                     this@UserProfileActivity, progressButton, getString(R.string.no_internet)
@@ -343,12 +372,64 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
         }
     }// End Initialize
 
+    private fun updateUser() {
+
+        /////////////////Call Update Mutation /////////////
+        val locationType: LocationType = LocationType.Point
+        val locationInput: LocationInput? = latLang?.let { it1 ->
+            LocationInput(
+                Optional.present(locationType),
+                it1
+            )
+        }
+        ////////////////Add required parameters//////////////////
+        val updateUserInput = UpdateUserInput(
+            Optional.Present(editName.text.toString()),
+            Optional.Absent,
+            Optional.Present(locationInput),
+            Optional.Absent,
+            Optional.Absent,
+            Optional.Absent,
+            Optional.Absent,
+            Optional.Absent,
+            Optional.Present(sharedPreferences.getFCM()),
+            Optional.Present(dateOfBirth),
+            Optional.Present(gender)
+        )
+        ///////////////Initialize mutation/////////////
+        val updateUserMutation = UpdateUserMutation(
+            updateUserInput
+
+        )
+        /////////////////Perform Background Task///////////////////
+        launch {
+            val response: ApolloResponse<UpdateUserMutation.Data> =
+                apolloClient.mutation(updateUserMutation).execute()
+            afterResult(response)
+        }
+    }
+
     //////////////////Deselect CardView////////////////////////////
     private fun setDeselected(cardView: MaterialCardView?, linearLayout: LinearLayout, color: Int) {
         if (cardView != null) {
             linearLayout.setBackgroundColor(color)
             cardView.strokeColor = color
             cardView.strokeWidth = 0
+        }
+
+    }
+
+    ///////////////////Handle response from server///////////////////
+    private fun afterResult(response: ApolloResponse<UpdateUserMutation.Data>) {
+        if (response.data?.updateUser?.success == true) {
+            sharedPreferences.setProfileUpdate(true)
+            startMain()
+        } else {
+            commonFunctions.showErrorSnackBar(
+                this@UserProfileActivity,
+                progressButton,
+                response.data?.updateUser?.message.toString()
+            )
         }
 
     }
@@ -365,24 +446,42 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
 
     }
 
-    private fun afterResult(response: ApolloResponse<UpdateUserMutation.Data>) {
-        if (response.data?.updateUser?.success == true) {
-            sharedPreferences.setProfileUpdate(true)
-            startMain()
-        } else {
-            commonFunctions.showErrorSnackBar(
-                this@UserProfileActivity,
-                progressButton,
-                response.data?.updateUser?.message.toString()
-            )
-        }
 
-    }
-
+    //////////////////////////Start MainActivity////////////////////////////
     private fun startMain() {
         val intent = Intent(this@UserProfileActivity, MainActivity::class.java)
         startActivity(intent)
         finish()
+    }
+
+    ////////////////////////Refresh Token if expired/////////////////////////////////
+    private fun refreshAccessToken(refreshToken: String) {
+        val jwt = JWT(sharedPreferences.getAccessToken().toString())
+        if (jwt.isExpired(10)) {
+            var tokenRefresh = TokenUpdateMutation(
+                refreshToken
+            )
+
+            launch {
+                var response: ApolloResponse<TokenUpdateMutation.Data> =
+                    apolloClient.mutation(tokenRefresh).execute()
+                afterResponse(response)
+            }
+        }
+
+    }
+
+    ////////////////////////////save tokens//////////////////////////////////////
+    private fun afterResponse(response: ApolloResponse<TokenUpdateMutation.Data>) {
+        if (response?.data?.tokenUpdate?.success == true) {
+            sharedPreferences.setAccessToken(response?.data?.tokenUpdate!!.payload!!.accessToken.toString())
+            sharedPreferences.setRefreshToken(response?.data?.tokenUpdate!!.payload!!.refreshToken.toString())
+            commonFunctions.showErrorSnackBar(
+                this@UserProfileActivity,
+                progressButton,
+                getString(R.string.token_refresh)
+            )
+        }
     }
 
     ///////////////////////Progress Button Animations/////////////////////////////
@@ -405,68 +504,5 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
             postDelayed({ doneLoadingAnimation(fillColor, bitmap) }, doneTime)
             postDelayed(::revertAnimation, revertTime)
         }
-    }
-
-    private fun askPermission(permissionName: String) {
-        // This is only necessary for API level >= 33 (TIRAMISU)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            if (ContextCompat.checkSelfPermission(
-                    this@UserProfileActivity, permissionName
-                ) == PackageManager.PERMISSION_GRANTED
-            ) {
-                // FCM SDK (and your app) can post notifications.
-                generateFCMToken()
-                getUserLocation()
-            } else if (ActivityCompat.shouldShowRequestPermissionRationale(
-                    this@UserProfileActivity, permissionName
-                )
-            ) {
-                ActivityCompat.requestPermissions(
-                    this@UserProfileActivity,
-                    arrayOf(permissionName),
-                    0
-                )
-            } else {
-                // Directly ask for the permission
-                requestPermissionLauncher.launch(permissionName)
-            }
-        } else {
-            // Directly ask for the permission
-            (ActivityCompat.shouldShowRequestPermissionRationale(
-                this@UserProfileActivity, permissionName
-            ))
-
-        }
-
-    }
-
-    private fun hasPermission(permission: String): Boolean {
-        try {
-            val info: PackageInfo = packageManager.getPackageInfo(
-                packageName, PackageManager.GET_PERMISSIONS
-            )
-            if (info.requestedPermissions != null) {
-                for (p in info.requestedPermissions) {
-                    if (p == permission) {
-                        PackageManager.PERMISSION_GRANTED
-                        return true
-                    }
-                }
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return false
-    }
-
-    class AuthorizationInterceptor(context: Context) : Interceptor {
-        private val sharedPreferences: SharedPreferences = SharedPreferences(context)
-        override fun intercept(chain: Interceptor.Chain): Response {
-            val request = chain.request().newBuilder()
-                .addHeader("Authorization", sharedPreferences.getAccessToken()!!).build()
-
-            return chain.proceed(request)
-        }
-
     }
 }

@@ -90,6 +90,7 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
         return viewL;
     }
 
+    //////////////////////Set Timer for Resend OTP//////////////////////
     private fun startTimer() {
         timer = object : CountDownTimer(30000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
@@ -130,45 +131,7 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
                 } else {
                     //////////////////Initiate OTPVerification///////////////////
                     morphDoneAndRevert(requireActivity())
-                    /////////////////Call VerifyOTP Mutation /////////////
-                    val otp = pinView?.text.toString()
-                    ////////////////Object with required parameters/////////////
-                    val verifyOtpMutation = bundleGet.getString("requestId")?.let { it1 ->
-                        VerifyOTPMutation(
-                            it1,
-                            otp,
-                            bundleGet.getString("phone")!!,
-                            bundleGet.getString("dailCode")!!
-                        )
-                    }
-
-                    ///////////Start background thread//////////
-                    launch {
-                        val responseVerify: ApolloResponse<VerifyOTPMutation.Data> =
-                            apolloClient.mutation(verifyOtpMutation!!).execute()
-                        if (responseVerify.data?.verifyOTP!!.success == true) {
-//                            Log.d("verifyOTP Response :", responseVerify.data.toString())
-                            sharedPrefs.setAccessToken(responseVerify.data!!.verifyOTP.accessToken.toString())
-                            var uid: String =
-                                responseVerify.data!!.verifyOTP.payload?.uid.toString()
-                            var userModel = UserModel(
-                                responseVerify.data!!.verifyOTP.payload?.uid.toString(),
-                                responseVerify.data!!.verifyOTP.payload?.fullname.toString(),
-                                responseVerify.data!!.verifyOTP.payload?.phone.toString(),
-                                responseVerify.data!!.verifyOTP.payload?.dialcode.toString(),
-                                responseVerify.data!!.verifyOTP.payload?.email.toString(),
-                                responseVerify.data!!.verifyOTP.payload?.dob.toString(),
-                                null,
-                                responseVerify.data!!.verifyOTP.payload?.gender
-
-                            );
-                            sharedPrefs.setRefreshToken(responseVerify.data!!.verifyOTP.payload!!.refreshToken.toString())
-                            sharedPrefs.setLoggedIn(true)
-                            timer?.cancel()
-                            startMain(uid, userModel)
-                        } else afterResultVerify(responseVerify)
-
-                    }//End Launch
+                    verifyOTP()
                 }//End else
                 else activity?.let { it1 ->
                     commonFunctions.showErrorSnackBar(
@@ -180,25 +143,74 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
 
         textResendOTP.run {
             setOnClickListener {
-                val resendOTPMutation = ResendOTPMutation(
-                    bundleGet.getString("phone")!!,
-                    bundleGet.getString("dailCode")!!,
-                    resendType.text
-                )
-                launch {
-                    val responseResendOPT: ApolloResponse<ResendOTPMutation.Data> =
-                        apolloClient.mutation(resendOTPMutation).execute()
-                    startTimer()
-                    activity?.let { it1 ->
-                        commonFunctions.showErrorSnackBar(
-                            it1, textResendOTP, responseResendOPT.data!!.resendOTP.message
-                        )
-                    }
-                }
+                resendOTP()
             }
         }
     }
 
+    ////////////////Verify OTP and login//////////////////////////
+    private fun verifyOTP() {
+        /////////////////Call VerifyOTP Mutation /////////////
+        val otp = pinView?.text.toString()
+        ////////////////Object with required parameters/////////////
+        val verifyOtpMutation = bundleGet.getString("requestId")?.let { it1 ->
+            VerifyOTPMutation(
+                it1,
+                otp,
+                bundleGet.getString("phone")!!,
+                bundleGet.getString("dailCode")!!
+            )
+        }
+
+        ///////////Start background thread//////////
+        launch {
+            val responseVerify: ApolloResponse<VerifyOTPMutation.Data> =
+                apolloClient.mutation(verifyOtpMutation!!).execute()
+            if (responseVerify.data?.verifyOTP!!.success == true) {
+//                            Log.d("verifyOTP Response :", responseVerify.data.toString())
+                sharedPrefs.setAccessToken(responseVerify.data!!.verifyOTP.accessToken.toString())
+                var uid: String =
+                    responseVerify.data!!.verifyOTP.payload?.uid.toString()
+                var userModel = UserModel(
+                    responseVerify.data!!.verifyOTP.payload?.uid.toString(),
+                    responseVerify.data!!.verifyOTP.payload?.fullname.toString(),
+                    responseVerify.data!!.verifyOTP.payload?.phone.toString(),
+                    responseVerify.data!!.verifyOTP.payload?.dialcode.toString(),
+                    responseVerify.data!!.verifyOTP.payload?.email.toString(),
+                    responseVerify.data!!.verifyOTP.payload?.dob.toString(),
+                    null,
+                    responseVerify.data!!.verifyOTP.payload?.gender
+
+                );
+                sharedPrefs.setRefreshToken(responseVerify.data!!.verifyOTP.payload!!.refreshToken.toString())
+                sharedPrefs.setLoggedIn(true)
+                timer?.cancel()
+                startMain(uid, userModel)
+            } else afterResultVerify(responseVerify)
+
+        }//End Launch
+    }
+
+    /////////////////////resend OTP if not received///////////////
+    private fun resendOTP() {
+        val resendOTPMutation = ResendOTPMutation(
+            bundleGet.getString("phone")!!,
+            bundleGet.getString("dailCode")!!,
+            resendType.text
+        )
+        launch {
+            val responseResendOPT: ApolloResponse<ResendOTPMutation.Data> =
+                apolloClient.mutation(resendOTPMutation).execute()
+            startTimer()
+            activity?.let { it1 ->
+                commonFunctions.showErrorSnackBar(
+                    it1, textResendOTP, responseResendOPT.data!!.resendOTP.message
+                )
+            }
+        }
+    }
+
+    //////////////////Handle Response on Verify//////////////////////////////////////
     private fun afterResultVerify(response: ApolloResponse<VerifyOTPMutation.Data>) {
         activity?.let {
             commonFunctions.showErrorSnackBar(
@@ -209,13 +221,14 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
 
     }
 
+    ////////////////Start Main Activity//////////////////////////////////
     private fun startMain(uid: String, userModel: UserModel?) {
-       /* if (sharedPrefs.isProfileUpdate() || userModel?.uDOB?.isNotEmpty() == true) {
+        if (sharedPrefs.isProfileUpdate() || userModel?.uDOB?.isNotEmpty() == true) {
             sharedPrefs.setProfileUpdate(true)
             val mainIntent = Intent(activity, MainActivity::class.java)
             startActivity(mainIntent)
             activity?.finish()
-        } else {*/
+        } else {
             val profileIntent = Intent(activity, UserProfileActivity::class.java)
             profileIntent.putExtra("uId", userModel?.uId)
             profileIntent.putExtra("fullName", userModel?.uName)
@@ -223,7 +236,7 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
             profileIntent.putExtra("dob", userModel?.uDOB)
             startActivity(profileIntent)
             activity?.finish()
-        //}
+        }
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

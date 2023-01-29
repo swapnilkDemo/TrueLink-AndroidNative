@@ -1,13 +1,17 @@
 package com.swapnilk.truelink.utils
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.Color
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.os.Build
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.view.View
+import android.view.WindowManager
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
@@ -18,6 +22,19 @@ import java.util.*
 
 
 class CommonFunctions(context: Context) {
+    /////////////////////////Set Dark theme//////////////////
+    @RequiresApi(Build.VERSION_CODES.P)
+    fun setStatusBar(context: Activity) {
+        if (Build.VERSION.SDK_INT >= 21) {
+            val window = context.window
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+            window.statusBarColor = context.getColor(R.color.light_background)
+            window.navigationBarDividerColor = context.getColor(R.color.light_background)
+            window.navigationBarColor = context.getColor(R.color.light_background)
+        }
+    }
+
     ////////////////////////Add color text between string...////////////////////
     fun spanTextWithColor(
         text: String, color: Int, start: Int, end: Int

@@ -1,21 +1,24 @@
 package com.swapnilk.truelink
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.widget.Button
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.widget.ViewPager2
-import com.swapnilk.truelink.R
 import com.swapnilk.truelink.ui.SigninActivity
 import com.swapnilk.truelink.ui.welcome_screen.IntroPagerAdapter
+import com.swapnilk.truelink.utils.CommonFunctions
 import com.swapnilk.truelink.utils.SharedPreferences
 import me.relex.circleindicator.CircleIndicator3
 import java.util.*
 
 class IntroActivity : FragmentActivity() {
     private lateinit var sharedPrefs: SharedPreferences
+    private lateinit var commonFunctions: CommonFunctions
     private lateinit var viewPager2: ViewPager2
     private lateinit var indicator: CircleIndicator3
 
@@ -28,11 +31,14 @@ class IntroActivity : FragmentActivity() {
     val PERIOD_MS: Long = 3000 // time in milliseconds between successive task executions.
 
 
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         Thread.sleep(300)
         setTheme(R.style.Theme_TrueLink)
         super.onCreate(savedInstanceState)
+        commonFunctions = CommonFunctions(applicationContext)
+        commonFunctions.setStatusBar(this)
         sharedPrefs = SharedPreferences(applicationContext)
         if (sharedPrefs.isFirstLaunch()) {
             setContentView(R.layout.activity_intro)
