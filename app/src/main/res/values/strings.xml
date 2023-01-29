@@ -93,4 +93,22 @@ meaning regardless of whether they appear in singular or in plural.</span></div>
 
     <string name="back">Back</string>
     <string name="edit">Edit</string>
+    <string name="complete_profile">COMPLETE YOUR PROFILE</string>
+    <string name="connect">Connect</string>
+    <string name="account_inf">Account Info</string>
+    <string name="hint_user_id">User Id</string>
+    <string name="hint_full_name">Full name</string>
+    <string name="hint_mobile">Phone</string>
+    <string name="hint_address">Address</string>
+    <string name="hint_dob">Birthday</string>
+    <string name="app_settings">App Settings</string>
+    <string name="fav_browser">Favourite Browser\'</string>
+    <string name="other">Other</string>
+    <string name="custom_notification">Customize Notifications</string>
+    <string name="warn">Warn</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="submitted_link">"Submitted Link Reports "</string>
+    <string name="faq">FAQ</string>
+    <string name="contact">Contact Us</string>
+    <string name="privacy_policy">Privacy Policy</string>
 </resources>

@@ -27,7 +27,7 @@ class UpdateUserProfile : Fragment() {
         _binding = FragmentUpdateUserProfileBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textName
+        val textView: TextView = binding.textProgress
         updateProfileViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }

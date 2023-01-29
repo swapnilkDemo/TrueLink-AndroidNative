@@ -3,9 +3,10 @@ package com.swapnilk.truelink
 import android.os.Build
 import android.os.Bundle
 import android.widget.ImageView
-import android.widget.Toolbar
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.apollographql.apollo3.ApolloClient
@@ -14,6 +15,7 @@ import com.auth0.android.jwt.JWT
 import com.example.TokenUpdateMutation
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.swapnilk.truelink.databinding.ActivityMainBinding
+import com.swapnilk.truelink.ui.user_profile.UpdateUserProfile
 import com.swapnilk.truelink.utils.CommonFunctions
 import com.swapnilk.truelink.utils.SharedPreferences
 import kotlinx.coroutines.CoroutineScope
@@ -73,10 +75,34 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         navView.selectedItemId = R.id.nav_threat_control
         ///////////Set Badge to Alert/////////////////
         setBadgeToAlert()
+        /////////////////Set Up Toolbar//////////////////
+        setUpToolbar()
 
         val refreshToken = sharedPreferences.getRefreshToken();
-        if (!refreshToken.isNullOrEmpty() && commonFunctions.checkConnection(this@MainActivity))
-            refreshAccessToken(refreshToken)
+        if (!refreshToken.isNullOrEmpty() && commonFunctions.checkConnection(this@MainActivity)) refreshAccessToken(
+            refreshToken
+        )
+    }
+
+    private fun setUpToolbar() {
+        toolbar = binding.toolbar
+        ivProfile = binding.ivProfile
+        ivSearch = binding.ivSearch
+
+        ivProfile.setOnClickListener {
+            val userFragment = UpdateUserProfile()
+            addFragmentToActivity(userFragment)
+        }
+    }
+
+    private fun addFragmentToActivity(fragment: Fragment?) {
+
+        if (fragment == null) return
+        val fm = supportFragmentManager
+        val tr = fm.beginTransaction()
+        tr.add(R.id.nav_host_fragment, fragment)
+        tr.commitAllowingStateLoss()
+        var curFragment = fragment
     }
 
     ///////////////Set Badge to alert navigation/////////////////
@@ -109,9 +135,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
             sharedPreferences.setAccessToken(response?.data?.tokenUpdate!!.payload!!.accessToken.toString())
             sharedPreferences.setRefreshToken(response?.data?.tokenUpdate!!.payload!!.refreshToken.toString())
             commonFunctions.showErrorSnackBar(
-                this@MainActivity,
-                navView,
-                getString(R.string.token_refresh)
+                this@MainActivity, navView, getString(R.string.token_refresh)
             )
         }
     }
