@@ -90,4 +90,7 @@ meaning regardless of whether they appear in singular or in plural.</span></div>
     <string name="dialog_permission_title">PermissionManger</string>
     <string name="dialog_permission_default_message">Default Message</string>
     <string name="dialog_permission_button_positive">Ok</string>
+
+    <string name="back">Back</string>
+    <string name="edit">Edit</string>
 </resources>

@@ -4,12 +4,14 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable-v24/rect_blue.xml" value="0.144" />
+        <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/__icon__edit.xml" value="0.138" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/avatar_male.xml" value="0.144" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/backgroun_round.xml" value="0.1495" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/background_circle.xml" value="0.1495" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/backround_outline_box.xml" value="0.1495" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/button_progress.xml" value="0.1" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/bvn_active_foreground.xml" value="0.1" />
+        <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/ic_back.xml" value="0.138" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/ic_dashboard_black_24dp.xml" value="0.1495" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/ic_home_black_24dp.xml" value="0.1495" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/ic_notifications_black_24dp.xml" value="0.1495" />
@@ -38,6 +40,7 @@
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/fragment_url_shortener.xml" value="0.19114583333333332" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/fragment_verify_o_t_p.xml" value="0.1921875" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/toolbar_main.xml" value="0.1921875" />
+        <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/toolbar_profile.xml" value="0.25" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/menu/bottom_nav_menu.xml" value="0.1765625" />
       </map>
     </option>

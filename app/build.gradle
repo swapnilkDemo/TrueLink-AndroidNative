@@ -72,6 +72,8 @@ dependencies {
 //    implementation 'com.github.abdulrehmank7:iOS-date-time-picker:1.05'
     //////////////////////JWT Decode Library////////////////////////////
     implementation 'com.auth0.android:jwtdecode:2.0.2'
+    ///////////////////////////CircleImageView//////////////////////
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
     ////////////////////////////////////////////////////////////////
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
