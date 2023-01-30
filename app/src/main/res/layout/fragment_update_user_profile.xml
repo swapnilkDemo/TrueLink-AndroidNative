@@ -7,48 +7,40 @@
     android:background="@color/colorPrimary"
     tools:context=".ui.user_profile.UpdateUserProfile">
 
-    <include layout="@layout/toolbar_profile" />
+    <include
+        android:id="@+id/toolbar_profile"
+        layout="@layout/toolbar_profile" />
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin50">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:layout_margin="@dimen/margin10"
             android:orientation="vertical">
 
 
-            <RelativeLayout
-                android:id="@+id/mainLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+            <com.ss.profilepercentageview.ProfilePercentageView
+                android:id="@+id/ppvProfile"
+                android:layout_width="@dimen/margin180"
+                android:layout_height="@dimen/margin180"
                 android:layout_gravity="center"
-                android:gravity="center"
-                android:padding="@dimen/margin10">
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/iv_profile"
-                    android:layout_width="@dimen/margin70"
-                    android:layout_height="@dimen/margin70"
-                    android:src="@drawable/ic_upload" />
-
-                <ProgressBar
-                    android:id="@+id/progressBar"
-                    android:layout_width="@dimen/margin70"
-                    android:layout_height="@dimen/margin70"
-                    android:layout_alignLeft="@+id/iv_profile"
-                    android:layout_alignTop="@+id/iv_profile"
-                    android:background="@drawable/circle_shape"
-                    android:max="100"
-                    android:padding="1dp"
-                    android:progress="65"
-                    android:progressDrawable="@drawable/circular_progress_bar" />
-
-            </RelativeLayout>
+                app:ppv_arcBackgroundColor="@color/progressColor"
+                app:ppv_arcProgressEndColor="@color/progressColor"
+                app:ppv_arcProgressStartColor="@color/progressColor"
+                app:ppv_arcWidth="@dimen/margin5"
+                app:ppv_currentValue="0"
+                app:ppv_dashWidth="@dimen/margin2"
+                app:ppv_imgBorderColor="@color/borderColor"
+                app:ppv_imgBorderWidth="@dimen/margin2"
+                app:ppv_imgPadding="@dimen/margin15"
+                app:ppv_isDashEnable="false"
+                app:ppv_isRounded="true"
+                app:ppv_max="100"
+                app:srcCompat="@drawable/ic_upload" />
 
             <TextView
                 android:id="@+id/text_progress"
@@ -121,7 +113,7 @@
                 android:text="@string/account_inf"
                 android:textAppearance="@style/textViewFontSora"
                 android:textColor="@color/gray_200"
-                android:textSize="@dimen/text18"
+                android:textSize="@dimen/text16"
                 android:textStyle="bold" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -130,9 +122,9 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin10"
                 android:hint="@string/hint_user_id"
+                android:textColorHint="@color/transparent50"
                 app:boxStrokeColor="@color/transparent50"
-                app:expandedHintEnabled="true"
-                app:hintTextColor="@color/transparent50">
+                app:expandedHintEnabled="false">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edit_id"
@@ -141,7 +133,7 @@
                     android:padding="@dimen/margin10"
                     android:textAppearance="@style/textViewFontSora"
                     android:textColor="@color/gray_200"
-                    android:textSize="@dimen/text12" />
+                    android:textSize="@dimen/text14" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -151,9 +143,9 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin10"
                 android:hint="@string/hint_full_name"
+                android:textColorHint="@color/transparent50"
                 app:boxStrokeColor="@color/transparent50"
-                app:expandedHintEnabled="true"
-                app:hintTextColor="@color/transparent50">
+                app:expandedHintEnabled="false">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edit_name"
@@ -162,7 +154,7 @@
                     android:padding="@dimen/margin10"
                     android:textAppearance="@style/textViewFontSora"
                     android:textColor="@color/gray_200"
-                    android:textSize="@dimen/text12" />
+                    android:textSize="@dimen/text14" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -173,9 +165,9 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin10"
                 android:hint="@string/hint_mobile"
+                android:textColorHint="@color/transparent50"
                 app:boxStrokeColor="@color/transparent50"
-                app:expandedHintEnabled="true"
-                app:hintTextColor="@color/transparent50">
+                app:expandedHintEnabled="false">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edit_phone"
@@ -184,7 +176,7 @@
                     android:padding="@dimen/margin10"
                     android:textAppearance="@style/textViewFontSora"
                     android:textColor="@color/gray_200"
-                    android:textSize="@dimen/text12" />
+                    android:textSize="@dimen/text14" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -194,9 +186,9 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin10"
                 android:hint="@string/hint_address"
+                android:textColorHint="@color/transparent50"
                 app:boxStrokeColor="@color/transparent50"
-                app:expandedHintEnabled="true"
-                app:hintTextColor="@color/transparent50">
+                app:expandedHintEnabled="false">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edit_address"
@@ -205,7 +197,7 @@
                     android:padding="@dimen/margin10"
                     android:textAppearance="@style/textViewFontSora"
                     android:textColor="@color/gray_200"
-                    android:textSize="@dimen/text12" />
+                    android:textSize="@dimen/text14" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -215,9 +207,9 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin10"
                 android:hint="@string/hint_dob"
+                android:textColorHint="@color/transparent50"
                 app:boxStrokeColor="@color/transparent50"
-                app:expandedHintEnabled="true"
-                app:hintTextColor="@color/transparent50">
+                app:expandedHintEnabled="false">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edit_dob"
@@ -226,7 +218,7 @@
                     android:padding="@dimen/margin10"
                     android:textAppearance="@style/textViewFontSora"
                     android:textColor="@color/gray_200"
-                    android:textSize="@dimen/text12" />
+                    android:textSize="@dimen/text14" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -239,7 +231,7 @@
                 android:text="@string/app_settings"
                 android:textAppearance="@style/textViewFontSora"
                 android:textColor="@color/gray_200"
-                android:textSize="@dimen/text18"
+                android:textSize="@dimen/text16"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -265,16 +257,16 @@
                     android:paddingLeft="@dimen/margin20"
                     android:text="@string/fav_browser"
                     android:textColor="@color/gray_200"
-                    android:textSize="@dimen/text16" />
+                    android:textSize="@dimen/text14" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:paddingLeft="@dimen/margin20"
-                    android:text="@string/fav_browser"
+                    android:text="@string/chrome"
                     android:textColor="@color/gray_200"
-                    android:textSize="@dimen/text16" />
+                    android:textSize="@dimen/text14" />
             </LinearLayout>
 
             <LinearLayout
@@ -300,7 +292,7 @@
                     android:paddingLeft="@dimen/margin20"
                     android:text="@string/custom_notification"
                     android:textColor="@color/gray_200"
-                    android:textSize="@dimen/text16" />
+                    android:textSize="@dimen/text14" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -309,7 +301,7 @@
                     android:paddingLeft="@dimen/margin20"
                     android:text="@string/warn"
                     android:textColor="@color/gray_200"
-                    android:textSize="@dimen/text16" />
+                    android:textSize="@dimen/text14" />
             </LinearLayout>
 
             <LinearLayout
@@ -335,14 +327,15 @@
                     android:paddingLeft="@dimen/margin20"
                     android:text="@string/dark_mode"
                     android:textColor="@color/gray_200"
-                    android:textSize="@dimen/text16" />
+                    android:textSize="@dimen/text14" />
 
                 <Switch
                     android:id="@+id/sw_dark_mode"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:gravity="end" />
+                    android:gravity="end"
+                    android:textSize="@dimen/text14" />
             </LinearLayout>
 
             <LinearLayout
@@ -368,7 +361,7 @@
                     android:paddingLeft="@dimen/margin20"
                     android:text="@string/submitted_link"
                     android:textColor="@color/gray_200"
-                    android:textSize="@dimen/text16" />
+                    android:textSize="@dimen/text14" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -377,7 +370,7 @@
                     android:paddingLeft="@dimen/margin20"
                     android:text="55"
                     android:textColor="@color/gray_200"
-                    android:textSize="@dimen/text16" />
+                    android:textSize="@dimen/text14" />
             </LinearLayout>
 
 
@@ -390,7 +383,7 @@
                 android:text="@string/other"
                 android:textAppearance="@style/textViewFontSora"
                 android:textColor="@color/gray_200"
-                android:textSize="@dimen/text18"
+                android:textSize="@dimen/text16"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -416,7 +409,7 @@
                     android:paddingLeft="@dimen/margin20"
                     android:text="@string/faq"
                     android:textColor="@color/gray_200"
-                    android:textSize="@dimen/text16" />
+                    android:textSize="@dimen/text14" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -449,7 +442,7 @@
                     android:paddingLeft="@dimen/margin20"
                     android:text="@string/contact"
                     android:textColor="@color/gray_200"
-                    android:textSize="@dimen/text16" />
+                    android:textSize="@dimen/text14" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -465,6 +458,7 @@
                 android:layout_marginLeft="@dimen/margin10"
                 android:layout_marginTop="@dimen/margin10"
                 android:layout_marginRight="@dimen/margin10"
+                android:layout_marginBottom="@dimen/margin50"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -482,7 +476,7 @@
                     android:paddingLeft="@dimen/margin20"
                     android:text="@string/privacy_policy"
                     android:textColor="@color/gray_200"
-                    android:textSize="@dimen/text16" />
+                    android:textSize="@dimen/text14" />
 
                 <ImageView
                     android:layout_width="wrap_content"

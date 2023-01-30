@@ -102,7 +102,7 @@ meaning regardless of whether they appear in singular or in plural.</span></div>
     <string name="hint_address">Address</string>
     <string name="hint_dob">Birthday</string>
     <string name="app_settings">App Settings</string>
-    <string name="fav_browser">Favourite Browser\'</string>
+    <string name="fav_browser">Favourite Browser</string>
     <string name="other">Other</string>
     <string name="custom_notification">Customize Notifications</string>
     <string name="warn">Warn</string>
@@ -111,4 +111,5 @@ meaning regardless of whether they appear in singular or in plural.</span></div>
     <string name="faq">FAQ</string>
     <string name="contact">Contact Us</string>
     <string name="privacy_policy">Privacy Policy</string>
+    <string name="chrome">Chrome</string>
 </resources>

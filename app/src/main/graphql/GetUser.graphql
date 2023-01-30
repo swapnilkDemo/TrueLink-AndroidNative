@@ -1,0 +1,19 @@
+query GetUser {
+    getUser {
+        code
+        message
+        success
+        payload {
+            dob
+            fcmtoken
+            city
+            country
+            address
+            avatar
+            dialcode
+            fullname
+            phone
+            state
+        }
+    }
+}

@@ -2,6 +2,7 @@ package com.swapnilk.truelink
 
 import android.os.Build
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +14,7 @@ import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.ApolloResponse
 import com.auth0.android.jwt.JWT
 import com.example.TokenUpdateMutation
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.swapnilk.truelink.databinding.ActivityMainBinding
 import com.swapnilk.truelink.ui.user_profile.UpdateUserProfile
@@ -45,6 +47,11 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
     override fun onDestroy() {
         super.onDestroy()
         job.cancel()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        showToolBar()
     }
 
     @RequiresApi(Build.VERSION_CODES.P)
@@ -84,10 +91,15 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         )
     }
 
+    private fun showToolBar() {
+        findViewById<AppBarLayout>(R.id.appBarLayout).visibility = View.VISIBLE
+        navView.visibility = View.VISIBLE
+    }
+
     private fun setUpToolbar() {
-        toolbar = binding.toolbar
-        ivProfile = binding.ivProfile
-        ivSearch = binding.ivSearch
+        toolbar = binding.toolbarMain.toolbar
+        ivProfile = binding.toolbarMain.ivProfile
+        ivSearch = binding.toolbarMain.ivSearch
 
         ivProfile.setOnClickListener {
             val userFragment = UpdateUserProfile()
