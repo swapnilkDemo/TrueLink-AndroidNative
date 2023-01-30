@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/toolbar_profile"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     tools:context=".MainActivity">
@@ -32,6 +33,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginRight="@dimen/margin10"
                 android:orientation="horizontal">
                 <!--Left side munu-->
                 <TextView
@@ -44,13 +46,13 @@
                     android:gravity="start"
                     android:text="@string/back"
                     android:textSize="@dimen/text16"
-                    app:drawableLeftCompat="@drawable/ic_back" />
+                    app:drawableLeftCompat="@drawable/ic_back_gray" />
 
                 <TextView
                     android:id="@+id/btn_edit"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_gravity="start|center_vertical"
+                    android:layout_gravity="end|center_vertical"
                     android:layout_weight="1"
                     android:drawablePadding="@dimen/margin5"
                     android:gravity="end"

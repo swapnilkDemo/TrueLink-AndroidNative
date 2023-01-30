@@ -20,7 +20,7 @@
     <color name="light_background">#323239</color>
     <color name="bottom_nav_color">#A5A5A5</color>
     <color name="selected_color">#40B3E0</color>
-    <color name="transparent50">#50FFFFFF
-    </color>
-
+    <color name="transparent50">#50FFFFFF</color>
+    <color name="mtrl_textinput_default_box_stroke_color">#50FFFFFF</color>
+    <color name="mtrl_textinput_default_hint_color">#50FFFFFF</color>
 </resources>

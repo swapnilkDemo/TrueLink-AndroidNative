@@ -74,6 +74,8 @@ dependencies {
     implementation 'com.auth0.android:jwtdecode:2.0.2'
     ///////////////////////////CircleImageView//////////////////////
     implementation 'de.hdodenhof:circleimageview:3.1.0'
+    ///////////////////////Profile Progress////////////////////////
+    implementation 'io.github.smartsensesolutions:ProfilePercentageView:1.0.2'
     ////////////////////////////////////////////////////////////////
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'

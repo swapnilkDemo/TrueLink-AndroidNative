@@ -7,6 +7,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.ss.profilepercentageview.ProfilePercentageView
 import com.swapnilk.truelink.R
 import com.swapnilk.truelink.databinding.FragmentUpdateUserProfileBinding
 
@@ -19,20 +22,34 @@ class UpdateUserProfile : Fragment() {
     private val binding get() = _binding!!
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         val updateProfileViewModel = ViewModelProvider(this)[UpdateProfileViewModel::class.java]
+        showToolBar()
 
         _binding = FragmentUpdateUserProfileBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         val textView: TextView = binding.textProgress
+        val ppvProfile: ProfilePercentageView = binding.ppvProfile
         updateProfileViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
+            textView.text = "50%"
+            ppvProfile.setValue(50)
         }
 
-        return inflater.inflate(R.layout.fragment_update_user_profile, container, false)
+        return root
+    }
+
+    private fun showToolBar() {
+        activity?.findViewById<AppBarLayout>(R.id.appBarLayout)?.visibility = View.GONE
+        activity?.findViewById<BottomNavigationView>(R.id.bottom_navigation)?.visibility = View.GONE
+
+       /* val btnHome: TextView = binding.toolbarProfile.btnHomeUp
+        val btnEdit: TextView = binding.toolbarProfile.btnEdit
+
+        btnHome.setOnClickListener {
+            activity?.onBackPressed()
+        }*/
     }
 
 
