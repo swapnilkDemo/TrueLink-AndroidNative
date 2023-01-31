@@ -1,9 +1,14 @@
 package com.swapnilk.truelink.ui.user_profile
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.NetworkOnMainThreadException
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -16,8 +21,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.textfield.TextInputEditText
 import com.ss.profilepercentageview.ProfilePercentageView
 import com.swapnilk.truelink.R
-import com.swapnilk.truelink.data.online.ApolloHelper
+import com.swapnilk.truelink.data.online.AuthorizationInterceptor
 import com.swapnilk.truelink.databinding.FragmentUpdateUserProfileBinding
+import com.swapnilk.truelink.utils.CommonFunctions
+import com.swapnilk.truelink.utils.SharedPreferences
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -38,14 +45,16 @@ class UpdateUserProfile : Fragment(), CoroutineScope {
     // onDestroyView.
     private val binding get() = _binding!!
     private lateinit var apolloClient: ApolloClient
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var commonFunctions: CommonFunctions
 
     private lateinit var textProgress: TextView
     private lateinit var ppvProfile: ProfilePercentageView
-    private lateinit var editId: TextInputEditText
     private lateinit var editName: TextInputEditText
     private lateinit var editPhone: TextInputEditText
     private lateinit var editAddress: TextInputEditText
     private lateinit var editBirthday: TextInputEditText
+    private lateinit var editGender: AutoCompleteTextView
     private lateinit var progressBar: ProgressBar
     private lateinit var viewF: View
 
@@ -57,24 +66,31 @@ class UpdateUserProfile : Fragment(), CoroutineScope {
         viewF = inflater.inflate(R.layout.fragment_update_user_profile, container, false)
 
         Initialize()
+        ////////////////////////////////GET shared Preferences///////////
+        sharedPreferences = SharedPreferences(requireActivity())
+        commonFunctions = CommonFunctions(requireContext())
         //////////////////////////////Get Apollo Client//////////////////
         try {
-            val okHttpClient =
-                OkHttpClient.Builder().addInterceptor(
-                    ApolloHelper.AuthorizationInterceptor(
-                        requireActivity()
-                    )
-                )
-                    .build()
-
-            apolloClient = ApolloClient.Builder().serverUrl(ApolloHelper.SERVER_URL)
+            ///////////////////////Initialize ApolloClient////////////////////////////
+            val okHttpClient = OkHttpClient.Builder()
+                .addInterceptor(AuthorizationInterceptor(requireContext().applicationContext))
+                .build()
+            apolloClient = ApolloClient.Builder().serverUrl("https://truelink.neki.dev/graphql/")
                 .okHttpClient(okHttpClient).build()
+
         } catch (e: Exception) {
             e.stackTrace
         }
 
         ////////////////////////////////////////////////////////////////
-        getUserDetails()
+        if (commonFunctions.checkConnection(requireContext()))
+            getUserDetails()
+        else
+            commonFunctions.showErrorSnackBar(
+                requireContext(),
+                ppvProfile,
+                getString(R.string.no_internet)
+            )
 
         return viewF
     }
@@ -85,10 +101,25 @@ class UpdateUserProfile : Fragment(), CoroutineScope {
 
         editAddress = viewF.findViewById(R.id.edit_address)
         editBirthday = viewF.findViewById(R.id.edit_dob)
-        editId = viewF.findViewById(R.id.edit_id)
         editName = viewF.findViewById(R.id.edit_name)
         editPhone = viewF.findViewById(R.id.edit_phone)
         progressBar = viewF.findViewById(R.id.progressBar)
+
+        editGender = viewF.findViewById(R.id.edit_gender)
+
+        val item = arrayOf(
+            "Male", "Female", "Other"
+        )
+
+        editGender.setAdapter(
+            ArrayAdapter<String>(
+                requireContext(),
+                android.R.layout.simple_dropdown_item_1line,
+                item
+            )
+        )
+        //  editGender.addTextChangedListener(TextWatcher)
+
     }
 
     private fun getUserDetails() {
@@ -100,14 +131,41 @@ class UpdateUserProfile : Fragment(), CoroutineScope {
             }
         } catch (e: Exception) {
             e.stackTrace
+        } catch (e: NetworkOnMainThreadException) {
+            e.stackTrace
         }
 
     }
 
+    @SuppressLint("SetTextI18n")
     private fun afterResponse(response: ApolloResponse<GetUserQuery.Data>) {
         if (response.data != null) {
             progressBar.visibility = View.GONE
+            val address = response.data!!.getUser.payload?.address.toString()
+            val city = response.data!!.getUser.payload?.city.toString()
+            val state = response.data!!.getUser.payload?.state.toString()
+            val country = response.data!!.getUser.payload?.country.toString()
+            var strAddress = ""
+            if (!TextUtils.isEmpty(address) && address != "null")
+                strAddress += address
+            if (!TextUtils.isEmpty(city) && city != "null")
+                strAddress = "$strAddress, $city"
+            if (!TextUtils.isEmpty(state) && state != "null")
+                strAddress = "$strAddress, $state"
+            if (!TextUtils.isEmpty(country) && country != "null")
+                strAddress = "$strAddress, $country"
+            editAddress.setText(
+                strAddress
+            )
             editName.setText(response.data!!.getUser.payload?.fullname.toString())
+
+            editPhone.setText(
+                response.data!!.getUser.payload?.dialcode.toString()
+                        + " " + response.data!!.getUser.payload?.phone.toString()
+            )
+//            val gender = response.data!!.getUser.payload.gender
+//            editGender.setText()
+            editBirthday.setText(commonFunctions.convertTimeStamp2Date(response.data!!.getUser.payload?.dob.toString()))
         }
     }
 
@@ -115,12 +173,20 @@ class UpdateUserProfile : Fragment(), CoroutineScope {
         activity?.findViewById<AppBarLayout>(R.id.appBarLayout)?.visibility = View.GONE
         activity?.findViewById<BottomNavigationView>(R.id.bottom_navigation)?.visibility = View.GONE
 
-        /* val btnHome: TextView = binding.toolbarProfile.btnHomeUp
-         val btnEdit: TextView = binding.toolbarProfile.btnEdit
+        val btnHome: TextView = viewF.findViewById(R.id.btn_home_up)
+        val btnEdit: TextView = viewF.findViewById(R.id.btn_edit)
 
-         btnHome.setOnClickListener {
-             activity?.onBackPressed()
-         }*/
+        btnHome.setOnClickListener {
+            activity?.onBackPressed()
+        }
+
+        btnEdit.setOnClickListener {
+            editGender.isEnabled = true
+            editBirthday.isEnabled = true
+            editAddress.isEnabled = true
+            editName.isEnabled = true
+            btnEdit.setText(R.string.save)
+        }
     }
 
     override fun onDestroy() {

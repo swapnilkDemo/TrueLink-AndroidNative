@@ -131,7 +131,14 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
                 } else {
                     //////////////////Initiate OTPVerification///////////////////
                     morphDoneAndRevert(requireActivity())
-                    verifyOTP()
+                    if (commonFunctions.checkConnection(requireContext()))
+                        verifyOTP()
+                    else
+                        commonFunctions.showErrorSnackBar(
+                            requireContext(),
+                            pinView,
+                            getString(R.string.no_internet)
+                        )
                 }//End else
                 else activity?.let { it1 ->
                     commonFunctions.showErrorSnackBar(
@@ -163,32 +170,38 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
         }
 
         ///////////Start background thread//////////
-        launch {
-            val responseVerify: ApolloResponse<VerifyOTPMutation.Data> =
-                apolloClient.mutation(verifyOtpMutation!!).execute()
-            if (responseVerify.data?.verifyOTP!!.success == true) {
+        try {
+            launch {
+                val responseVerify: ApolloResponse<VerifyOTPMutation.Data> =
+                    apolloClient.mutation(verifyOtpMutation!!).execute()
+                if (responseVerify.data?.verifyOTP!!.success == true) {
 //                            Log.d("verifyOTP Response :", responseVerify.data.toString())
-                sharedPrefs.setAccessToken(responseVerify.data!!.verifyOTP.accessToken.toString())
-                var uid: String =
-                    responseVerify.data!!.verifyOTP.payload?.uid.toString()
-                var userModel = UserModel(
-                    responseVerify.data!!.verifyOTP.payload?.uid.toString(),
-                    responseVerify.data!!.verifyOTP.payload?.fullname.toString(),
-                    responseVerify.data!!.verifyOTP.payload?.phone.toString(),
-                    responseVerify.data!!.verifyOTP.payload?.dialcode.toString(),
-                    responseVerify.data!!.verifyOTP.payload?.email.toString(),
-                    responseVerify.data!!.verifyOTP.payload?.dob.toString(),
-                    null,
-                    responseVerify.data!!.verifyOTP.payload?.gender,
-                    null, null, null, null, null
-                );
-                sharedPrefs.setRefreshToken(responseVerify.data!!.verifyOTP.payload!!.refreshToken.toString())
-                sharedPrefs.setLoggedIn(true)
-                timer?.cancel()
-                startMain(uid, userModel)
-            } else afterResultVerify(responseVerify)
+                    sharedPrefs.setAccessToken(responseVerify.data!!.verifyOTP.accessToken.toString())
+                    var uid: String =
+                        responseVerify.data!!.verifyOTP.payload?.uid.toString()
+                    var userModel = UserModel(
+                        responseVerify.data!!.verifyOTP.payload?.uid.toString(),
+                        responseVerify.data!!.verifyOTP.payload?.fullname.toString(),
+                        responseVerify.data!!.verifyOTP.payload?.phone.toString(),
+                        responseVerify.data!!.verifyOTP.payload?.dialcode.toString(),
+                        responseVerify.data!!.verifyOTP.payload?.email.toString(),
+                        responseVerify.data!!.verifyOTP.payload?.dob.toString(),
+                        null,
+                        responseVerify.data!!.verifyOTP.payload?.gender,
+                        null, null, null, null, null
+                    );
+                    sharedPrefs.setRefreshToken(responseVerify.data!!.verifyOTP.payload!!.refreshToken.toString())
+                    sharedPrefs.setLoggedIn(true)
+                    timer?.cancel()
+                    startMain(uid, userModel)
+                } else afterResultVerify(responseVerify)
 
-        }//End Launch
+            }//End Launch
+        } catch (e: Exception) {
+            e.stackTrace
+        } catch (e: android.os.NetworkOnMainThreadException) {
+            e.stackTrace
+        }
     }
 
     /////////////////////resend OTP if not received///////////////

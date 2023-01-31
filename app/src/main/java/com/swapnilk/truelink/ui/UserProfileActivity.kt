@@ -13,6 +13,7 @@ import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.os.NetworkOnMainThreadException
 import android.util.Log
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -363,7 +364,14 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
                 } else {
                     //////////////////Initiate Update///////////////////
                     morphDoneAndRevert(this@UserProfileActivity)
-                    updateUser()
+                    if (commonFunctions.checkConnection(this@UserProfileActivity))
+                        updateUser()
+                    else
+                        commonFunctions.showErrorSnackBar(
+                            this@UserProfileActivity,
+                            progressButton,
+                            getString(R.string.no_internet)
+                        )
                 }
                 else commonFunctions.showErrorSnackBar(
                     this@UserProfileActivity, progressButton, getString(R.string.no_internet)
@@ -402,10 +410,16 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
 
         )
         /////////////////Perform Background Task///////////////////
-        launch {
-            val response: ApolloResponse<UpdateUserMutation.Data> =
-                apolloClient.mutation(updateUserMutation).execute()
-            afterResult(response)
+        try {
+            launch {
+                val response: ApolloResponse<UpdateUserMutation.Data> =
+                    apolloClient.mutation(updateUserMutation).execute()
+                afterResult(response)
+            }
+        } catch (e: Exception) {
+            e.stackTrace
+        } catch (e: NetworkOnMainThreadException) {
+            e.stackTrace
         }
     }
 

@@ -112,4 +112,6 @@ meaning regardless of whether they appear in singular or in plural.</span></div>
     <string name="contact">Contact Us</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="chrome">Chrome</string>
+    <string name="hint_gender">Gender</string>
+    <string name="save">Save</string>
 </resources>

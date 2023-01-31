@@ -21,6 +21,9 @@
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/rect.xml" value="0.144" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/rect_error.xml" value="0.144" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/rounded_left_corners.xml" value="0.144" />
+        <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/switch_thumb_selecter.xml" value="0.138" />
+        <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/switch_thumb_selector.xml" value="0.1095" />
+        <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/switch_track_selecter.xml" value="0.138" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/activity_intro.xml" value="0.1765625" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/activity_signin.xml" value="0.22" />

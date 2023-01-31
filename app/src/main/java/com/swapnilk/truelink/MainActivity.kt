@@ -2,6 +2,7 @@ package com.swapnilk.truelink
 
 import android.os.Build
 import android.os.Bundle
+import android.os.NetworkOnMainThreadException
 import android.view.View
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
@@ -51,7 +52,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
 
     override fun onResume() {
         super.onResume()
-        showToolBar()
+       // showToolBar()
     }
 
     @RequiresApi(Build.VERSION_CODES.P)
@@ -132,10 +133,16 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
                 refreshToken
             )
 
-            launch {
-                var response: ApolloResponse<TokenUpdateMutation.Data> =
-                    apolloClient.mutation(tokenRefresh).execute()
-                afterResponse(response)
+            try {
+                launch {
+                    var response: ApolloResponse<TokenUpdateMutation.Data> =
+                        apolloClient.mutation(tokenRefresh).execute()
+                    afterResponse(response)
+                }
+            } catch (e: Exception) {
+                e.stackTrace
+            } catch (e: NetworkOnMainThreadException) {
+                e.stackTrace
             }
         }
 

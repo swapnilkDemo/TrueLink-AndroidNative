@@ -9,6 +9,7 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.os.NetworkOnMainThreadException
 import android.text.Html
 import android.util.Log
 import android.view.View
@@ -148,18 +149,24 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
 
     ////////////////////Login using mobile number/////////////////
     private fun login() {
-        /////////////////Call GetOTP Mutation /////////////
-        val getOTPMutation = GetOTPMutation(
-            editPhone.text.toString(), editCountryCode.text.toString()
-        )
-        ///////////Start background thread//////////
-        launch {
-            val response: ApolloResponse<GetOTPMutation.Data> =
-                apolloClient.mutation(
-                    getOTPMutation
+        try {
+            /////////////////Call GetOTP Mutation /////////////
+            val getOTPMutation = GetOTPMutation(
+                editPhone.text.toString(), editCountryCode.text.toString()
+            )
+            ///////////Start background thread//////////
+            launch {
+                val response: ApolloResponse<GetOTPMutation.Data> =
+                    apolloClient.mutation(
+                        getOTPMutation
 
-                ).execute()
-            if (response != null) afterResult(response)
+                    ).execute()
+                if (response != null) afterResult(response)
+            }
+        } catch (e: Exception) {
+            e.stackTrace
+        } catch (e: NetworkOnMainThreadException) {
+            e.stackTrace
         }
     }
 

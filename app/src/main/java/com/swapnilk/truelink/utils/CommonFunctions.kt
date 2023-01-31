@@ -103,9 +103,9 @@ class CommonFunctions(context: Context) {
     fun convertTimeStamp2Date(timestamp: String): String {
         var strDate = ""
         try {
-            val original: DateFormat = SimpleDateFormat("yyyy-mm-dd hh:mm:ss.SSSz")
-            val date = original.format(timestamp)
-            val formatter: DateFormat = SimpleDateFormat("mmm dd, yyyy")
+            val original: DateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+            val date = original.parse(timestamp)
+            val formatter: DateFormat = SimpleDateFormat("MMM, dd  yyyy")
             strDate = formatter.format(date).toString();
         } catch (e: Exception) {
             e.stackTrace
