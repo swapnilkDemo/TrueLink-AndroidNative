@@ -25,13 +25,19 @@ class CommonFunctions(context: Context) {
     /////////////////////////Set Dark theme//////////////////
     @RequiresApi(Build.VERSION_CODES.P)
     fun setStatusBar(context: Activity) {
-        if (Build.VERSION.SDK_INT >= 21) {
-            val window = context.window
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-            window.statusBarColor = context.getColor(R.color.light_background)
-            window.navigationBarDividerColor = context.getColor(R.color.light_background)
-            window.navigationBarColor = context.getColor(R.color.light_background)
+        try {
+            if (Build.VERSION.SDK_INT >= 21) {
+                val window = context.window
+                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+                window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+                window.statusBarColor = context.getColor(R.color.light_background)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
+                    window.navigationBarDividerColor = context.getColor(R.color.light_background)
+                window.navigationBarColor = context.getColor(R.color.light_background)
+            }
+
+        } catch (e: Exception) {
+
         }
     }
 

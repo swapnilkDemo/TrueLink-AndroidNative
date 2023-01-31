@@ -13,7 +13,7 @@ import javax.inject.Singleton
 
 @Module
 object ApolloHelper {
-    private const val SERVER_URL = "https://tuelink.neki.dev/graphql"
+    const val SERVER_URL = "https://tuelink.neki.dev/graphql"
     private const val HEADER_AUTHORIZATION = "Authorization"
 
     @Provides

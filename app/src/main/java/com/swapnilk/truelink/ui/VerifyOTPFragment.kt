@@ -179,8 +179,8 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
                     responseVerify.data!!.verifyOTP.payload?.email.toString(),
                     responseVerify.data!!.verifyOTP.payload?.dob.toString(),
                     null,
-                    responseVerify.data!!.verifyOTP.payload?.gender
-
+                    responseVerify.data!!.verifyOTP.payload?.gender,
+                    null, null, null, null, null
                 );
                 sharedPrefs.setRefreshToken(responseVerify.data!!.verifyOTP.payload!!.refreshToken.toString())
                 sharedPrefs.setLoggedIn(true)

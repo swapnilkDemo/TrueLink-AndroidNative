@@ -12,9 +12,9 @@ data class UserModel(
     val uDOB: String,
     val uLocation: Location?,
     val uGender: Gender?,
-    val uCity: String,
-    val uState: String,
-    val uCountry: String,
-    val uAddress: String,
-    val uAvtar: String
+    val uCity: String?,
+    val uState: String?,
+    val uCountry: String?,
+    val uAddress: String?,
+    val uAvtar: String?
 )

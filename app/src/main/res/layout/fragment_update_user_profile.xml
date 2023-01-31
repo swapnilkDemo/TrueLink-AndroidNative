@@ -11,6 +11,16 @@
         android:id="@+id/toolbar_profile"
         layout="@layout/toolbar_profile" />
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:elevation="@dimen/margin10"
+        android:progressBackgroundTint="@color/transparent50"
+        android:progressTint="@color/gray_200" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
