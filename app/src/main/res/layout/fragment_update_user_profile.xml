@@ -20,7 +20,7 @@
         android:layout_gravity="center"
         android:elevation="@dimen/margin10"
         android:indeterminate="true"
-        android:indeterminateTint="@color/colorSecondary"
+        android:indeterminateTint="@color/login_btn"
         android:indeterminateTintMode="src_atop" />
 
     <ScrollView
@@ -95,7 +95,8 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/margin5"
                     android:layout_weight="1"
-                    android:backgroundTint="@color/login_btn"
+                    android:backgroundTint="@color/colorSecondary"
+                    android:drawableRight="@drawable/ic_google"
                     android:text="@string/connect"
                     android:textAppearance="@style/textViewFontSora"
                     android:textColor="@color/gray_200"
@@ -107,7 +108,8 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/margin5"
                     android:layout_weight="1"
-                    android:backgroundTint="@color/login_btn"
+                    android:backgroundTint="@color/colorSecondary"
+                    android:drawableRight="@drawable/ic_linkedin"
                     android:text="@string/connect"
                     android:textAppearance="@style/textViewFontSora"
                     android:textColor="@color/gray_200"
@@ -135,8 +137,9 @@
                 android:layout_margin="@dimen/margin10"
                 android:hint="@string/hint_gender"
                 android:textColorHint="@color/transparent50"
-                app:boxStrokeColor="@color/transparent50"
-                app:expandedHintEnabled="false">
+                app:boxStrokeColor="@color/gray_200"
+                app:expandedHintEnabled="false"
+                app:hintTextColor="@color/gray_200">
 
 
                 <AutoCompleteTextView
@@ -149,6 +152,7 @@
                     android:dropDownHeight="100dp"
                     android:ems="10"
                     android:enabled="false"
+                    android:inputType="none"
                     android:padding="@dimen/margin10"
                     android:textAppearance="@style/textViewFontSora"
                     android:textColor="@color/gray_200"
@@ -166,8 +170,9 @@
                 android:layout_margin="@dimen/margin10"
                 android:hint="@string/hint_full_name"
                 android:textColorHint="@color/transparent50"
-                app:boxStrokeColor="@color/transparent50"
-                app:expandedHintEnabled="false">
+                app:boxStrokeColor="@color/gray_200"
+                app:expandedHintEnabled="false"
+                app:hintTextColor="@color/gray_200">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edit_name"
@@ -177,6 +182,7 @@
                     android:padding="@dimen/margin10"
                     android:textAppearance="@style/textViewFontSora"
                     android:textColor="@color/gray_200"
+                    android:textCursorDrawable="@null"
                     android:textSize="@dimen/text14" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -189,8 +195,9 @@
                 android:layout_margin="@dimen/margin10"
                 android:hint="@string/hint_mobile"
                 android:textColorHint="@color/transparent50"
-                app:boxStrokeColor="@color/transparent50"
-                app:expandedHintEnabled="false">
+                app:boxStrokeColor="@color/gray_200"
+                app:expandedHintEnabled="false"
+                app:hintTextColor="@color/gray_200">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edit_phone"
@@ -200,6 +207,7 @@
                     android:padding="@dimen/margin10"
                     android:textAppearance="@style/textViewFontSora"
                     android:textColor="@color/gray_200"
+                    android:textCursorDrawable="@null"
                     android:textSize="@dimen/text14" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -211,8 +219,9 @@
                 android:layout_margin="@dimen/margin10"
                 android:hint="@string/hint_address"
                 android:textColorHint="@color/transparent50"
-                app:boxStrokeColor="@color/transparent50"
-                app:expandedHintEnabled="false">
+                app:boxStrokeColor="@color/gray_200"
+                app:expandedHintEnabled="false"
+                app:hintTextColor="@color/gray_200">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edit_address"
@@ -222,28 +231,33 @@
                     android:padding="@dimen/margin10"
                     android:textAppearance="@style/textViewFontSora"
                     android:textColor="@color/gray_200"
+                    android:textCursorDrawable="@null"
                     android:textSize="@dimen/text14" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_layout_birthday"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin10"
                 android:hint="@string/hint_dob"
                 android:textColorHint="@color/transparent50"
-                app:boxStrokeColor="@color/transparent50"
-                app:expandedHintEnabled="false">
+                app:boxStrokeColor="@color/gray_200"
+                app:expandedHintEnabled="false"
+                app:hintTextColor="@color/gray_200">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edit_dob"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:enabled="false"
+                    android:inputType="none"
                     android:padding="@dimen/margin10"
                     android:textAppearance="@style/textViewFontSora"
                     android:textColor="@color/gray_200"
+                    android:textCursorDrawable="@null"
                     android:textSize="@dimen/text14" />
 
             </com.google.android.material.textfield.TextInputLayout>

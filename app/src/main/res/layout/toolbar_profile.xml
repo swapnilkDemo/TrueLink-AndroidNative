@@ -59,6 +59,19 @@
                     android:text="@string/edit"
                     android:textSize="@dimen/text16"
                     app:drawableRightCompat="@drawable/__icon__edit" />
+
+                <TextView
+                    android:id="@+id/btn_save"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_weight="1"
+                    android:drawablePadding="@dimen/margin5"
+                    android:gravity="end"
+                    android:text="@string/save"
+                    android:textSize="@dimen/text16"
+                    android:visibility="gone"
+                    app:drawableRightCompat="@drawable/ic_save" />
             </LinearLayout>
         </androidx.appcompat.widget.Toolbar>
 

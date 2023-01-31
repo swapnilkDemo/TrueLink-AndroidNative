@@ -15,6 +15,8 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
+import com.ozcanalasalvar.library.utils.DateUtils
+import com.ozcanalasalvar.library.view.popup.DatePickerPopup
 import com.swapnilk.truelink.R
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -31,8 +33,8 @@ class CommonFunctions(context: Context) {
                 window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
                 window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
                 window.statusBarColor = context.getColor(R.color.light_background)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
-                    window.navigationBarDividerColor = context.getColor(R.color.light_background)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) window.navigationBarDividerColor =
+                    context.getColor(R.color.light_background)
                 window.navigationBarColor = context.getColor(R.color.light_background)
             }
 
@@ -63,12 +65,12 @@ class CommonFunctions(context: Context) {
     /////////////////////////Show Common Snackbar////////////////////////////
     fun showErrorSnackBar(context: Context, view: View, str: String) {
         try {
-            val snackBarView = Snackbar.make(view, str, Snackbar.LENGTH_LONG)
-                .setTextColor(Color.WHITE)
-                .setActionTextColor(Color.WHITE)
-                .setAction(context.getString(R.string.ok), View.OnClickListener {
+            val snackBarView =
+                Snackbar.make(view, str, Snackbar.LENGTH_LONG).setTextColor(Color.WHITE)
+                    .setActionTextColor(Color.WHITE)
+                    .setAction(context.getString(R.string.ok), View.OnClickListener {
 
-                })
+                    })
             val view = snackBarView.view
 
             /* val params = view.layoutParams as FrameLayout.LayoutParams
@@ -119,14 +121,21 @@ class CommonFunctions(context: Context) {
         if (cm != null) {
             val capabilities = cm.getNetworkCapabilities(cm.activeNetwork)
             if (capabilities != null) {
-                if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR))
-                    return true
-                else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI))
-                    return true
-                else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET))
-                    return true
+                if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) return true
+                else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) return true
+                else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) return true
             }
         }
         return false
+    }
+
+    //////////////////Build Date Picker Dialog
+    fun createDatePickerDialog(context: Context): DatePickerPopup {
+        return DatePickerPopup.Builder().from(context).offset(3)
+            //.darkModeEnabled(true)
+            .pickerMode(com.ozcanalasalvar.library.view.datePicker.DatePicker.MONTH_ON_FIRST)
+            .textSize(19).endDate(DateUtils.getCurrentTime())
+            .currentDate(DateUtils.getTimeMiles(1997, 7, 7))
+            .startDate(DateUtils.getTimeMiles(1900, 1, 1)).build()
     }
 }

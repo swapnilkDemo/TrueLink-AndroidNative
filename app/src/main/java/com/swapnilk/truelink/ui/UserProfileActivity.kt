@@ -293,13 +293,7 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
         editName = findViewById(R.id.edit_name)
         tvSelectDob = findViewById(R.id.tv_select_dob)
 
-        datePickerPopup = DatePickerPopup.Builder().from(this@UserProfileActivity).offset(3)
-            //.darkModeEnabled(true)
-            .pickerMode(com.ozcanalasalvar.library.view.datePicker.DatePicker.MONTH_ON_FIRST)
-            .textSize(19).endDate(DateUtils.getCurrentTime())
-            .currentDate(DateUtils.getTimeMiles(1997, 7, 7))
-            .startDate(DateUtils.getTimeMiles(1900, 1, 1))
-            .build()
+        datePickerPopup = commonFunctions.createDatePickerDialog(this@UserProfileActivity)
         datePicker = findViewById(R.id.ll_select_dob)
         datePicker.setOnClickListener {
             datePickerPopup?.show()
