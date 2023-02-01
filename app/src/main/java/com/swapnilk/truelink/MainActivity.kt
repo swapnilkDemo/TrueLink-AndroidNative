@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
 
     override fun onResume() {
         super.onResume()
-       // showToolBar()
+        // showToolBar()
     }
 
     @RequiresApi(Build.VERSION_CODES.P)
@@ -154,8 +154,18 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
             sharedPreferences.setAccessToken(response?.data?.tokenUpdate!!.payload!!.accessToken.toString())
             sharedPreferences.setRefreshToken(response?.data?.tokenUpdate!!.payload!!.refreshToken.toString())
             commonFunctions.showErrorSnackBar(
-                this@MainActivity, navView, getString(R.string.token_refresh)
+                this@MainActivity,
+                navView,
+                getString(R.string.token_refresh),
+                false
             )
         }
+    }
+
+    ////////////////////////Handle Navigation and Backpress//////////////////
+    override fun onBackPressed() {
+        super.onBackPressed()
+        if (supportFragmentManager.fragments.size == 1)
+            navView.selectedItemId = R.id.nav_threat_control
     }
 }

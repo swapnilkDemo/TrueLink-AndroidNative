@@ -41,7 +41,6 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.messaging.FirebaseMessaging
-import com.ozcanalasalvar.library.utils.DateUtils
 import com.ozcanalasalvar.library.view.popup.DatePickerPopup
 import com.swapnilk.truelink.MainActivity
 import com.swapnilk.truelink.R
@@ -152,6 +151,7 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
         }
     }
 
+    /////////////////////////////////Get User Location///////////////////////////////
     private fun getUserLocation() {
         if (checkPermission()) {
             if (isLocationEnabled()) {
@@ -169,12 +169,14 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
         }
     }
 
+    ////////////////////Check If GPS is enabled////////////////////////
     private fun isLocationEnabled(): Boolean {
         val locationManager: LocationManager =
             getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
     }
 
+    ////////////////////////////Check If Permission Granted//////////////////////
     private fun checkPermission(): Boolean {
         if (ActivityCompat.checkSelfPermission(
                 this,
@@ -190,6 +192,7 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
         return false
     }
 
+    /////////////////////////////Request Permission Group////////////////////
     private fun requestPermissions() {
         ActivityCompat.requestPermissions(
             this,
@@ -200,6 +203,7 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
         )
     }
 
+    ///////////////Check permission and get User Location///////////////////////////////
     @SuppressLint("MissingSuperCall")
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -213,6 +217,7 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
         }
     }
 
+    ////////////////////////Generate Firebase token///////////////////////
     @SuppressLint("StringFormatInvalid")
     private fun generateFCMToken() {
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
@@ -220,7 +225,6 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
                 Log.w(TAG, "Fetching FCM registration token failed", task.exception)
                 return@OnCompleteListener
             }
-
             // Get new FCM registration token
             val token = task.result
 
@@ -228,12 +232,11 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
             val msg = getString(R.string.msg_token_fmt, token)
             if (msg.isNotEmpty()) sharedPreferences.storeFCM(token)
             Log.d(TAG, msg)
-//            Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
         })
     }
 
+    /////////////////////////////////Initialize UI////////////////////////////
     private fun initialize() {
-        ////
         cardViewMale = findViewById(R.id.cardViewMale)
         cardViewFemale = findViewById(R.id.cardViewFemale)
         cardViewOther = findViewById(R.id.cardViewOther)
@@ -343,17 +346,22 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
                     commonFunctions.showErrorSnackBar(
                         this@UserProfileActivity,
                         progressButton,
-                        getString(R.string.error_select_gender)
+                        getString(R.string.error_select_gender),
+                        true
                     )
                 } else if (editName.text.isNullOrEmpty()) {
                     commonFunctions.showErrorSnackBar(
                         this@UserProfileActivity,
                         progressButton,
-                        getString(R.string.error_enter_full_name)
+                        getString(R.string.error_enter_full_name),
+                        true
                     )
                 } else if (dateOfBirth == null) {
                     commonFunctions.showErrorSnackBar(
-                        this@UserProfileActivity, progressButton, getString(R.string.error_dob)
+                        this@UserProfileActivity,
+                        progressButton,
+                        getString(R.string.error_dob),
+                        true
                     )
                 } else {
                     //////////////////Initiate Update///////////////////
@@ -364,11 +372,15 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
                         commonFunctions.showErrorSnackBar(
                             this@UserProfileActivity,
                             progressButton,
-                            getString(R.string.no_internet)
+                            getString(R.string.no_internet),
+                            true
                         )
                 }
                 else commonFunctions.showErrorSnackBar(
-                    this@UserProfileActivity, progressButton, getString(R.string.no_internet)
+                    this@UserProfileActivity,
+                    progressButton,
+                    getString(R.string.no_internet),
+                    true
                 )
             }
         }
@@ -436,7 +448,8 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
             commonFunctions.showErrorSnackBar(
                 this@UserProfileActivity,
                 progressButton,
-                response.data?.updateUser?.message.toString()
+                response.data?.updateUser?.message.toString(),
+                true
             )
         }
 
@@ -487,7 +500,8 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
             commonFunctions.showErrorSnackBar(
                 this@UserProfileActivity,
                 progressButton,
-                getString(R.string.token_refresh)
+                getString(R.string.token_refresh),
+                false
             )
         }
     }

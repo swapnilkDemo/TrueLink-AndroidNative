@@ -1,0 +1,8 @@
+query GetProfileUploadURL {
+    getProfileUploadURL {
+        code
+        message
+        success
+        payload
+    }
+}

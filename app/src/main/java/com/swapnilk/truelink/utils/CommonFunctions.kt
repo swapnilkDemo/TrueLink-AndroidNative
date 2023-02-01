@@ -63,7 +63,7 @@ class CommonFunctions(context: Context) {
     }
 
     /////////////////////////Show Common Snackbar////////////////////////////
-    fun showErrorSnackBar(context: Context, view: View, str: String) {
+    fun showErrorSnackBar(context: Context, view: View, str: String, isError: Boolean) {
         try {
             val snackBarView =
                 Snackbar.make(view, str, Snackbar.LENGTH_LONG).setTextColor(Color.WHITE)
@@ -79,6 +79,8 @@ class CommonFunctions(context: Context) {
              view.layoutParams = params*/
             view.background =
                 ContextCompat.getDrawable(context, R.drawable.rect_error) // for custom background
+            if (!isError)
+                view.background.setTint(context.getColor(R.color.teal_700))
             snackBarView.animationMode = BaseTransientBottomBar.ANIMATION_MODE_FADE
 
             snackBarView.show()
@@ -129,7 +131,7 @@ class CommonFunctions(context: Context) {
         return false
     }
 
-    //////////////////Build Date Picker Dialog
+    //////////////////Build Date Picker Dialog///////////////////////////////////////////////
     fun createDatePickerDialog(context: Context): DatePickerPopup {
         return DatePickerPopup.Builder().from(context).offset(3)
             //.darkModeEnabled(true)

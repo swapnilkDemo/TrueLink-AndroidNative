@@ -89,6 +89,7 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
 
     }
 
+    /////////////////////////////Initialize UI////////////////////////
     private fun initialize() {
         editPhone = findViewById(R.id.edit_phone)
         editCountryCode = findViewById(R.id.edit_coutryCode)
@@ -130,18 +131,21 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
                     } else commonFunctions.showErrorSnackBar(
                         this@SigninActivity,
                         circularProgressButton,
-                        getString(R.string.enter_mobile)
+                        getString(R.string.enter_mobile),
+                        true
                     )
                     else commonFunctions.showErrorSnackBar(
                         this@SigninActivity,
                         circularProgressButton,
-                        getString(R.string.error_privacy)
+                        getString(R.string.error_privacy),
+                    true
                     )
                 else
                     commonFunctions.showErrorSnackBar(
                         this@SigninActivity,
                         circularProgressButton,
-                        getString(R.string.no_internet)
+                        getString(R.string.no_internet),
+                        true
                     )
             }//End onCLickListener
         }//End Run
@@ -175,7 +179,9 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
         if (response.data?.getOTP!!.success) response.data!!.getOTP.request_id?.let {
             commonFunctions.showErrorSnackBar(
                 this@SigninActivity,
-                circularProgressButton, response.data?.getOTP!!.message
+                circularProgressButton,
+                response.data?.getOTP!!.message,
+                false
             )
             var bundle = Bundle()
             bundle.putString("requestId", it)
@@ -186,7 +192,8 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
         else commonFunctions.showErrorSnackBar(
             this@SigninActivity,
             circularProgressButton,
-            getString(R.string.login_error) + " " + response.data?.getOTP!!.message
+            getString(R.string.login_error) + " " + response.data?.getOTP!!.message,
+            true
         )
     }
 

@@ -103,7 +103,6 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
                 // logic to set the EditText could go here
             }
 
-
             override fun onFinish() {
                 textResendOTP.isEnabled = true
                 textResendOTP.text = getString(R.string.click_resend)
@@ -114,6 +113,7 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
 
     }
 
+    //////////////////////////////////////Initialize UI/////////////////////////
     private fun initialize() {
         textResendOTP = viewL.findViewById<TextView>(R.id.txt_resend)
         pinView = viewL.findViewById<PinView>(R.id.pinView)
@@ -122,11 +122,17 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
                 ///////////////Data validations/////////////////////////
                 if (activity?.let { it1 -> commonFunctions.checkConnection(it1) } == true) if (pinView?.text.isNullOrEmpty()) {
                     commonFunctions.showErrorSnackBar(
-                        requireActivity(), pinView, getString(R.string.enter_otp)
+                        requireActivity(),
+                        pinView,
+                        getString(R.string.enter_otp),
+                        true
                     )
                 } else if (pinView!!.text!!.length < 4) {
                     commonFunctions.showErrorSnackBar(
-                        requireActivity(), pinView, getString(R.string.otp_lenght_error)
+                        requireActivity(),
+                        pinView,
+                        getString(R.string.otp_lenght_error),
+                        true
                     )
                 } else {
                     //////////////////Initiate OTPVerification///////////////////
@@ -137,12 +143,16 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
                         commonFunctions.showErrorSnackBar(
                             requireContext(),
                             pinView,
-                            getString(R.string.no_internet)
+                            getString(R.string.no_internet),
+                            true
                         )
                 }//End else
                 else activity?.let { it1 ->
                     commonFunctions.showErrorSnackBar(
-                        it1, pinView, getString(R.string.no_internet)
+                        it1,
+                        pinView,
+                        getString(R.string.no_internet),
+                        true
                     )
                 }
             }// End onclick listener
@@ -175,7 +185,6 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
                 val responseVerify: ApolloResponse<VerifyOTPMutation.Data> =
                     apolloClient.mutation(verifyOtpMutation!!).execute()
                 if (responseVerify.data?.verifyOTP!!.success == true) {
-//                            Log.d("verifyOTP Response :", responseVerify.data.toString())
                     sharedPrefs.setAccessToken(responseVerify.data!!.verifyOTP.accessToken.toString())
                     var uid: String =
                         responseVerify.data!!.verifyOTP.payload?.uid.toString()
@@ -217,7 +226,10 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
             startTimer()
             activity?.let { it1 ->
                 commonFunctions.showErrorSnackBar(
-                    it1, textResendOTP, responseResendOPT.data!!.resendOTP.message
+                    it1,
+                    textResendOTP,
+                    responseResendOPT.data!!.resendOTP.message,
+                    false
                 )
             }
         }
@@ -227,7 +239,10 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
     private fun afterResultVerify(response: ApolloResponse<VerifyOTPMutation.Data>) {
         activity?.let {
             commonFunctions.showErrorSnackBar(
-                it, viewL, getString(R.string.login_error) + response.data?.verifyOTP!!.message
+                it,
+                viewL,
+                getString(R.string.login_error) + response.data?.verifyOTP!!.message,
+                true
             )
             pinView.setText("")
         }
