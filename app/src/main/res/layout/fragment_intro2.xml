@@ -13,12 +13,12 @@
         android:orientation="vertical"
         android:padding="@dimen/margin15">
 
-        <ImageView
+      <!--  <ImageView
             android:layout_width="@dimen/margin180"
             android:layout_height="@dimen/margin50"
             android:layout_gravity="center"
             android:layout_margin="@dimen/margin10"
-            android:src="@drawable/ic_logo_white_tgline" />
+            android:src="@drawable/ic_logo_white_tgline" />-->
 
         <ImageView
             android:layout_width="@dimen/margin250"

@@ -33,12 +33,9 @@ class IntroActivity : FragmentActivity() {
 
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        Thread.sleep(300)
-        setTheme(R.style.Theme_TrueLink)
         super.onCreate(savedInstanceState)
         commonFunctions = CommonFunctions(applicationContext)
-        commonFunctions.setStatusBar(this)
+        commonFunctions.setStatusBar(this@IntroActivity)
         sharedPrefs = SharedPreferences(applicationContext)
         if (sharedPrefs.isFirstLaunch()) {
             setContentView(R.layout.activity_intro)

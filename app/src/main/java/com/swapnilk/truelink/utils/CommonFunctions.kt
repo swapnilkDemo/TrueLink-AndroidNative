@@ -11,7 +11,9 @@ import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
@@ -28,6 +30,9 @@ class CommonFunctions(context: Context) {
     @RequiresApi(Build.VERSION_CODES.P)
     fun setStatusBar(context: Activity) {
         try {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            Thread.sleep(300)
+            //  context.setTheme(R.style.Theme_TrueLink)
             if (Build.VERSION.SDK_INT >= 21) {
                 val window = context.window
                 window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
@@ -79,8 +84,7 @@ class CommonFunctions(context: Context) {
              view.layoutParams = params*/
             view.background =
                 ContextCompat.getDrawable(context, R.drawable.rect_error) // for custom background
-            if (!isError)
-                view.background.setTint(context.getColor(R.color.teal_700))
+            if (!isError) view.background.setTint(context.getColor(R.color.teal_700))
             snackBarView.animationMode = BaseTransientBottomBar.ANIMATION_MODE_FADE
 
             snackBarView.show()
@@ -93,7 +97,7 @@ class CommonFunctions(context: Context) {
     fun convertDate2TimeStamp(dateStr: String): Long? {
         var timestamp: Long? = null
         try {
-            val formatter: DateFormat = SimpleDateFormat("mm/dd/yyyy")
+            val formatter: DateFormat = SimpleDateFormat("MMM, dd  yyyy")
             val date: Date = formatter.parse(dateStr) as Date
             timestamp = date.time
 
@@ -139,5 +143,11 @@ class CommonFunctions(context: Context) {
             .textSize(19).endDate(DateUtils.getCurrentTime())
             .currentDate(DateUtils.getTimeMiles(1997, 7, 7))
             .startDate(DateUtils.getTimeMiles(1900, 1, 1)).build()
+    }
+
+    /////////////////////Show Toast //////////////////////////
+    fun showToast(context: Context, message: String?) {
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+
     }
 }

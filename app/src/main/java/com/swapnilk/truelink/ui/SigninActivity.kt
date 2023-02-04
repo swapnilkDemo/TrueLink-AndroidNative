@@ -9,7 +9,6 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.os.NetworkOnMainThreadException
 import android.text.Html
 import android.util.Log
 import android.view.View
@@ -75,7 +74,7 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
         //////////////////////////Initialize required classes//////
         sharedPrefs = SharedPreferences(applicationContext)
         commonFunctions = CommonFunctions(applicationContext)
-        commonFunctions.setStatusBar(this)
+        commonFunctions.setStatusBar(this@SigninActivity)
         try {
             apolloClient =
                 ApolloClient.Builder().serverUrl("https://truelink.neki.dev/graphql/").build()
@@ -138,7 +137,7 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
                         this@SigninActivity,
                         circularProgressButton,
                         getString(R.string.error_privacy),
-                    true
+                        true
                     )
                 else
                     commonFunctions.showErrorSnackBar(
@@ -167,26 +166,24 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
                     ).execute()
                 if (response != null) afterResult(response)
             }
+        } catch (e: ApolloException) {
+            e.stackTrace
+            commonFunctions.showToast(this@SigninActivity, e.message)
         } catch (e: Exception) {
             e.stackTrace
-        } catch (e: NetworkOnMainThreadException) {
-            e.stackTrace
+            commonFunctions.showToast(this@SigninActivity, e.message)
         }
     }
 
     //////////////////////Handle Response from getOTP server operation////////////
     private fun afterResult(response: ApolloResponse<GetOTPMutation.Data>) {
         if (response.data?.getOTP!!.success) response.data!!.getOTP.request_id?.let {
-            commonFunctions.showErrorSnackBar(
-                this@SigninActivity,
-                circularProgressButton,
-                response.data?.getOTP!!.message,
-                false
-            )
+
             var bundle = Bundle()
             bundle.putString("requestId", it)
             bundle.putString("phone", editPhone.text.toString())
             bundle.putString("dailCode", editCountryCode.text.toString())
+            bundle.putString("message", response.data?.getOTP!!.message.toString())
             VerifyOTPFragment(bundle).show(supportFragmentManager, VerifyOTPFragment.TAG);
         }
         else commonFunctions.showErrorSnackBar(

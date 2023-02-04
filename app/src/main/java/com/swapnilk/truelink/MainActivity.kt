@@ -2,7 +2,6 @@ package com.swapnilk.truelink
 
 import android.os.Build
 import android.os.Bundle
-import android.os.NetworkOnMainThreadException
 import android.view.View
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
@@ -13,6 +12,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.ApolloResponse
+import com.apollographql.apollo3.exception.ApolloException
 import com.auth0.android.jwt.JWT
 import com.example.TokenUpdateMutation
 import com.google.android.material.appbar.AppBarLayout
@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         ////////////////////Initialize common classes////////////////
         sharedPreferences = SharedPreferences(this@MainActivity)
         commonFunctions = CommonFunctions(this@MainActivity)
-        commonFunctions.setStatusBar(this)
+        commonFunctions.setStatusBar(this@MainActivity)
         try {
             //apolloHelper = ApolloHelper(this@MainActivity)
             apolloClient =
@@ -141,8 +141,12 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
                 }
             } catch (e: Exception) {
                 e.stackTrace
-            } catch (e: NetworkOnMainThreadException) {
+                commonFunctions.showToast(this@MainActivity, e.message)
+
+            } catch (e: ApolloException) {
                 e.stackTrace
+                commonFunctions.showToast(this@MainActivity, e.message)
+
             }
         }
 

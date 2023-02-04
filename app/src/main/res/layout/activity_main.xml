@@ -31,7 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:itemBackground="@color/colorPrimary"
-            app:itemHorizontalTranslationEnabled="true"
+            app:itemHorizontalTranslationEnabled="false"
             app:itemIconTint="@drawable/bnv_active_foreground"
             app:itemPaddingBottom="@dimen/margin4"
             app:itemTextAppearanceActive="@color/selected_color"

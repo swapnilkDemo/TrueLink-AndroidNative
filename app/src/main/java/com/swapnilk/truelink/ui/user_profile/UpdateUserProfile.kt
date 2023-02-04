@@ -10,6 +10,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
+import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
@@ -18,22 +19,21 @@ import android.net.Uri
 import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
-import android.os.NetworkOnMainThreadException
 import android.provider.MediaStore
 import android.text.TextUtils
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.widget.*
 import androidx.core.content.PermissionChecker
 import androidx.core.content.PermissionChecker.checkSelfPermission
 import androidx.fragment.app.Fragment
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.ApolloResponse
 import com.apollographql.apollo3.api.Optional
+import com.apollographql.apollo3.exception.ApolloException
 import com.apollographql.apollo3.network.okHttpClient
 import com.example.GetProfileUploadURLQuery
 import com.example.GetUserQuery
@@ -45,6 +45,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.ozcanalasalvar.library.view.popup.DatePickerPopup
+import com.squareup.picasso.Picasso
 import com.ss.profilepercentageview.ProfilePercentageView
 import com.swapnilk.truelink.R
 import com.swapnilk.truelink.data.online.AuthorizationInterceptor
@@ -55,6 +56,7 @@ import kotlinx.coroutines.*
 import okhttp3.OkHttpClient
 import java.io.*
 import java.net.HttpURLConnection
+import java.net.SocketTimeoutException
 import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.*
@@ -163,8 +165,12 @@ open class UpdateUserProfile : Fragment(), CoroutineScope {
             }
         } catch (e: Exception) {
             e.stackTrace
-        } catch (e: NetworkOnMainThreadException) {
+            commonFunctions.showToast(requireContext(), e.message)
+
+        } catch (e: ApolloException) {
             e.stackTrace
+            commonFunctions.showToast(requireContext(), e.message)
+
         }
 
     }
@@ -179,6 +185,12 @@ open class UpdateUserProfile : Fragment(), CoroutineScope {
             }
         } catch (e: Exception) {
             e.stackTrace
+            commonFunctions.showToast(requireContext(), e.message)
+
+        } catch (e: ApolloException) {
+            e.stackTrace
+            commonFunctions.showToast(requireContext(), e.message)
+
         }
     }
 
@@ -198,20 +210,32 @@ open class UpdateUserProfile : Fragment(), CoroutineScope {
             ppvProfile.setValue(25)
             val url = response.data!!.getUser.payload?.avatar.toString()
             if (!TextUtils.isEmpty(url)) {
-                launch {
-                    val remoteImageDeferred = async(Dispatchers.IO) {
-                        getImageFromUrl(url)
-                    }
-                    val imageBitmap = remoteImageDeferred.await()
-                    //loadImage(imageBitmap)
-                    launch(Dispatchers.Default) {
-                        //  val filterBitmap = Filter.apply(imageBitmap)
-                        withContext(Dispatchers.Main) {
-                            loadImage(imageBitmap)
+                /*try {
+                    launch {
+                        val remoteImageDeferred = async(Dispatchers.IO) {
+                            getImageFromUrl(url)
+
                         }
-                        // Log.i(MainActivity.TAG, "Default. Thread: ${Thread.currentThread().name}")
+                        val imageBitmap = remoteImageDeferred.await()
+                        //loadImage(imageBitmap)
+                        launch(Dispatchers.Default) {
+                            //  val filterBitmap = Filter.apply(imageBitmap)
+                            withContext(Dispatchers.Main) {
+                                loadImage(imageBitmap )
+                            }
+                            // Log.i(MainActivity.TAG, "Default. Thread: ${Thread.currentThread().name}")
+                        }
                     }
-                }
+                } catch (e: Exception) {
+                    e.stackTrace
+                    commonFunctions.showToast(requireContext(), e.message)
+
+                } catch (e: ApolloException) {
+                    e.stackTrace
+                    commonFunctions.showToast(requireContext(), e.message)
+
+                }*/
+                Picasso.with(requireContext()).load(url).into(ppvProfile)
             }
             val address = response.data!!.getUser.payload?.address.toString()
             val city = response.data!!.getUser.payload?.city.toString()
@@ -281,14 +305,22 @@ open class UpdateUserProfile : Fragment(), CoroutineScope {
                 requireContext(), android.R.layout.simple_spinner_dropdown_item, item
             )
         )
-        editGender.setOnClickListener {
-            editGender.showDropDown()
-        }
+        editGender.setOnTouchListener(object : View.OnTouchListener {
+            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+                editGender.showDropDown()
+
+                return v?.onTouchEvent(event) ?: true
+            }
+        })
 
         datePickerPopup = commonFunctions.createDatePickerDialog(requireContext())
-        textLayoutBirthday.setOnClickListener {
-            datePickerPopup.show()
-        }
+        editBirthday.setOnTouchListener(object : View.OnTouchListener {
+            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+                datePickerPopup.show()
+                return v?.onTouchEvent(event) ?: true
+            }
+
+        })
         datePickerPopup?.setListener(DatePickerPopup.OnDateSelectListener { dp, date, day, month, year ->
             val monthName: Int = (month + 1)
             calendar.set(Calendar.MONTH, month)
@@ -576,8 +608,15 @@ open class UpdateUserProfile : Fragment(), CoroutineScope {
             }
         } catch (e: Exception) {
             e.stackTrace
-        } catch (e: NetworkOnMainThreadException) {
+            commonFunctions.showToast(requireContext(), e.message)
+
+        } catch (e: ApolloException) {
             e.stackTrace
+            commonFunctions.showToast(requireContext(), e.message)
+
+        } catch (e: SocketTimeoutException) {
+            e.message
+            commonFunctions.showToast(requireContext(), e.message)
         }//////////End try
     }
 
@@ -615,6 +654,14 @@ open class UpdateUserProfile : Fragment(), CoroutineScope {
             return Uri.parse(path)
         }
 
+        private fun getRealPathFromURI(uri: Uri): String? {
+            val cursor: Cursor? = con.contentResolver.query(uri, null, null, null, null)
+            cursor?.moveToFirst()
+            val index: Int? = cursor?.getColumnIndex(MediaStore.Images.ImageColumns.DATA)
+
+            return cursor?.getString(index!!)
+        }
+
         override fun doInBackground(vararg params: String?): String {
             try {
                 val sourceFileUri = getImageUri(con, mBitMap)
@@ -628,86 +675,87 @@ open class UpdateUserProfile : Fragment(), CoroutineScope {
                 var bufferSize: Int
                 val buffer: ByteArray
                 val maxBufferSize = 1 * 1024 * 1024
-                val sourceFile = File(sourceFileUri?.path)
+                val sourceFile = File(getRealPathFromURI(sourceFileUri!!))
+                //  sourceFile.mkdirs()
                 if (sourceFile.isFile) {
-                    try {
-                        val upLoadServerUri = params[0]
+                try {
+                    val upLoadServerUri = params[0]
 
-                        // open a URL connection to the Servlet
-                        val fileInputStream = FileInputStream(
-                            sourceFile
-                        )
-                        val url = URL(upLoadServerUri)
+                    // open a URL connection to the Servlet
+                    val fileInputStream = FileInputStream(
+                        sourceFile
+                    )
+                    val url = URL(upLoadServerUri)
 
-                        // Open a HTTP connection to the URL
-                        conn = url.openConnection() as HttpURLConnection
-                        conn.doInput = true // Allow Inputs
-                        conn.doOutput = true // Allow Outputs
-                        conn.useCaches = false // Don't use a Cached Copy
-                        conn.requestMethod = "PUT"
-                        conn.setRequestProperty("Connection", "Keep-Alive")
-                        conn.setRequestProperty(
-                            "ENCTYPE", "multipart/form-data"
-                        )
-                        conn.setRequestProperty(
-                            /* "Content-Type",
-                             "multipart/form-data;boundary=$boundary"*/
-                            "Content-Type", "image/jpeg"
-                        )
-                        conn.setRequestProperty("bill", sourceFileUri.toString())
-                        dos = DataOutputStream(conn.getOutputStream())
-                        dos.writeBytes(twoHyphens + boundary + lineEnd)
-                        dos.writeBytes(
-                            "Content-Disposition: form-data; name=\"bill\";filename=\"" + sourceFileUri + "\"" + lineEnd
-                        )
-                        dos.writeBytes(lineEnd)
+                    // Open a HTTP connection to the URL
+                    conn = url.openConnection() as HttpURLConnection
+                    conn.doInput = true // Allow Inputs
+                    conn.doOutput = true // Allow Outputs
+                    conn.useCaches = false // Don't use a Cached Copy
+                    conn.requestMethod = "PUT"
+                    conn.setRequestProperty("Connection", "Keep-Alive")
+                    conn.setRequestProperty(
+                        "ENCTYPE", "multipart/form-data"
+                    )
+                    conn.setRequestProperty(
+                        /* "Content-Type",
+                         "multipart/form-data;boundary=$boundary"*/
+                        "Content-Type", "image/jpeg"
+                    )
+                    conn.setRequestProperty("bill", sourceFileUri.toString())
+                    dos = DataOutputStream(conn.outputStream)
+                    dos.writeBytes(twoHyphens + boundary + lineEnd)
+                    dos.writeBytes(
+                        "Content-Disposition: form-data; name=\"bill\";filename=\"" + sourceFileUri + "\"" + lineEnd
+                    )
+                    dos.writeBytes(lineEnd)
 
-                        // create a buffer of maximum size
+                    // create a buffer of maximum size
+                    bytesAvailable = fileInputStream.available()
+                    bufferSize = Math.min(bytesAvailable, maxBufferSize)
+                    buffer = ByteArray(bufferSize)
+
+                    // read file and write it into form...
+                    bytesRead = fileInputStream.read(buffer, 0, bufferSize)
+                    while (bytesRead > 0) {
+                        dos.write(buffer, 0, bufferSize)
                         bytesAvailable = fileInputStream.available()
                         bufferSize = Math.min(bytesAvailable, maxBufferSize)
-                        buffer = ByteArray(bufferSize)
-
-                        // read file and write it into form...
-                        bytesRead = fileInputStream.read(buffer, 0, bufferSize)
-                        while (bytesRead > 0) {
-                            dos.write(buffer, 0, bufferSize)
-                            bytesAvailable = fileInputStream.available()
-                            bufferSize = Math.min(bytesAvailable, maxBufferSize)
-                            bytesRead = fileInputStream.read(
-                                buffer, 0, bufferSize
-                            )
-                        }
-
-                        // send multipart form data necesssary after file
-                        // data...
-                        dos.writeBytes(lineEnd)
-                        dos.writeBytes(
-                            (twoHyphens + boundary + twoHyphens + lineEnd)
+                        bytesRead = fileInputStream.read(
+                            buffer, 0, bufferSize
                         )
-
-                        // Responses from the server (code and message)
-                        var serverResponseCode = conn.getResponseCode()
-                        val serverResponseMessage: String = conn.getResponseMessage()
-                        if (serverResponseCode === 200) {
-
-                            // messageText.setText(msg);
-                            //Toast.makeText(ctx, "File Upload Complete.",
-                            //      Toast.LENGTH_SHORT).show();
-
-                            // recursiveDelete(mDirectory1);
-                        }
-
-                        // close the streams //
-                        fileInputStream.close()
-                        dos.flush()
-                        dos.close()
-                    } catch (e: java.lang.Exception) {
-
-                        // dialog.dismiss();
-                        e.printStackTrace()
                     }
+
+                    // send multipart form data necesssary after file
+                    // data...
+                    dos.writeBytes(lineEnd)
+                    dos.writeBytes(
+                        (twoHyphens + boundary + twoHyphens + lineEnd)
+                    )
+
+                    // Responses from the server (code and message)
+                    var serverResponseCode = conn.getResponseCode()
+                    val serverResponseMessage: String = conn.getResponseMessage()
+                    if (serverResponseCode === 200) {
+
+                        // messageText.setText(msg);
+                        //Toast.makeText(ctx, "File Upload Complete.",
+                        //      Toast.LENGTH_SHORT).show();
+
+                        // recursiveDelete(mDirectory1);
+                    }
+
+                    // close the streams //
+                    fileInputStream.close()
+                    dos.flush()
+                    dos.close()
+                } catch (e: java.lang.Exception) {
+
                     // dialog.dismiss();
-                } // End else block
+                    e.printStackTrace()
+                }
+                // dialog.dismiss();
+//                } // End else block
             } catch (ex: java.lang.Exception) {
                 // dialog.dismiss();
                 ex.printStackTrace()
@@ -719,6 +767,26 @@ open class UpdateUserProfile : Fragment(), CoroutineScope {
         override fun onPreExecute() {}
         override fun onProgressUpdate(vararg values: Void?) {}
 
+    }
+
+
+    fun getAllBrowsers() {
+        val allLaunchers = ArrayList<String>()
+
+        val allApps = Intent(Intent.ACTION_MAIN)
+        val allAppList: List<ResolveInfo> =
+            requireContext().packageManager.queryIntentActivities(allApps, 0)
+        for (i in allAppList.indices) allLaunchers.add(allAppList[i].activityInfo.packageName)
+
+        val myApps = Intent(Intent.ACTION_VIEW)
+        myApps.data = Uri.parse("http://www.google.es")
+        val myAppList: List<ResolveInfo> =
+            requireContext().packageManager.queryIntentActivities(myApps, 0)
+        for (i in myAppList.indices) {
+            if (allLaunchers.contains(myAppList[i].activityInfo.packageName)) {
+                Log.e("match", myAppList[i].activityInfo.packageName + "")
+            }
+        }
     }
 }
 

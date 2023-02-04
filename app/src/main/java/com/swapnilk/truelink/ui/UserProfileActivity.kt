@@ -13,7 +13,6 @@ import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.os.NetworkOnMainThreadException
 import android.util.Log
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -27,6 +26,7 @@ import br.com.simplepass.loadingbutton.customViews.CircularProgressButton
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.ApolloResponse
 import com.apollographql.apollo3.api.Optional
+import com.apollographql.apollo3.exception.ApolloException
 import com.apollographql.apollo3.network.okHttpClient
 import com.auth0.android.jwt.JWT
 import com.example.TokenUpdateMutation
@@ -104,7 +104,7 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
         permissionUtils = PermissionUtils(this@UserProfileActivity)
         sharedPreferences = SharedPreferences(this@UserProfileActivity)
         commonFunctions = CommonFunctions(this@UserProfileActivity)
-        commonFunctions.setStatusBar(this)
+        commonFunctions.setStatusBar(this@UserProfileActivity)
         ///////////////////////Initialize ApolloClient////////////////////////////
         val okHttpClient = OkHttpClient.Builder()
             .addInterceptor(AuthorizationInterceptor(this@UserProfileActivity)).build()
@@ -308,36 +308,10 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
             val sdf = SimpleDateFormat("MMM")
             var monthStr = sdf.format(calendar.time)
             tvSelectDob.text = "$monthStr, $day   $year"
+//            dateOfBirth = commonFunctions.convertDate2TimeStamp("$monthName/$day/$year")
             dateOfBirth = commonFunctions.convertDate2TimeStamp("$monthName/$day/$year")
-        })
 
-        /* val calendar = Calendar.getInstance()
-         calendar.set(1900, 1, 1)
-         val dateTimeSelectedListener =
-             object : OnDateTimeSelectedListener {
-                 override fun onDateTimeSelected(selectedDateTime: Calendar) {
-                     val month = selectedDateTime.time.month
-                     val day = selectedDateTime.time.day
-                     val year = selectedDateTime.time.year
-                     dateOfBirth = commonFunctions.convertDate2TimeStamp("$month/$day/$year")
-                 }
-             }
-         val dateTimePickerDialog = DialogDateTimePicker(
-             this,
-             calendar,
-             1440,
-             dateTimeSelectedListener,
-             getString(R.string.select_dob)
-         )
-         dateTimePickerDialog.setCancelBtnColor(R.color.login_btn)
-         dateTimePickerDialog.setSubmitBtnColor(R.color.login_btn)
-         dateTimePickerDialog.setSubmitBtnText(getString(R.string.ok))
-         dateTimePickerDialog.setCancelBtnTextColor(R.color.gray_200)
-         dateTimePickerDialog.setSubmitBtnTextColor(R.color.gray_200)
-         datePicker = findViewById(R.id.ll_select_dob)
-         datePicker.setOnClickListener {
-             dateTimePickerDialog.show()
-         }*/
+        })
 
         progressButton = findViewById(R.id.btn_finish)
         progressButton.run {
@@ -424,8 +398,12 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
             }
         } catch (e: Exception) {
             e.stackTrace
-        } catch (e: NetworkOnMainThreadException) {
+            commonFunctions.showToast(this@UserProfileActivity, e.message)
+
+        } catch (e: ApolloException) {
             e.stackTrace
+            commonFunctions.showToast(this@UserProfileActivity, e.message)
+
         }
     }
 

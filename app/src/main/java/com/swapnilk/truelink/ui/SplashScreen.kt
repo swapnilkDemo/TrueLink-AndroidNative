@@ -17,7 +17,7 @@ class SplashScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val commonFunctions = CommonFunctions(this)
-        commonFunctions.setStatusBar(this)
+        commonFunctions.setStatusBar(this@SplashScreen)
         setContentView(R.layout.activity_splash_screen)
         ////Manage SharePreferences, Sessions in this activity//////////////////
 

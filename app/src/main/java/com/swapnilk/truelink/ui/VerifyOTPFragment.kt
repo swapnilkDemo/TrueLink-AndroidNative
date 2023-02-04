@@ -11,6 +11,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
+import android.text.TextUtils
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
@@ -86,6 +87,16 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
         /////////////////Initalize UI////////////////
         initialize()
         //////////////////////////////////////////////
+        if (!TextUtils.isEmpty(bundleGet.getString("message")))
+            bundleGet.getString("message")?.let {
+                commonFunctions.showErrorSnackBar(
+                    requireContext(),
+                    pinView,
+                    it,
+                    false
+                )
+            }
+
         startTimer()
         return viewL;
     }
@@ -208,7 +219,10 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
             }//End Launch
         } catch (e: Exception) {
             e.stackTrace
-        } catch (e: android.os.NetworkOnMainThreadException) {
+            commonFunctions.showToast(requireContext(), e.message)
+
+        } catch (e: ApolloException) {
+            commonFunctions.showToast(requireContext(), e.message)
             e.stackTrace
         }
     }
@@ -220,18 +234,26 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
             bundleGet.getString("dailCode")!!,
             resendType.text
         )
-        launch {
-            val responseResendOPT: ApolloResponse<ResendOTPMutation.Data> =
-                apolloClient.mutation(resendOTPMutation).execute()
-            startTimer()
-            activity?.let { it1 ->
-                commonFunctions.showErrorSnackBar(
-                    it1,
-                    textResendOTP,
-                    responseResendOPT.data!!.resendOTP.message,
-                    false
-                )
+        try {
+            launch {
+                val responseResendOPT: ApolloResponse<ResendOTPMutation.Data> =
+                    apolloClient.mutation(resendOTPMutation).execute()
+                startTimer()
+                activity?.let { it1 ->
+                    commonFunctions.showErrorSnackBar(
+                        it1,
+                        textResendOTP,
+                        responseResendOPT.data!!.resendOTP.message,
+                        false
+                    )
+                }
             }
+        } catch (e: Exception) {
+            e.stackTrace
+            commonFunctions.showToast(requireContext(), e.message)
+        } catch (e: ApolloException) {
+            e.stackTrace
+            commonFunctions.showToast(requireContext(), e.message)
         }
     }
 
@@ -309,6 +331,7 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
     override fun onDestroy() {
         super.onDestroy()
         job.cancel()
+        timer?.cancel()
     }
 
     ///////////////////////Progress Button Animations/////////////////////////////
