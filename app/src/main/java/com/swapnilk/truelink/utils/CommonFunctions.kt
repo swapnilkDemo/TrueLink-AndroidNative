@@ -32,6 +32,7 @@ class CommonFunctions(context: Context) {
         try {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             Thread.sleep(300)
+            
             //  context.setTheme(R.style.Theme_TrueLink)
             if (Build.VERSION.SDK_INT >= 21) {
                 val window = context.window
@@ -84,7 +85,7 @@ class CommonFunctions(context: Context) {
              view.layoutParams = params*/
             view.background =
                 ContextCompat.getDrawable(context, R.drawable.rect_error) // for custom background
-            if (!isError) view.background.setTint(context.getColor(R.color.teal_700))
+            if (!isError) view.background.setTint(context.getColor(R.color.teal_200))
             snackBarView.animationMode = BaseTransientBottomBar.ANIMATION_MODE_FADE
 
             snackBarView.show()

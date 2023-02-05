@@ -7,8 +7,8 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="colorPrimary">#202125</color>
-    <color name="colorSecondary">#454649</color>
+    <color name="primary_color">#202125</color>
+    <color name="secondary_color">#454649</color>
     <color name="gray_200">#EEEEEE</color>
     <color name="login_btn">#3265FE</color>
     <color name="link">#56ACE0</color>

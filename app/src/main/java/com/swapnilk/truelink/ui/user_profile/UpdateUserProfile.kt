@@ -53,9 +53,10 @@ import com.swapnilk.truelink.databinding.FragmentUpdateUserProfileBinding
 import com.swapnilk.truelink.utils.CommonFunctions
 import com.swapnilk.truelink.utils.SharedPreferences
 import kotlinx.coroutines.*
-import okhttp3.OkHttpClient
+import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.create
 import java.io.*
-import java.net.HttpURLConnection
 import java.net.SocketTimeoutException
 import java.net.URL
 import java.text.SimpleDateFormat
@@ -645,13 +646,13 @@ open class UpdateUserProfile : Fragment(), CoroutineScope {
         var con = context
         var mBitMap = bitmap
 
-        private fun getImageUri(inContext: Context, inImage: Bitmap): Uri? {
+        private fun getByteArray(inContext: Context, inImage: Bitmap): ByteArray? {
             val bytes = ByteArrayOutputStream()
             inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
-            val path = MediaStore.Images.Media.insertImage(
-                inContext.contentResolver, inImage, "Title", null
-            )
-            return Uri.parse(path)
+
+            val byteArray: ByteArray = bytes.toByteArray()
+
+            return byteArray
         }
 
         private fun getRealPathFromURI(uri: Uri): String? {
@@ -663,7 +664,7 @@ open class UpdateUserProfile : Fragment(), CoroutineScope {
         }
 
         override fun doInBackground(vararg params: String?): String {
-            try {
+            /*try {
                 val sourceFileUri = getImageUri(con, mBitMap)
                 var conn: HttpURLConnection? = null
                 var dos: DataOutputStream? = null
@@ -678,88 +679,97 @@ open class UpdateUserProfile : Fragment(), CoroutineScope {
                 val sourceFile = File(getRealPathFromURI(sourceFileUri!!))
                 //  sourceFile.mkdirs()
                 if (sourceFile.isFile) {
-                try {
-                    val upLoadServerUri = params[0]
+                    try {
+                        val upLoadServerUri = params[0]
 
-                    // open a URL connection to the Servlet
-                    val fileInputStream = FileInputStream(
-                        sourceFile
-                    )
-                    val url = URL(upLoadServerUri)
+                        // open a URL connection to the Servlet
+                        val fileInputStream = FileInputStream(
+                            sourceFile
+                        )
+                        val url = URL(upLoadServerUri)
 
-                    // Open a HTTP connection to the URL
-                    conn = url.openConnection() as HttpURLConnection
-                    conn.doInput = true // Allow Inputs
-                    conn.doOutput = true // Allow Outputs
-                    conn.useCaches = false // Don't use a Cached Copy
-                    conn.requestMethod = "PUT"
-                    conn.setRequestProperty("Connection", "Keep-Alive")
-                    conn.setRequestProperty(
-                        "ENCTYPE", "multipart/form-data"
-                    )
-                    conn.setRequestProperty(
-                        /* "Content-Type",
-                         "multipart/form-data;boundary=$boundary"*/
-                        "Content-Type", "image/jpeg"
-                    )
-                    conn.setRequestProperty("bill", sourceFileUri.toString())
-                    dos = DataOutputStream(conn.outputStream)
-                    dos.writeBytes(twoHyphens + boundary + lineEnd)
-                    dos.writeBytes(
-                        "Content-Disposition: form-data; name=\"bill\";filename=\"" + sourceFileUri + "\"" + lineEnd
-                    )
-                    dos.writeBytes(lineEnd)
+                        // Open a HTTP connection to the URL
+                        conn = url.openConnection() as HttpURLConnection
+                        conn.doInput = true // Allow Inputs
+                        conn.doOutput = true // Allow Outputs
+                        conn.useCaches = false // Don't use a Cached Copy
+                        conn.requestMethod = "PUT"
 
-                    // create a buffer of maximum size
-                    bytesAvailable = fileInputStream.available()
-                    bufferSize = Math.min(bytesAvailable, maxBufferSize)
-                    buffer = ByteArray(bufferSize)
+                        conn.setRequestProperty(
+                            *//* "Content-Type",
+                             "multipart/form-data;boundary=$boundary"*//*
+                            "Content-Type", "image/jpeg"
+                        )
+                        dos = DataOutputStream(conn.outputStream)
+                        dos.writeBytes(twoHyphens + boundary + lineEnd)
+                        dos.writeBytes(
+                            "Content-Disposition: form-data; name=\"bill\";filename=\"" + sourceFileUri + "\"" + lineEnd
+                        )
+                        dos.writeBytes(lineEnd)
 
-                    // read file and write it into form...
-                    bytesRead = fileInputStream.read(buffer, 0, bufferSize)
-                    while (bytesRead > 0) {
-                        dos.write(buffer, 0, bufferSize)
+                        // create a buffer of maximum size
                         bytesAvailable = fileInputStream.available()
                         bufferSize = Math.min(bytesAvailable, maxBufferSize)
-                        bytesRead = fileInputStream.read(
-                            buffer, 0, bufferSize
+                        buffer = ByteArray(bufferSize)
+
+                        // read file and write it into form...
+                        bytesRead = fileInputStream.read(buffer, 0, bufferSize)
+                        while (bytesRead > 0) {
+                            dos.write(buffer, 0, bufferSize)
+                            bytesAvailable = fileInputStream.available()
+                            bufferSize = Math.min(bytesAvailable, maxBufferSize)
+                            bytesRead = fileInputStream.read(
+                                buffer, 0, bufferSize
+                            )
+                        }
+
+                        // send multipart form data necesssary after file
+                        // data...
+                        dos.writeBytes(lineEnd)
+                        dos.writeBytes(
+                            (twoHyphens + boundary + twoHyphens + lineEnd)
                         )
+
+                        // Responses from the server (code and message)
+                        var serverResponseCode = conn.getResponseCode()
+                        val serverResponseMessage: String = conn.responseMessage
+                        if (serverResponseCode === 200) {
+
+                            // messageText.setText(msg);
+                            //Toast.makeText(ctx, "File Upload Complete.",
+                            //      Toast.LENGTH_SHORT).show();
+
+                            // recursiveDelete(mDirectory1);
+                        }
+
+                        // close the streams //
+                        fileInputStream.close()
+                        dos.flush()
+                        dos.close()
+                    } catch (e: java.lang.Exception) {
+
+                        // dialog.dismiss();
+                        e.printStackTrace()
                     }
-
-                    // send multipart form data necesssary after file
-                    // data...
-                    dos.writeBytes(lineEnd)
-                    dos.writeBytes(
-                        (twoHyphens + boundary + twoHyphens + lineEnd)
-                    )
-
-                    // Responses from the server (code and message)
-                    var serverResponseCode = conn.getResponseCode()
-                    val serverResponseMessage: String = conn.getResponseMessage()
-                    if (serverResponseCode === 200) {
-
-                        // messageText.setText(msg);
-                        //Toast.makeText(ctx, "File Upload Complete.",
-                        //      Toast.LENGTH_SHORT).show();
-
-                        // recursiveDelete(mDirectory1);
-                    }
-
-                    // close the streams //
-                    fileInputStream.close()
-                    dos.flush()
-                    dos.close()
-                } catch (e: java.lang.Exception) {
-
                     // dialog.dismiss();
-                    e.printStackTrace()
-                }
-                // dialog.dismiss();
-//                } // End else block
+                } // End else block
             } catch (ex: java.lang.Exception) {
                 // dialog.dismiss();
                 ex.printStackTrace()
+            }*/
+
+            val client = OkHttpClient().newBuilder()
+                .build()
+            val mediaType: MediaType? = "image/jpeg".toMediaTypeOrNull()
+            val body: RequestBody? = getByteArray(con, mBitMap)?.let { create(mediaType, it) }
+            val request: Request? = params[0]?.let {
+                Request.Builder()
+                    .url(it)
+                    .method("PUT", body)
+                    .addHeader("Content-Type", "image/jpeg")
+                    .build()
             }
+            val response: Response? = request?.let { client.newCall(it).execute() }
             return "Executed"
         }
 

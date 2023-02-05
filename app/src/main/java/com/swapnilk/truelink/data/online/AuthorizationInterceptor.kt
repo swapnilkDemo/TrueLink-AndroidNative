@@ -8,6 +8,7 @@ import okhttp3.Response
 class AuthorizationInterceptor(context: Context) : Interceptor {
     private val sharedPreferences: SharedPreferences = SharedPreferences(context)
     override fun intercept(chain: Interceptor.Chain): Response {
+
         val request = chain.request().newBuilder()
             .addHeader("Authorization", sharedPreferences.getAccessToken()!!).build()
 

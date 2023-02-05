@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
-        android:background="@color/colorPrimary"
+        android:background="@color/primary_color"
         android:orientation="vertical"
         android:padding="@dimen/margin10"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">

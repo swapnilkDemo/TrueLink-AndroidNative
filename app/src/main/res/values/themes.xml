@@ -2,9 +2,9 @@
     <!-- Base application theme. -->
     <style name="Theme.TrueLink" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryVariant">@color/colorPrimary</item>
-        <item name="colorOnPrimary">@color/colorPrimary</item>
+        <item name="colorPrimary">@color/primary_color</item>
+        <item name="colorPrimaryVariant">@color/primary_color</item>
+        <item name="colorOnPrimary">@color/primary_color</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/login_btn</item>
         <item name="colorSecondaryVariant">@color/login_btn</item>
@@ -12,7 +12,7 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
-        <item name="backgroundColor">@color/colorPrimary</item>
+        <item name="backgroundColor">@color/primary_color</item>
         <item name="homeAsUpIndicator">@drawable/ic_logo_white_tgline</item>
         <!--  <item name="checkboxStyle">@style/Widget.App.CheckBox</item>
           <item name="switchStyle">@style/Widget.App.Switch</item>
@@ -24,6 +24,8 @@
     <style name="Theme.TrueLink.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+
+     <!--  -->
     </style>
 
     <style name="Theme.TrueLink.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
@@ -79,10 +81,10 @@
         <item name="android:textColor">@color/black</item>
         <item name="android:padding">@dimen/margin20</item>
         <item name="android:windowBackground">@color/transparent50</item>
-        <item name="android:dial">@color/colorPrimary</item>
+        <item name="android:dial">@color/primary_color</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:windowIsFloating">true</item>
-        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="colorAccent">@color/primary_color</item>
         <item name="android:radius">@dimen/margin10</item>
     </style>
 

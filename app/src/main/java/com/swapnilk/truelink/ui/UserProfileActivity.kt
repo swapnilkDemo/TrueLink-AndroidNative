@@ -130,19 +130,19 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
             if (gender == Gender.MALE) setSelected(
                 cardViewMale,
                 llCardmMale,
-                getColor(R.color.colorSecondary),
+                getColor(R.color.secondary_color),
                 getColor(R.color.male_blue)
             )
             else if (gender == Gender.FEMALE) setSelected(
                 cardViewFemale,
                 llCardFemale,
-                getColor(R.color.colorSecondary),
+                getColor(R.color.secondary_color),
                 getColor(R.color.female_marun)
             )
             else if (gender == Gender.OTHERS) setSelected(
                 cardViewOther,
                 llCardOther,
-                getColor(R.color.colorSecondary),
+                getColor(R.color.secondary_color),
                 getColor(R.color.other_voilet)
             )
 
@@ -248,7 +248,7 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
             setSelected(
                 cardViewMale,
                 llCardmMale,
-                getColor(R.color.colorSecondary),
+                getColor(R.color.secondary_color),
                 getColor(R.color.male_blue)
             )
             setDeselected(
@@ -264,7 +264,7 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
             setSelected(
                 cardViewFemale,
                 llCardFemale,
-                getColor(R.color.colorSecondary),
+                getColor(R.color.secondary_color),
                 getColor(R.color.female_marun)
             )
             setDeselected(
@@ -281,7 +281,7 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
             setSelected(
                 cardViewOther,
                 llCardOther,
-                getColor(R.color.colorSecondary),
+                getColor(R.color.secondary_color),
                 getColor(R.color.other_voilet)
             )
             setDeselected(

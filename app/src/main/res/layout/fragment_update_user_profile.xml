@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
+    android:background="@color/primary_color"
     tools:context=".ui.user_profile.UpdateUserProfile">
 
     <include
@@ -95,7 +95,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/margin5"
                     android:layout_weight="1"
-                    android:backgroundTint="@color/colorSecondary"
+                    android:backgroundTint="@color/secondary_color"
                     android:drawableRight="@drawable/ic_google"
                     android:padding="@dimen/margin10"
                     android:text="@string/connect"
@@ -109,7 +109,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/margin5"
                     android:layout_weight="1"
-                    android:backgroundTint="@color/colorSecondary"
+                    android:backgroundTint="@color/secondary_color"
                     android:drawableRight="@drawable/ic_linkedin"
                     android:padding="@dimen/margin10"
                     android:text="@string/connect"

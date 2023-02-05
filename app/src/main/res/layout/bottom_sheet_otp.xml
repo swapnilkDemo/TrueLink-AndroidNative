@@ -10,7 +10,7 @@
         android:id="@+id/ll_child"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimary"
+        android:background="@color/primary_color"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <LinearLayout
@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="@color/colorPrimary"
+            android:background="@color/primary_color"
             android:orientation="vertical"
             android:padding="@dimen/margin10">
 
@@ -62,7 +62,7 @@
                 android:inputType="number"
                 android:itemBackground="@color/gray_200"
                 android:padding="@dimen/margin5"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/primary_color"
                 android:textSize="@dimen/text16"
                 android:textStyle="bold"
                 app:cursorColor="@color/black"
