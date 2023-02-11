@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.swapnilk.truelink.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
@@ -23,17 +25,28 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
+            ViewModelProvider(this)[HomeViewModel::class.java]
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textHome
+       /* val textView: TextView = binding.textHome
         homeViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
+        }*/
+
+        loadTopAppList()
+        return root
+    }
+
+    private fun loadTopAppList() {
+        binding.rvApps.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+           /* adapter = AppDataAdapter(createHeroList()) { hero, position ->
+
+            }*/
         }
 
-        return root
     }
 
     override fun onDestroyView() {
