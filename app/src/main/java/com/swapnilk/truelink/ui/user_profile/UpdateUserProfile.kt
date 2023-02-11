@@ -26,7 +26,10 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.core.content.PermissionChecker
 import androidx.core.content.PermissionChecker.checkSelfPermission
 import androidx.fragment.app.Fragment
@@ -52,11 +55,16 @@ import com.swapnilk.truelink.data.online.AuthorizationInterceptor
 import com.swapnilk.truelink.databinding.FragmentUpdateUserProfileBinding
 import com.swapnilk.truelink.utils.CommonFunctions
 import com.swapnilk.truelink.utils.SharedPreferences
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.create
-import java.io.*
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.IOException
 import java.net.SocketTimeoutException
 import java.net.URL
 import java.text.SimpleDateFormat
@@ -645,14 +653,13 @@ open class UpdateUserProfile : Fragment(), CoroutineScope {
     class UploadImageTask(context: Context, bitmap: Bitmap) : AsyncTask<String?, Void?, String>() {
         var con = context
         var mBitMap = bitmap
+        var commonFunctions = CommonFunctions(context)
 
         private fun getByteArray(inContext: Context, inImage: Bitmap): ByteArray? {
             val bytes = ByteArrayOutputStream()
-            inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+            inImage.compress(Bitmap.CompressFormat.PNG, 100, bytes)
 
-            val byteArray: ByteArray = bytes.toByteArray()
-
-            return byteArray
+            return bytes.toByteArray()
         }
 
         private fun getRealPathFromURI(uri: Uri): String? {
@@ -663,7 +670,7 @@ open class UpdateUserProfile : Fragment(), CoroutineScope {
             return cursor?.getString(index!!)
         }
 
-        override fun doInBackground(vararg params: String?): String {
+        override fun doInBackground(vararg params: String?): String? {
             /*try {
                 val sourceFileUri = getImageUri(con, mBitMap)
                 var conn: HttpURLConnection? = null
@@ -770,10 +777,17 @@ open class UpdateUserProfile : Fragment(), CoroutineScope {
                     .build()
             }
             val response: Response? = request?.let { client.newCall(it).execute() }
-            return "Executed"
+            return response?.message+" "+response?.code.toString()
         }
 
-        override fun onPostExecute(result: String) {}
+        override fun onPostExecute(result: String) {
+            commonFunctions.showToast(
+                con,
+                result
+
+            )
+        }
+
         override fun onPreExecute() {}
         override fun onProgressUpdate(vararg values: Void?) {}
 

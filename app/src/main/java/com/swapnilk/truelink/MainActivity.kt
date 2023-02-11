@@ -87,7 +87,8 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         setUpToolbar()
 
         val refreshToken = sharedPreferences.getRefreshToken();
-        if (!refreshToken.isNullOrEmpty() && commonFunctions.checkConnection(this@MainActivity)) refreshAccessToken(
+        if (!refreshToken.isNullOrEmpty() && commonFunctions.checkConnection(this@MainActivity))
+            refreshAccessToken(
             refreshToken
         )
     }
