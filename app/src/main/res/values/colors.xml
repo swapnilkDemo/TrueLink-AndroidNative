@@ -23,4 +23,6 @@
     <color name="transparent50">#50FFFFFF</color>
     <color name="mtrl_textinput_default_box_stroke_color">#50FFFFFF</color>
     <color name="mtrl_textinput_default_hint_color">#50FFFFFF</color>
+    <color name="purple">#8F00A7</color>
+    <color name="red">#FE1C1D</color>
 </resources>

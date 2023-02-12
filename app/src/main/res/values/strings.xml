@@ -118,4 +118,24 @@ meaning regardless of whether they appear in singular or in plural.</span></div>
     <string name="fromcamera">Camera</string>
     <string name="select_source">Select Source</string>
     <string name="grant_permission">Please grant the permission to access camera and the device storage</string>
+
+    <string name="safe_link">Links are safe  </string>
+    <string name="suspicious_link">Suspicious Links</string>
+    <string name="browser_link">Scanned within Browser </string>
+    <string name="app_link">Link Received in Apps</string>
+    <string name="filter">last 30 days </string>
+    <string name="total_scan">Total Link Scanned </string>
+    <string name="link_clicked">Link Clicked</string>
+    <string name="verified_link">Verified Links</string>
+    <string name="recent_scan">Recent Scans</string>
+    <string name="tab_all">All</string>
+    <string name="tab_safe">Safe</string>
+    <string name="tab_verified">Verified</string>
+    <string name="tab_suspicious">Suspicious</string>
+    <string name="time">12 : 19 PM</string>
+    <string name="url">http://www.amazon.com/eviubdiuvbdivufiew</string>
+    <string name="phishing">Phishing</string>
+    <string name="verified">Verified</string>
+    <string name="social_media">Social Media</string>
+    <string name="source">Link Source</string>
 </resources>

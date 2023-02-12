@@ -25,7 +25,7 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
 
-     <!--  -->
+        <!--  -->
     </style>
 
     <style name="Theme.TrueLink.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
@@ -86,6 +86,15 @@
         <item name="android:windowIsFloating">true</item>
         <item name="colorAccent">@color/primary_color</item>
         <item name="android:radius">@dimen/margin10</item>
+    </style>
+
+    <style name="TabLayoutCustomStyle" parent="TextAppearance.Design.Tab">
+        <item name="textAllCaps">false</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="itemTextAppearanceActive">@color/white</item>
+        <item name="textSize">@dimen/text12</item>
+        <item name="fontFamily">@font/sora</item>
+        <item name="itemTextAppearanceInactive">@color/transparent50</item>
     </style>
 
 </resources>
