@@ -138,4 +138,40 @@ meaning regardless of whether they appear in singular or in plural.</span></div>
     <string name="verified">Verified</string>
     <string name="social_media">Social Media</string>
     <string name="source">Link Source</string>
+
+
+    <!---->
+    <string name="total_scans">Total Scans 1,785</string>
+    <string name="domain_icon">domain icon</string>
+    <string name="domain_text">youtube.com</string>
+    <string name="full_url">shorturl.at/bgoWYKoLdjo…</string>
+    <string name="tag_icon">phishing</string>
+    <string name="tagged_as_name">PHISHING PAGE</string>
+    <string name="reports_count">38 Spam Reports</string>
+    <string name="origin_ip_text">10.101.20.202</string>
+    <string name="origin_ip_title">Origin IP</string>
+    <string name="origin_ip_icon">TODO</string>
+    <string name="category_icon">category</string>
+    <string name="category_title">Category</string>
+    <string name="category_text">Social Media</string>
+    <string name="connection_type_icon">https</string>
+    <string name="connection_type_title">Connection</string>
+    <string name="connection_type_text">Yes</string>
+    <string name="location_icon">location icon</string>
+    <string name="location_title">Location</string>
+    <string name="location_text">Mumbai India</string>
+    <string name="hosting_icon">hosting icon</string>
+    <string name="hosting_title">Hosting</string>
+    <string name="hosting_text">AS54113 Fastly, Inc</string>
+    <string name="more_info_btn_text">More Info</string>
+    <string name="severity_bar_safe_text">Safe</string>
+    <string name="severity_bar_low_risk_text">Low Risk</string>
+    <string name="severity_bar_warning_text">Warning</string>
+    <string name="severity_bar_danger_text">Danger</string>
+    <string name="browser_btn_text">Open</string>
+    <string name="sandbox_btn_text">Sandbox</string>
+    <string name="report_btn_text">Report</string>
+    <string name="close_btn_text">close</string>
+    <string name="category_and_scans">Social Media | Total Scans 1,785</string>
+    <string name="created_on">Since 1996</string>
 </resources>
