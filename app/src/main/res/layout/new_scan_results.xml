@@ -1,0 +1,620 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <ImageView
+                android:layout_width="90dp"
+                android:layout_height="20dp"
+                android:layout_gravity="start"
+                android:src="@drawable/header_ico"
+                />
+        </LinearLayout>
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginHorizontal="8dp"
+            app:cardBackgroundColor="@color/danger"
+            android:id="@+id/banner_card"
+            app:cardCornerRadius="10dp"
+            >
+            <!--        add exit icon-->
+            <Button
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:id="@+id/window_close"
+                android:background="@drawable/exit"
+                android:layout_margin="10dp"
+                android:layout_gravity="end"
+                >
+
+            </Button>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingHorizontal="10dp"
+                android:id="@+id/topLayout"
+                android:paddingBottom="20dp">
+                <!--        add alert icon-->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginTop="2dp"
+                    >
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/scan_icon"
+                        android:layout_width="90dp"
+                        android:layout_height="90dp"
+                        android:layout_gravity="center"
+                        android:layout_marginHorizontal="10dp"
+                        app:lottie_autoPlay="true"
+                        app:lottie_loop="true"
+                        app:lottie_speed="0.5"
+                        app:lottie_renderMode="hardware"
+                        app:lottie_rawRes="@raw/shield_success" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="12sp"
+                        android:layout_gravity="center"
+                        android:id="@+id/created_on_text"
+                        android:textColor="@color/white"
+                        android:text="@string/created_on"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/total_scan_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="5dp"
+                        android:text="@string/category_and_scans"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"
+                        android:textSize="11sp" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        tools:ignore="UseCompoundDrawables">
+
+                        <ImageView
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:id="@+id/https_icon"
+                            android:contentDescription="@string/domain_icon"
+                            android:src="@drawable/https_ico" />
+
+                        <TextView
+                            android:id="@+id/domain_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:text="@string/domain_text"
+                            android:textColor="@color/white"
+                            android:textSize="17sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+
+                    <TextView
+                        android:id="@+id/full_url_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/badge"
+                        android:paddingHorizontal="10dp"
+                        android:paddingVertical="2dp"
+                        android:text="@string/full_url"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/tag_icon"
+                            android:layout_width="20dp"
+                            android:layout_height="25dp"
+                            android:contentDescription="@string/tag_icon"
+                            android:src="@drawable/fakeicon" />
+
+                        <TextView
+                            android:id="@+id/tagged_as_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingHorizontal="5dp"
+                            android:text="@string/tagged_as_name"
+                            android:textColor="@color/white"
+                            android:textSize="11sp"
+                            android:textStyle="bold" />
+
+                        <!--                    create a dot-->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="•"
+                            android:textColor="@color/white"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:id="@+id/dot"
+                            tools:ignore="HardcodedText" />
+
+                        <TextView
+                            android:id="@+id/reports_count_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingHorizontal="5dp"
+                            android:text="@string/reports_count"
+                            android:textColor="@color/white"
+                            android:textSize="11sp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+
+
+
+
+        </androidx.cardview.widget.CardView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="-25dp"
+            android:translationZ="40dp"
+            android:id="@+id/bottom_card"
+            >
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                app:cardBackgroundColor="@color/themeBlueDark"
+                app:cardCornerRadius="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        app:cardBackgroundColor="@color/themeBlue"
+                        android:layout_gravity="center_horizontal"
+                        app:cardCornerRadius="10dp"
+                        >
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginVertical="10dp"
+                            android:layout_gravity="center_horizontal"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginHorizontal="10dp"
+                                android:gravity="center_horizontal"
+                                android:orientation="vertical">
+                                <!--                        load polygon image-->
+
+                                <ImageView
+                                    android:layout_width="60dp"
+                                    android:layout_height="15dp"
+                                    android:contentDescription="@string/alert_description"
+                                    android:src="@drawable/polygon"
+                                    android:visibility="invisible"
+                                    android:tint="@color/safe"
+                                    android:id="@+id/safe_polygon"
+                                    tools:ignore="UseAppTint" />
+
+                                <ImageView
+                                    android:layout_width="75dp"
+                                    android:layout_height="wrap_content"
+                                    android:src="@drawable/bar"
+                                    android:tint="@color/safe"
+                                    tools:ignore="ContentDescription,UseAppTint" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/severity_bar_safe_text"
+                                    android:textColor="@color/white" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginHorizontal="10dp"
+                                android:gravity="center_horizontal"
+                                android:orientation="vertical">
+                                <!--                        load polygon image-->
+
+                                <ImageView
+                                    android:layout_width="60dp"
+                                    android:layout_height="15dp"
+                                    android:contentDescription="@string/alert_description"
+                                    android:src="@drawable/polygon"
+                                    android:tint="@color/lowRisk"
+                                    tools:ignore="UseAppTint"
+                                    android:id="@+id/low_risk_polygon"
+                                    android:visibility="invisible"
+                                    />
+
+                                <ImageView
+                                    android:layout_width="70dp"
+                                    android:layout_height="wrap_content"
+                                    android:src="@drawable/bar"
+                                    android:tint="@color/lowRisk"
+                                    tools:ignore="ContentDescription,UseAppTint"
+                                    />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/severity_bar_low_risk_text"
+                                    android:textColor="@color/white" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginHorizontal="10dp"
+                                android:gravity="center_horizontal"
+                                android:orientation="vertical">
+                                <!--                        load polygon image-->
+
+                                <ImageView
+                                    android:layout_width="60dp"
+                                    android:layout_height="15dp"
+                                    android:contentDescription="@string/alert_description"
+                                    android:src="@drawable/polygon"
+                                    android:visibility="invisible"
+                                    android:tint="@color/warning"
+                                    android:id="@+id/warning_polygon"
+                                    tools:ignore="UseAppTint" />
+
+                                <ImageView
+                                    android:layout_width="70dp"
+                                    android:layout_height="wrap_content"
+                                    android:src="@drawable/bar"
+                                    android:tint="@color/warning"
+                                    tools:ignore="ContentDescription,UseAppTint"
+                                    />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/severity_bar_warning_text"
+                                    android:textColor="@color/white" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginHorizontal="10dp"
+                                android:gravity="center_horizontal"
+                                android:orientation="vertical">
+                                <!--                        load polygon image-->
+
+                                <ImageView
+                                    android:layout_width="60dp"
+                                    android:layout_height="15dp"
+                                    android:contentDescription="@string/alert_description"
+                                    android:src="@drawable/polygon"
+                                    android:tint="@color/danger"
+                                    android:id="@+id/danger_polygon"
+                                    tools:ignore="UseAppTint" />
+
+                                <ImageView
+                                    android:layout_width="70dp"
+                                    android:layout_height="wrap_content"
+                                    android:src="@drawable/bar"
+                                    android:tint="@color/danger"
+                                    tools:ignore="ContentDescription,UseAppTint" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/severity_bar_danger_text"
+                                    android:textColor="@color/white" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        app:cardBackgroundColor="@color/themeBlueDark"
+                        >
+                        <!--                    add divider-->
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                        >
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_horizontal"
+                                android:layout_marginTop="2dp"
+                                android:layout_marginHorizontal="3dp"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:orientation="horizontal"
+                                    tools:ignore="UseCompoundDrawables">
+
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="20dp"
+                                        android:contentDescription="@string/origin_ip_icon"
+                                        android:src="@drawable/origin_ip" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/origin_ip_title"
+                                        android:textColor="@color/white"
+                                        android:textSize="13sp"
+                                        android:textStyle="bold" />
+                                </LinearLayout>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="5dp"
+                                    android:id="@+id/origin_ip_text"
+                                    android:text="@string/origin_ip_text"
+                                    android:textColor="@color/white" />
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_horizontal"
+                                android:layout_marginTop="2dp"
+                                android:layout_marginHorizontal="3dp"
+
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:orientation="horizontal"
+                                    tools:ignore="UseCompoundDrawables">
+
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="20dp"
+                                        android:contentDescription="@string/location_icon"
+                                        android:src="@drawable/location" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/location_title"
+                                        android:textColor="@color/white"
+                                        android:textSize="13sp"
+                                        android:textStyle="bold" />
+                                </LinearLayout>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="5dp"
+                                    android:text="@string/location_text"
+                                    android:id="@+id/location_text"
+                                    android:textColor="@color/white" />
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:layout_marginTop="2dp"
+                                android:layout_marginHorizontal="3dp"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:orientation="horizontal"
+                                    tools:ignore="UseCompoundDrawables">
+
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="20dp"
+                                        android:contentDescription="@string/hosting_icon"
+                                        android:src="@drawable/hosting" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/hosting_title"
+                                        android:textColor="@color/white"
+                                        android:textSize="13sp"
+                                        android:textStyle="bold" />
+                                </LinearLayout>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="5dp"
+                                    android:text="@string/hosting_text"
+                                    android:id="@+id/hosting_text"
+                                    android:gravity="center"
+                                    android:textColor="@color/white" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="2dp"
+                        android:background="@color/gray" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        >
+                        <GridLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:columnCount="4"
+                            android:layout_marginTop="2dp"
+                            android:layout_gravity="center"
+                            android:useDefaultMargins="true"
+                            android:layout_marginBottom="2dp"
+                            android:orientation="horizontal"
+
+                            tools:ignore="UselessParent">
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="30dp"
+                                android:layout_marginLeft="30dp"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <Button
+                                    android:id="@+id/open_in_browser"
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:background="@drawable/chrome"
+                                    />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/browser_btn_text"
+                                    android:textColor="@color/white"
+                                    android:layout_marginTop="6dp"
+                                    />
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:layout_marginRight="30dp"
+                                android:layout_marginLeft="30dp"
+                                android:gravity="center"
+                                >
+                                <Button
+                                    android:id="@+id/report_btn"
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:background="@drawable/not_spam"
+
+                                    />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/report_btn_text"
+                                    android:textColor="@color/white"
+                                    android:layout_marginTop="6dp"
+                                    />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="30dp"
+                                android:orientation="vertical"
+                                android:gravity="center"
+                                android:layout_marginLeft="30dp"
+                                >
+                                <Button
+                                    android:id="@+id/more_info_btn"
+                                    android:layout_width="20dp"
+                                    android:background="@drawable/more_info"
+                                    android:layout_height="20dp" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/more_info_btn_text"
+                                    android:textColor="@color/white"
+                                    android:layout_marginTop="6dp"
+                                    />
+                            </LinearLayout>
+
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="30dp"
+                                android:layout_marginLeft="30dp"
+                                android:orientation="vertical"
+                                android:gravity="center"
+                                >
+                                <Button
+                                    android:id="@+id/window_close_2"
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:background="@drawable/close_svg"
+                                    />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/close_btn_text"
+                                    android:textColor="@color/white"
+                                    android:layout_marginTop="6dp"
+                                    />
+                            </LinearLayout>
+
+                        </GridLayout>
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>
