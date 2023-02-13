@@ -70,7 +70,7 @@ open class MainActivity : AppCompatActivity(), CoroutineScope {
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ////////////////////Initialize common classes////////////////
+        ////////////////////Initialize common classes//////////////////
         sharedPreferences = SharedPreferences(this@MainActivity)
         commonFunctions = CommonFunctions(this@MainActivity)
         commonFunctions.setStatusBar(this@MainActivity)
