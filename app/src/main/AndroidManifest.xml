@@ -70,6 +70,8 @@
             android:exported="true"
             android:theme="@style/Theme.TrueLink.NoActionBar" />
 
+        <activity android:name="com.truelink.ScanResultsActivity" />
+
         <service
             android:name=".service.MyFirebaseMessagingService"
             android:exported="false">
@@ -77,6 +79,8 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+        <service android:name=".service.ForegroundService" />
+        <service android:name=".service.PopupService" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
