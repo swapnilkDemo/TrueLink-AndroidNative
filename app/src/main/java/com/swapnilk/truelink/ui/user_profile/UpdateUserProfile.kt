@@ -264,8 +264,10 @@ open class UpdateUserProfile : Fragment(), CoroutineScope {
             editPhone.setText(
                 response.data!!.getUser.payload?.dialcode.toString() + " " + response.data!!.getUser.payload?.phone.toString()
             )
-            val gender = response.data!!.getUser.payload?.gender as Gender
-            editGender.setText(gender.rawValue.toString())
+            if (response.data!!.getUser.payload?.gender != null) {
+                val gender = response.data!!.getUser.payload?.gender as Gender
+                editGender.setText(gender.rawValue.toString())
+            }
             editBirthday.setText(commonFunctions.convertTimeStamp2Date(response.data!!.getUser.payload?.dob.toString()))
         }
     }
@@ -777,7 +779,7 @@ open class UpdateUserProfile : Fragment(), CoroutineScope {
                     .build()
             }
             val response: Response? = request?.let { client.newCall(it).execute() }
-            return response?.message+" "+response?.code.toString()
+            return response?.message + " " + response?.code.toString()
         }
 
         override fun onPostExecute(result: String) {

@@ -1,7 +1,10 @@
 package com.swapnilk.truelink
 
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.view.View
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
@@ -18,6 +21,8 @@ import com.example.TokenUpdateMutation
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.swapnilk.truelink.databinding.ActivityMainBinding
+import com.swapnilk.truelink.service.ForegroundService
+import com.swapnilk.truelink.service.MyReceiver
 import com.swapnilk.truelink.ui.user_profile.UpdateUserProfile
 import com.swapnilk.truelink.utils.CommonFunctions
 import com.swapnilk.truelink.utils.SharedPreferences
@@ -27,7 +32,12 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
-class MainActivity : AppCompatActivity(), CoroutineScope {
+
+open class MainActivity : AppCompatActivity(), CoroutineScope {
+    companion  object GlobalFields {
+            val INTENT_ACTION_NOTIFICATION = "it.gmariotti.notification"
+    }
+
     ////////////Start Coroutine for Background Task../////////////
     private var job: Job = Job()
     override val coroutineContext: CoroutineContext
@@ -44,7 +54,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
 
     //  private lateinit var apolloHelper: ApolloHelper
     private lateinit var apolloClient: ApolloClient
-
+    protected var mReceiver: MyReceiver = MyReceiver()
     override fun onDestroy() {
         super.onDestroy()
         job.cancel()
@@ -53,6 +63,8 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
     override fun onResume() {
         super.onResume()
         // showToolBar()
+        if (mReceiver == null) mReceiver = MyReceiver()
+        registerReceiver(mReceiver, IntentFilter(INTENT_ACTION_NOTIFICATION))
     }
 
     @RequiresApi(Build.VERSION_CODES.P)
@@ -89,8 +101,11 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         val refreshToken = sharedPreferences.getRefreshToken();
         if (!refreshToken.isNullOrEmpty() && commonFunctions.checkConnection(this@MainActivity))
             refreshAccessToken(
-            refreshToken
-        )
+                refreshToken
+            )
+
+        //////////////////Check Permissions////////////////
+        checkOverlayPermission()
     }
 
     private fun showToolBar() {
@@ -173,4 +188,29 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         if (supportFragmentManager.fragments.size == 1)
             navView.selectedItemId = R.id.nav_threat_control
     }
+
+    ////////////////Start Foreground Service//////////////////
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun startService() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (Settings.canDrawOverlays(this)) {
+                startForegroundService(Intent(this, ForegroundService::class.java))
+            } else {
+                startService(Intent(this, ForegroundService::class.java))
+            }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun checkOverlayPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!Settings.canDrawOverlays(this)) {
+                // send user to the device settings
+                val myIntent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
+                startActivity(myIntent)
+            } else {
+                startService()
+            }
+        }
+    } // check for permission again when user grants it from
 }

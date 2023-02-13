@@ -2,26 +2,31 @@ package com.swapnilk.truelink.service;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.IBinder;
 
 import androidx.annotation.Nullable;
 
-public class PopupService extends HeadlessJsTaskService {
-
-    @Override
-    protected @Nullable
-    HeadlessJsTaskConfig getTaskConfig(Intent intent) {
-        Bundle extras = intent.getExtras();
-        if (extras != null) {
-            return new HeadlessJsTaskConfig(
-                    "PopupTask",
-                    Arguments.fromBundle(extras),
-                    5000,
-                    true);
-        }
-        return null;
+public class PopupService extends ForegroundService {
+    public PopupService() {
+        super();
     }
 
-//    @Override
+    @Override
+    public IBinder onBind(Intent intent) {
+        return super.onBind(intent);
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return super.onStartCommand(intent, flags, startId);
+    }
+
+    //    @Override
 //    public void onCreate() {
 //        super.onCreate();
 //        // create the custom or default notification

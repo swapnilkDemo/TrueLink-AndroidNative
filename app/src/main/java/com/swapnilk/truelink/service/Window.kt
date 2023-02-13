@@ -13,7 +13,7 @@ import android.widget.*
 import androidx.cardview.widget.CardView
 import androidx.core.view.marginTop
 import com.airbnb.lottie.LottieAnimationView
-import com.airbnb.lottie.RenderMode
+import com.swapnilk.truelink.R
 
 class Window(  // declaring required variables
     private val context: Context
@@ -100,7 +100,7 @@ class Window(  // declaring required variables
     @SuppressLint("SetTextI18n")
     fun loading(full_url: String, fact: String) {
         scanIcon?.setAnimation(R.raw.progress)
-        banner?.setCardBackgroundColor(context.resources.getColor(R.color.themeBlue))
+        banner?.setCardBackgroundColor(context.resources.getColor(R.color.primary_color))
         domainText?.text = "Scanning..."
         if (full_url.length > 25) {
             val substring = full_url.substring(0, 25)

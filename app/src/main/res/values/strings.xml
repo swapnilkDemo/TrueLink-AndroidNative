@@ -138,7 +138,11 @@ meaning regardless of whether they appear in singular or in plural.</span></div>
     <string name="verified">Verified</string>
     <string name="social_media">Social Media</string>
     <string name="source">Link Source</string>
-
+    <string name="social_apps">Social Apps</string>
+    <string name="browser_security">Browser Security</string>
+    <string name="default_scanner">Default Scanner</string>
+    <string name="risk_warning">Your Device is at Risk</string>
+    <string name="settings_completion">Complete your settings for maximum security</string>
 
     <!---->
     <string name="total_scans">Total Scans 1,785</string>
@@ -174,4 +178,5 @@ meaning regardless of whether they appear in singular or in plural.</span></div>
     <string name="close_btn_text">close</string>
     <string name="category_and_scans">Social Media | Total Scans 1,785</string>
     <string name="created_on">Since 1996</string>
+    <string name="alert_description">Alert Description</string>
 </resources>

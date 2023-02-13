@@ -27,6 +27,7 @@
     <dimen name="margin55">55dp</dimen>
     <dimen name="margin60">60dp</dimen>
     <dimen name="margin70">70dp</dimen>
+    <dimen name="margin75">75dp</dimen>
     <dimen name="margin180">180dp</dimen>
     <dimen name="margin200">200dp</dimen>
     <dimen name="margin250">250dp</dimen>

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.SeekBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -28,7 +29,7 @@ class HomeFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
     private lateinit var tabGraph: TabLayout
-
+    private lateinit var seekBar: SeekBar
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,13 +50,21 @@ class HomeFragment : Fragment() {
         loadTopAppList()
         loadTabs()
         loadRecentScans()
+        setDefaultScanner()
         return root
+    }
+
+    private fun setDefaultScanner() {
+
     }
 
 
     private fun bindViews() {
         tabGraph = binding.tabGraph
-
+        seekBar = binding.seekBar
+        seekBar.thumb.mutate().alpha = 255
+//        seekBar.isEnabled = false
+//        seekBar.progress = 100
     }
 
     private fun loadTopAppList() {

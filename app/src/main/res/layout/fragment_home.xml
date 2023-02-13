@@ -13,6 +13,151 @@
         android:orientation="vertical"
         tools:context=".ui.home.HomeFragment">
 
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cv_permissions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin5"
+            android:elevation="@dimen/margin8"
+            app:cardBackgroundColor="@color/light_background"
+            app:cardCornerRadius="@dimen/margin8">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin8"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="@dimen/margin75"
+                            android:layout_height="@dimen/margin75"
+                            android:layout_gravity="center"
+                            android:layout_margin="@dimen/margin5"
+                            android:src="@drawable/ic_permission_default"
+                            app:backgroundTint="@color/white" />
+
+                        <TextView
+                            style="@style/textViewFontSora"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="@dimen/margin5"
+                            android:gravity="center"
+                            android:text="@string/default_scanner"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text10" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="@dimen/margin75"
+                            android:layout_height="@dimen/margin75"
+                            android:layout_gravity="center"
+                            android:layout_margin="@dimen/margin5"
+                            android:backgroundTint="@color/white"
+                            android:src="@drawable/ic_permission_notification" />
+
+                        <TextView
+                            style="@style/textViewFontSora"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="@dimen/margin5"
+                            android:gravity="center"
+                            android:text="@string/social_apps"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text10" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="@dimen/margin75"
+                            android:layout_height="@dimen/margin75"
+                            android:layout_gravity="center"
+                            android:layout_margin="@dimen/margin5"
+                            android:backgroundTint="@color/white"
+                            android:src="@drawable/ic_permission_browser" />
+
+                        <TextView
+                            style="@style/textViewFontSora"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="@dimen/margin5"
+                            android:gravity="center"
+                            android:text="@string/browser_security"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text10" />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <SeekBar
+                    android:id="@+id/seekBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/margin10"
+                    android:background="@null"
+                    android:progressDrawable="@drawable/seekbar_background"
+                    android:shape="oval"
+                    android:thumbTint="@color/red" />
+
+                <TextView
+                    style="@style/textViewFontSora"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/margin5"
+                    android:gravity="center"
+                    android:text="@string/risk_warning"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text14" />
+
+                <TextView
+                    style="@style/textViewFontSora"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="@dimen/margin5"
+                    android:gravity="center"
+                    android:text="@string/settings_completion"
+                    android:textColor="@color/transparent50"
+                    android:textSize="@dimen/text12" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_apps"
             android:layout_width="match_parent"

@@ -47,11 +47,11 @@ class ScanResultsActivity : Activity() {
         bundle.putString("data", data.toString())
         serviceIntent.putExtras(bundle)
         applicationContext.startService(serviceIntent)
-        //        window.open();
+       // window.open();
         finish()
     }
 
-    fun startService() {
+    private fun startService() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             // check if the user has already granted
             // the Draw over other apps permission
@@ -79,9 +79,10 @@ class ScanResultsActivity : Activity() {
         }
     } // check for permission again when user grants it from
     // the device settings, and start the service
-    //    @Override
-    //    protected void onResume() {
-    //        super.onResume();
-    //        startService();
-    //    }
+
+
+    override fun onResume() {
+        super.onResume()
+        startService();
+    }
 }
