@@ -177,6 +177,7 @@
                     android:layout_marginTop="@dimen/margin10"
                     android:drawableEnd="@drawable/ic_round_arrow_drop_down_24"
                     android:dropDownHeight="100dp"
+                    android:background="@null"
                     android:ems="10"
                     android:enabled="false"
                     android:inputType="none"

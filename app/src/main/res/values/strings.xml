@@ -123,7 +123,6 @@ meaning regardless of whether they appear in singular or in plural.</span></div>
     <string name="suspicious_link">Suspicious Links</string>
     <string name="browser_link">Scanned within Browser </string>
     <string name="app_link">Link Received in Apps</string>
-    <string name="filter">last 30 days </string>
     <string name="total_scan">Total Link Scanned </string>
     <string name="link_clicked">Link Clicked</string>
     <string name="verified_link">Verified Links</string>
@@ -154,7 +153,19 @@ meaning regardless of whether they appear in singular or in plural.</span></div>
     <string name="text2">Don\'t worry Truelink redirects safe links to your favorite browser, blocks harmful links for secure browsing.</string>
     <string name="text3">To secure your social media apps, it is essential to allow notification access permission on your device</string>
     <string name="text4">To secure your browsing experience on any supported browser, allow the Accessibility permission to activate Browser Security</string>
+    <string name="month">last 30 days </string>
+    <string name="two_month">last 60 days </string>
+    <string name="quarter">last 90 days </string>
+    <string-array name="filter">
+        <item>@string/month</item>
+        <item>@string/two_month</item>
+        <item>@string/quarter</item>
+    </string-array>
+
+
     <!---->
+
+
     <string name="total_scans">Total Scans 1,785</string>
     <string name="domain_icon">domain icon</string>
     <string name="domain_text">youtube.com</string>

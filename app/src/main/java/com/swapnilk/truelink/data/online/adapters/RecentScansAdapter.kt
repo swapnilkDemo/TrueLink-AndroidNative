@@ -10,7 +10,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.swapnilk.truelink.R
 import com.swapnilk.truelink.data.online.model.RecentScansModel
-import de.hdodenhof.circleimageview.CircleImageView
 
 class RecentScansAdapter(private val scanList: ArrayList<RecentScansModel>, val context: Context) :
     RecyclerView.Adapter<RecentScansAdapter.ViewHolder>() {
@@ -27,10 +26,13 @@ class RecentScansAdapter(private val scanList: ArrayList<RecentScansModel>, val 
         holder.tvTime.text = recentScansModel.time
         holder.tvUrl.text = recentScansModel.actualUrl
 
-        if (recentScansModel.isPhishing)
+        if (recentScansModel.isPhishing) {
             holder.tvPhishing.visibility = View.VISIBLE
-        else
+            holder.ivSafe.setImageDrawable(context.getDrawable(R.drawable.ic_lock))
+        } else {
             holder.tvPhishing.visibility = View.GONE
+            holder.ivSafe.setImageDrawable(context.getDrawable(R.drawable.ic_unlock))
+        }
         if (recentScansModel.isSocialMedia)
             holder.tvSocialMedia.visibility = View.VISIBLE
         else
@@ -39,9 +41,18 @@ class RecentScansAdapter(private val scanList: ArrayList<RecentScansModel>, val 
             holder.tvSpamCount.text = recentScansModel.reportCount
             holder.tvSpamCount.visibility = View.VISIBLE
         }
+        if (recentScansModel.isVerified)
+            holder.tvVerified.visibility = View.VISIBLE
+        else
+            holder.tvVerified.visibility = View.GONE
 
         holder.tvSource.text = recentScansModel.source
-
+        holder.tvSource.setCompoundDrawablesWithIntrinsicBounds(
+            0,
+            0,
+            recentScansModel.sourceIcon,
+            0
+        )
     }
 
     override fun getItemCount(): Int {
@@ -49,7 +60,7 @@ class RecentScansAdapter(private val scanList: ArrayList<RecentScansModel>, val 
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var civFavicon: CircleImageView = itemView.findViewById(R.id.civ_favicon)
+        var civFavicon: ImageView = itemView.findViewById(R.id.civ_favicon)
         var ivSafe: ImageView = itemView.findViewById(R.id.iv_safe)
         var tvDomain: TextView = itemView.findViewById(R.id.tv_domain_name)
         var tvVerified: TextView = itemView.findViewById(R.id.tv_verified)

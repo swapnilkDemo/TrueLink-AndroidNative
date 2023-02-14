@@ -1,14 +1,13 @@
 package com.swapnilk.truelink
 
-import android.app.Activity
 import android.content.Intent
 import android.content.IntentFilter
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.view.View
 import android.widget.ImageView
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -17,9 +16,15 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.ApolloResponse
+import com.apollographql.apollo3.api.Optional
 import com.apollographql.apollo3.exception.ApolloException
 import com.auth0.android.jwt.JWT
+import com.example.ScanLinkMutation
 import com.example.TokenUpdateMutation
+import com.example.type.AppType
+import com.example.type.ScanLinkInput
+import com.example.type.ScanTriggerType
+import com.example.type.WhoisInput
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.swapnilk.truelink.databinding.ActivityMainBinding
@@ -28,10 +33,12 @@ import com.swapnilk.truelink.service.MyReceiver
 import com.swapnilk.truelink.ui.user_profile.UpdateUserProfile
 import com.swapnilk.truelink.utils.CommonFunctions
 import com.swapnilk.truelink.utils.SharedPreferences
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import java.io.DataInputStream
+import java.io.IOException
+import java.io.OutputStreamWriter
+import java.io.Writer
+import java.net.Socket
 import kotlin.coroutines.CoroutineContext
 
 
@@ -56,19 +63,19 @@ open class MainActivity : AppCompatActivity(), CoroutineScope {
         fun showLauncherSelection(context: MainActivity) {
             val intent = Intent(Settings.ACTION_MANAGE_DEFAULT_APPS_SETTINGS)
             context.startActivity(intent)
-           // resultLauncher.launch(intent)
+            // resultLauncher.launch(intent)
 
         }
 
-      /*  @RequiresApi(Build.VERSION_CODES.O)
-        private var resultLauncher =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                if (result.resultCode == Activity.RESULT_OK) {
-                    // There are no request codes
-                    val data: Intent? = result.data
-                    //doSomeOperations()
-                }
-            }*/
+        /*  @RequiresApi(Build.VERSION_CODES.O)
+          private var resultLauncher =
+              registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                  if (result.resultCode == Activity.RESULT_OK) {
+                      // There are no request codes
+                      val data: Intent? = result.data
+                      //doSomeOperations()
+                  }
+              }*/
 
         fun requestPermissions(permission: String) {
 
@@ -129,7 +136,7 @@ open class MainActivity : AppCompatActivity(), CoroutineScope {
         /////////////Set Navigation Menus////////////////
         navView = binding.bottomNavigation
         navView.setupWithNavController(navController)
-        navView.selectedItemId = R.id.nav_threat_control
+        navView.selectedItemId = R.id.nav_dashboard
         ///////////Set Badge to Alert/////////////////
         setBadgeToAlert()
         /////////////////Set Up Toolbar//////////////////
@@ -140,6 +147,57 @@ open class MainActivity : AppCompatActivity(), CoroutineScope {
             refreshAccessToken(
                 refreshToken
             )
+
+        //////////////////Handle Intent on click on Link//////////////////
+        val intent = intent
+        val action = intent.action
+        val data = intent.data
+        if (data != null) {
+            scanLink(data)
+        }
+    }
+
+    ///////////////////Scan Link/////////////////////////////////////////
+    private fun scanLink(data: Uri) {
+        val whoStr = consultWhois(data.host.toString())
+        val whoisInput = WhoisInput(
+            data.host.toString(),
+            data.host.toString(),
+            Optional.Absent,
+            Optional.Absent,
+            Optional.Absent,
+            Optional.Absent
+
+        )
+        val scanLinkInput = ScanLinkInput(
+            data.toString(),
+            ScanTriggerType.MANUAL,
+            Optional.present(data.userInfo),
+            Optional.present(AppType.SOCIAL_MEDIA),
+            Optional.present(data.scheme),
+            Optional.Absent,
+            Optional.Absent,
+            Optional.Absent,
+            Optional.Absent
+        )
+        val scanLink = ScanLinkMutation(
+            scanLinkInput
+        )
+
+        try {
+            launch {
+                var response: ApolloResponse<ScanLinkMutation.Data> =
+                    apolloClient.mutation(scanLink).execute()
+                handleScanResult(response)
+            }
+        } catch (e: ApolloException) {
+
+        }
+    }
+
+    //////////////////////////////Handle response of scan link////////////////////
+    private fun handleScanResult(response: ApolloResponse<ScanLinkMutation.Data>) {
+        commonFunctions.showToast(this@MainActivity, "Links Scanned successfully")
     }
 
     private fun showToolBar() {
@@ -233,6 +291,33 @@ open class MainActivity : AppCompatActivity(), CoroutineScope {
                 startService(Intent(this, ForegroundService::class.java))
             }
         }
+    }
+
+    //////////////////////////Check whois info from domain////////////////////////////
+    open fun consultWhois(domain: String): String? {
+        // val domquest = "$domain.$tld"
+        var resultado = ""
+        var theSocket: Socket
+        val hostname = "whois.internic.net"
+        val port = 43
+        try {
+            async {
+                theSocket = Socket(hostname, port, true)
+                val out: Writer = OutputStreamWriter(theSocket.getOutputStream())
+                out.write("=$domain\r\n")
+                out.flush()
+                val theWhoisStream: DataInputStream = DataInputStream(theSocket.getInputStream())
+                var s: String
+                while (theWhoisStream.readLine().also { s = it } != null) {
+                    resultado = """
+                $resultado$s
+                
+                """.trimIndent()
+                }
+            }
+        } catch (e: IOException) {
+        }
+        return resultado
     }
 
 }
