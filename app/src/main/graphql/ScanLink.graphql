@@ -1,0 +1,16 @@
+mutation ScanLink($form: ScanLinkInput!) {
+    scanLink(form: $form) {
+        code
+        message
+        success
+        payload {
+            app
+            appType
+            image
+            scan {
+                status
+            }
+            sender
+        }
+    }
+}
