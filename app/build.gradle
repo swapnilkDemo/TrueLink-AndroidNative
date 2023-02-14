@@ -78,7 +78,10 @@ dependencies {
     implementation 'io.github.smartsensesolutions:ProfilePercentageView:1.0.2'
     //////////////////////////////Photo Load/////////////////////////
     implementation 'com.squareup.picasso:picasso:2.5.2'
+    ///////////////////////////Lottie animations//////////////////
     implementation "com.airbnb.android:lottie:3.4.0"
+    ///////////////////////////Load Gif//////////////////////////
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.17'
     ////////////////////////////////////////////////////////////////
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'

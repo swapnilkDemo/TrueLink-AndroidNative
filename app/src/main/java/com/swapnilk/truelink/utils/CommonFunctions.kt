@@ -1,16 +1,28 @@
 package com.swapnilk.truelink.utils
 
+import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.Dialog
+import android.app.role.RoleManager
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.content.pm.ResolveInfo
 import android.graphics.Color
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.net.Uri
 import android.os.Build
 import android.text.Spannable
 import android.text.SpannableStringBuilder
+import android.text.TextUtils
 import android.text.style.ForegroundColorSpan
 import android.view.View
+import android.view.Window
 import android.view.WindowManager
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
@@ -19,6 +31,7 @@ import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.ozcanalasalvar.library.utils.DateUtils
 import com.ozcanalasalvar.library.view.popup.DatePickerPopup
+import com.swapnilk.truelink.MainActivity
 import com.swapnilk.truelink.R
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -32,7 +45,7 @@ class CommonFunctions(context: Context) {
         try {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             Thread.sleep(300)
-            
+
             //  context.setTheme(R.style.Theme_TrueLink)
             if (Build.VERSION.SDK_INT >= 21) {
                 val window = context.window
@@ -150,5 +163,17 @@ class CommonFunctions(context: Context) {
     fun showToast(context: Context, message: String?) {
         Toast.makeText(context, message, Toast.LENGTH_LONG).show()
 
+    }
+
+
+    /////////////////Check if truelink is default browser///////////////
+    fun isDefaultBrowser(context: Context): Boolean {
+        val browserIntent = Intent("android.intent.action.VIEW", Uri.parse("http://"))
+        val resolveInfo: ResolveInfo? =
+            context.packageManager
+                .resolveActivity(browserIntent, PackageManager.MATCH_DEFAULT_ONLY)
+        // This is the default browser's packageName
+        val packageName = resolveInfo?.activityInfo?.packageName
+        return !TextUtils.isEmpty(packageName) && packageName == "com.swapnilk.truelink"
     }
 }
