@@ -3,13 +3,26 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable-v24/popup_background.xml" value="0.138" />
+        <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable-v24/rect_blue.xml" value="0.138" />
+        <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/background_circle.xml" value="0.138" />
+        <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/background_circle_selected.xml" value="0.138" />
+        <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/background_outline_box_light.xml" value="0.138" />
+        <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/background_round.xml" value="0.138" />
+        <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/background_round_no_border.xml" value="0.138" />
+        <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/backround_outline_box.xml" value="0.138" />
+        <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/ic_faq.xml" value="0.138" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/ic_nav_dashboard.xml" value="0.138" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/ic_nav_shortner.xml" value="0.138" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/ic_permission_browser.xml" value="0.138" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/ic_permission_default.xml" value="0.138" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/ic_permission_notification.xml" value="0.138" />
+        <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/ic_safe_link.xml" value="0.138" />
+        <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/ic_save.xml" value="0.138" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/seekbar_background.xml" value="0.138" />
+        <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/custom_popup.xml" value="0.12072368421052632" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/list_items_circular.xml" value="0.1921875" />
+        <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/list_items_recent_scan.xml" value="0.12138157894736842" />
       </map>
     </option>
   </component>

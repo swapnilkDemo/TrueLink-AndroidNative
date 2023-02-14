@@ -1,5 +1,6 @@
 package com.swapnilk.truelink
 
+import android.app.Activity
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Build
@@ -7,6 +8,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.view.View
 import android.widget.ImageView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -34,8 +36,43 @@ import kotlin.coroutines.CoroutineContext
 
 
 open class MainActivity : AppCompatActivity(), CoroutineScope {
-    companion  object GlobalFields {
-            val INTENT_ACTION_NOTIFICATION = "it.gmariotti.notification"
+    companion object GlobalFields {
+        val INTENT_ACTION_NOTIFICATION = "it.gmariotti.notification"
+
+        @RequiresApi(Build.VERSION_CODES.O)
+        fun checkOverlayPermission(context: MainActivity) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (!Settings.canDrawOverlays(context)) {
+                    // send user to the device settings
+                    val myIntent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
+                    context.startActivity(myIntent)
+                } else {
+                    context.startService()
+                }
+            }
+        } // check for permission again when user grants it from
+
+        @RequiresApi(Build.VERSION_CODES.Q)
+        fun showLauncherSelection(context: MainActivity) {
+            val intent = Intent(Settings.ACTION_MANAGE_DEFAULT_APPS_SETTINGS)
+            context.startActivity(intent)
+           // resultLauncher.launch(intent)
+
+        }
+
+      /*  @RequiresApi(Build.VERSION_CODES.O)
+        private var resultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    // There are no request codes
+                    val data: Intent? = result.data
+                    //doSomeOperations()
+                }
+            }*/
+
+        fun requestPermissions(permission: String) {
+
+        }
     }
 
     ////////////Start Coroutine for Background Task../////////////
@@ -103,9 +140,6 @@ open class MainActivity : AppCompatActivity(), CoroutineScope {
             refreshAccessToken(
                 refreshToken
             )
-
-        //////////////////Check Permissions////////////////
-        checkOverlayPermission()
     }
 
     private fun showToolBar() {
@@ -201,16 +235,4 @@ open class MainActivity : AppCompatActivity(), CoroutineScope {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun checkOverlayPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (!Settings.canDrawOverlays(this)) {
-                // send user to the device settings
-                val myIntent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
-                startActivity(myIntent)
-            } else {
-                startService()
-            }
-        }
-    } // check for permission again when user grants it from
 }

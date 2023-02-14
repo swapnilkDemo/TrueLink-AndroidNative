@@ -142,8 +142,18 @@ meaning regardless of whether they appear in singular or in plural.</span></div>
     <string name="browser_security">Browser Security</string>
     <string name="default_scanner">Default Scanner</string>
     <string name="risk_warning">Your Device is at Risk</string>
+    <string name="draw_over_apps">Allow to draw over other Apps</string>
     <string name="settings_completion">Complete your settings for maximum security</string>
-
+    <string name="accidental_clicks">Prevent accidental clicks on any harmful link</string>
+    <string name="secure_social_apps">Secure social media apps with Notification Access</string>
+    <string name="browsing_security">Activate Broweser Security for safe browsing</string>
+    <string name="set_default">Set Default</string>
+    <string name="enable">Enable</string>
+    <string name="activate">Activate</string>
+    <string name="text1">Set Truelink as your default browser app for enhanced security.</string>
+    <string name="text2">Don\'t worry Truelink redirects safe links to your favorite browser, blocks harmful links for secure browsing.</string>
+    <string name="text3">To secure your social media apps, it is essential to allow notification access permission on your device</string>
+    <string name="text4">To secure your browsing experience on any supported browser, allow the Accessibility permission to activate Browser Security</string>
     <!---->
     <string name="total_scans">Total Scans 1,785</string>
     <string name="domain_icon">domain icon</string>
