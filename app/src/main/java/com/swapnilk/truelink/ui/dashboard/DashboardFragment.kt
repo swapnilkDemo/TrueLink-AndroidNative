@@ -312,22 +312,26 @@ class DashboardFragment : Fragment(), CoroutineScope {
             val response: ApolloResponse<RecentScansQuery.Data> =
                 apolloClient.query(recentScans).execute()
 
-            for (i in response.data?.recentScans?.payload?.results!!) {
-                var resentScansModel = RecentScansModel(
-                    i?.verified!!,
-                    i?.favicon!!,
-                    "domain.com",
-                    i?.full_url!!,
-                    commonFunctions.convertTimeStamp2Date(i?.createdAt!!.toString()),
-                    "i?",
-                    i?.appIcon,
-                    false,
-                    true,
-                    i?.reportSummary?.spam.toString()
+            try {
+                for (i in response.data?.recentScans?.payload?.results!!) {
+                    var resentScansModel = RecentScansModel(
+                        i?.verified!!,
+                        i?.favicon!!,
+                        "domain.com",
+                        i?.full_url!!,
+                        commonFunctions.convertTimeStamp2Date(i?.createdAt!!.toString()),
+                        "i?",
+                        i?.appIcon,
+                        false,
+                        true,
+                        i?.reportSummary?.spam.toString()
 
-                )
-                scanList.add(resentScansModel)
-                loadRecentScans(scanList)
+                    )
+                    scanList.add(resentScansModel)
+                    loadRecentScans(scanList)
+                }
+            } catch (ex: Exception) {
+                ex.stackTrace
             }
 
         }
@@ -396,31 +400,35 @@ class DashboardFragment : Fragment(), CoroutineScope {
                     apolloClient.query(appScanHistory).execute()
                 // for (i in response)
                 println(response.data?.appScanHistory?.payload)
-                for (i in response.data?.appScanHistory?.payload!!) {
-                    var appScansModel = AppDataModel(
-                        R.drawable.ic_no_photo,
-                        i?.overallScans?.totalLinks,
-                        i?.overallScans?.safeLinks,
-                        i?.overallScans?.clickedLinks,
-                        i?.overallScans?.suspicousLinks,
-                        i?.overallScans?.scannedFromNotifications,
-                        i?.overallScans?.scannedWithinBrowser,
-                        i?.overallScans?.verifiedLinks,
-                        "Overall",
-                        R.color.selected_color,
-                        true
+                try {
+                    for (i in response.data?.appScanHistory?.payload!!) {
+                        var appScansModel = AppDataModel(
+                            R.drawable.ic_no_photo,
+                            i?.overallScans?.totalLinks,
+                            i?.overallScans?.safeLinks,
+                            i?.overallScans?.clickedLinks,
+                            i?.overallScans?.suspicousLinks,
+                            i?.overallScans?.scannedFromNotifications,
+                            i?.overallScans?.scannedWithinBrowser,
+                            i?.overallScans?.verifiedLinks,
+                            "Overall",
+                            R.color.selected_color,
+                            true
 
-                    )
-                    appList.add(appScansModel)
-                    tvSafeCount.text = appScansModel.safeLinks.toString()
-                    tvSuspiciousCount.text = appScansModel.suspiciousLinks.toString()
-                    tvBrowserCount.text = appScansModel.scannedWithinBrowser.toString()
-                    tvAppLinkCount.text = appScansModel.scannedFromNotification.toString()
-                    tvTotalCount.text = appScansModel.totalLinks.toString()
-                    tvClickedCount.text = appScansModel.clickedLinks.toString()
-                    tvVerifiedCount.text = appScansModel.verifiedLinks.toString()
+                        )
+                        appList.add(appScansModel)
+                        tvSafeCount.text = appScansModel.safeLinks.toString()
+                        tvSuspiciousCount.text = appScansModel.suspiciousLinks.toString()
+                        tvBrowserCount.text = appScansModel.scannedWithinBrowser.toString()
+                        tvAppLinkCount.text = appScansModel.scannedFromNotification.toString()
+                        tvTotalCount.text = appScansModel.totalLinks.toString()
+                        tvClickedCount.text = appScansModel.clickedLinks.toString()
+                        tvVerifiedCount.text = appScansModel.verifiedLinks.toString()
+                    }
+                    loadTopAppList(appList)
+                } catch (ex: Exception) {
+                    ex.stackTrace
                 }
-                loadTopAppList(appList)
             }
         } catch (ex: ApolloException) {
             ex.stackTrace
