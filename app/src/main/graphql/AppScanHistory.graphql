@@ -1,0 +1,19 @@
+query AppScanHistory($skip: FilterSkip!, $limit: FilterLimit!) {
+    appScanHistory(skip: $skip, limit: $limit) {
+        code
+        success
+        message
+        payload {
+            linksCount
+            overallScans {
+                clickedLinks
+                safeLinks
+                scannedFromNotifications
+                scannedWithinBrowser
+                suspicousLinks
+                totalLinks
+                verifiedLinks
+            }
+        }
+    }
+}

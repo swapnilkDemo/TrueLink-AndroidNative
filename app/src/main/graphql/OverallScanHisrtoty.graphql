@@ -1,0 +1,16 @@
+query OverAllScanHistory {
+    overAllScanHistory {
+        code
+        success
+        message
+        payload {
+            clickedLinks
+            safeLinks
+            scannedFromNotifications
+            scannedWithinBrowser
+            suspicousLinks
+            totalLinks
+            verifiedLinks
+        }
+    }
+}

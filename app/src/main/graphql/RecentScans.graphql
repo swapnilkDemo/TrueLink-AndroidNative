@@ -1,0 +1,26 @@
+query RecentScans($skip: FilterSkip!, $limit: FilterLimit!) {
+    recentScans(skip: $skip, limit: $limit) {
+        code
+        success
+        message
+        payload {
+            results {
+                appIcon
+                category
+                createdAt
+                favicon
+                full_url
+                packageName
+                reportSummary {
+                    spam
+                    malware
+                    phishing
+                    fradulent
+                    others
+                }
+                severity
+                verified
+            }
+        }
+    }
+}
