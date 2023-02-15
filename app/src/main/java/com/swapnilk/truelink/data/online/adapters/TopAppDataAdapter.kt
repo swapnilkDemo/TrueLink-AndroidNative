@@ -25,15 +25,17 @@ class TopAppDataAdapter(private val appList: ArrayList<AppDataModel>, val contex
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val appDataModel = appList[position]
+        if (appDataModel.isSelected == true)
+            holder.ivAppIcon.background = context.getDrawable(R.drawable.background_circle_selected)
         /* Picasso.with(context)
              .load(appDataModel.clickedLinks)
              .into(holder.ivAppIcon)*/
-        holder.ivAppIcon.setImageDrawable(context.getDrawable(appDataModel.appIconUrl))
-        if (appDataModel.appLinkCount < 99)
-            holder.tvBadge.text = appDataModel.appLinkCount.toString()
+        holder.ivAppIcon.setImageDrawable(appDataModel.appIconUrl?.let { context.getDrawable(it) })
+        if (appDataModel.totalLinks!! < 99)
+            holder.tvBadge.text = appDataModel.totalLinks.toString()
         else
             holder.tvBadge.text = "99+"
-        setTextViewDrawableColor(holder.tvBadge, appDataModel.bgColor)
+        appDataModel.bgColor?.let { setTextViewDrawableColor(holder.tvBadge, it) }
         holder.tvAppName.text = appDataModel.appName
     }
 
@@ -45,6 +47,7 @@ class TopAppDataAdapter(private val appList: ArrayList<AppDataModel>, val contex
         var ivAppIcon: ImageView = itemView.findViewById(R.id.iv_app)
         var tvBadge: TextView = itemView.findViewById(R.id.tv_badge)
         var tvAppName: TextView = itemView.findViewById(R.id.tv_app_name)
+
     }
 
     private fun setTextViewDrawableColor(textView: TextView, color: Int) {

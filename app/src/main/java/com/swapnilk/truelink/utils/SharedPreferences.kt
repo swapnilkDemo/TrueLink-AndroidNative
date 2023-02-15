@@ -1,7 +1,10 @@
 package com.swapnilk.truelink.utils
 
+import android.app.ActivityManager
 import android.content.Context
 import android.content.SharedPreferences
+import com.swapnilk.truelink.service.NotificationService
+
 
 class SharedPreferences(context: Context) {
     private val mApppref: String = "mAppPref"
@@ -87,6 +90,16 @@ class SharedPreferences(context: Context) {
 
     fun getRefreshToken(): String? {
         return sharedPreferences.getString("refreshToken", "")
+    }
+
+    fun isNLServiceRunning(context: Context): Boolean {
+        val manager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager?
+        for (service in manager!!.getRunningServices(Int.MAX_VALUE)) {
+            if (NotificationService::class.java.name == service.service.className) {
+                return true
+            }
+        }
+        return false
     }
 
 }

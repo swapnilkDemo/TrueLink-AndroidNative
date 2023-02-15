@@ -17,10 +17,17 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.apollographql.apollo3.ApolloClient
+import com.apollographql.apollo3.api.ApolloResponse
+import com.apollographql.apollo3.exception.ApolloException
+import com.apollographql.apollo3.network.okHttpClient
+import com.example.AppScanHistoryQuery
+import com.example.RecentScansQuery
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.tabs.TabLayout
 import com.swapnilk.truelink.MainActivity
 import com.swapnilk.truelink.R
+import com.swapnilk.truelink.data.online.AuthorizationInterceptor
 import com.swapnilk.truelink.data.online.adapters.RecentScansAdapter
 import com.swapnilk.truelink.data.online.adapters.TopAppDataAdapter
 import com.swapnilk.truelink.data.online.model.AppDataModel
@@ -28,9 +35,20 @@ import com.swapnilk.truelink.data.online.model.RecentScansModel
 import com.swapnilk.truelink.databinding.FragmentDashboardBinding
 import com.swapnilk.truelink.ui.home.HomeViewModel
 import com.swapnilk.truelink.utils.CommonFunctions
+import com.swapnilk.truelink.utils.SharedPreferences
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import okhttp3.OkHttpClient
 import pl.droidsonroids.gif.GifImageView
+import kotlin.coroutines.CoroutineContext
 
-class DashboardFragment : Fragment() {
+class DashboardFragment : Fragment(), CoroutineScope {
+    ////////////Start Coroutine for Background Task../////////////
+    private var job: Job = Job()
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
 
     private var _binding: FragmentDashboardBinding? = null
 
@@ -44,7 +62,19 @@ class DashboardFragment : Fragment() {
     lateinit var imageViewBrowser: ImageView
     lateinit var cvPermissions: MaterialCardView
     lateinit var tvFilter: AutoCompleteTextView
+    lateinit var tvSafeCount: TextView
+    lateinit var tvSuspiciousCount: TextView
+    lateinit var tvBrowserCount: TextView
+    lateinit var tvAppLinkCount: TextView
+    lateinit var tvTotalCount: TextView
+    lateinit var tvClickedCount: TextView
+    lateinit var tvVerifiedCount: TextView
+
+
     private lateinit var commonFunctions: CommonFunctions
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var apolloClient: ApolloClient
+
     var progress: Int = 0
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -53,6 +83,22 @@ class DashboardFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        commonFunctions = CommonFunctions(requireContext())
+        sharedPreferences = SharedPreferences(requireContext())
+
+        //////////////////////////////Get Apollo Client//////////////////
+        try {
+            ///////////////////////Initialize ApolloClient////////////////////////////
+            val okHttpClient = OkHttpClient.Builder()
+                .addInterceptor(AuthorizationInterceptor(requireContext().applicationContext))
+                .build()
+            apolloClient = ApolloClient.Builder().serverUrl("https://truelink.neki.dev/graphql/")
+                .okHttpClient(okHttpClient).build()
+
+        } catch (e: Exception) {
+            e.stackTrace
+        }
+
         val homeViewModel =
             ViewModelProvider(this)[HomeViewModel::class.java]
 
@@ -64,11 +110,11 @@ class DashboardFragment : Fragment() {
              textView.text = it
          }*/
 
-        loadTopAppList()
-        loadTabs()
-        loadRecentScans()
+        createAppList()
+        createRecentScantList()
         setFilter()
-        commonFunctions = CommonFunctions(requireContext())
+        loadTabs()
+
         if (!commonFunctions.isDefaultBrowser(requireContext()))
             showPopupWindow(
                 requireContext(),
@@ -118,12 +164,20 @@ class DashboardFragment : Fragment() {
         imageViewBrowser = binding.ivBrowser
         cvPermissions = binding.cvPermissions
         tvFilter = binding.tvFilter
+
+        tvSafeCount = binding.tvSafeCount
+        tvSuspiciousCount = binding.tvSuspiciousCount
+        tvTotalCount = binding.tvTotalCount
+        tvClickedCount = binding.tvClickedCount
+        tvVerifiedCount = binding.tvVerifiedCount
+        tvAppLinkCount = binding.tvAppLinkCount
+        tvBrowserCount = binding.tvBrowserCount
     }
 
-    private fun loadTopAppList() {
+    private fun loadTopAppList(appList: ArrayList<AppDataModel>) {
         binding.rvApps.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = TopAppDataAdapter(createAppList(), requireContext())
+            adapter = TopAppDataAdapter(appList, requireContext())
 
         }
 
@@ -171,11 +225,11 @@ class DashboardFragment : Fragment() {
         })
     }
 
-    private fun loadRecentScans() {
+    private fun loadRecentScans(scanList: ArrayList<RecentScansModel>) {
 
         binding.rvRecentScan.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            adapter = RecentScansAdapter(createRecentScantList(), requireContext())
+            adapter = RecentScansAdapter(scanList, requireContext())
             var dividerItemDecoration = DividerItemDecoration(
                 context,
                 (layoutManager as LinearLayoutManager).orientation
@@ -187,122 +241,190 @@ class DashboardFragment : Fragment() {
 
     private fun createRecentScantList(): ArrayList<RecentScansModel> {
         var scanList = ArrayList<RecentScansModel>()
-        scanList.add(
-            RecentScansModel(
-                true,
-                R.drawable.ic_no_photo,
-                "amazon.com",
-                "http:///phishingUrlsample/sddsvsdvsdvsdvs",
-                "12 : 19 PM",
-                "Whatsapp",
-                R.drawable.ic_no_photo_small,
-                false,
-                true,
-                "89 spam reports"
+        /* scanList.add(
+             RecentScansModel(
+                 true,
+                 R.drawable.ic_no_photo,
+                 "amazon.com",
+                 "http:///phishingUrlsample/sddsvsdvsdvsdvs",
+                 "12 : 19 PM",
+                 "Whatsapp",
+                 R.drawable.ic_no_photo_small,
+                 false,
+                 true,
+                 "89 spam reports"
 
-            )
+             )
+         )
+
+         scanList.add(
+             RecentScansModel(
+                 true,
+                 R.drawable.ic_no_photo,
+                 "flipkart.com",
+                 "http:///phishingUrlsample/sddsvsdvsdvsdvs",
+                 "12 : 19 PM",
+                 "Facebook",
+                 R.drawable.ic_no_photo_small,
+                 false,
+                 true,
+                 "89 spam reports"
+
+             )
+         )
+
+         scanList.add(
+             RecentScansModel(
+                 false,
+                 R.drawable.ic_no_photo,
+                 "facebook.com",
+                 "http:///phishingUrlsample/sddsvsdvsdvsdvs",
+                 "12 : 19 PM",
+                 "Telegram",
+                 R.drawable.ic_no_photo_small,
+                 true,
+                 false,
+                 "89 spam reports"
+
+             )
+         )
+
+         scanList.add(
+             RecentScansModel(
+                 true,
+                 R.drawable.ic_no_photo,
+                 "sbi.com",
+                 "http:///phishingUrlsample/sddsvsdvsdvsdvs",
+                 "12 : 19 PM",
+                 "Instagram",
+                 R.drawable.ic_no_photo_small,
+                 false,
+                 true,
+                 "89 spam reports"
+
+             )
+         )*/
+        val recentScans = RecentScansQuery(
+            0,
+            100
         )
+        launch {
+            val response: ApolloResponse<RecentScansQuery.Data> =
+                apolloClient.query(recentScans).execute()
 
-        scanList.add(
-            RecentScansModel(
-                true,
-                R.drawable.ic_no_photo,
-                "flipkart.com",
-                "http:///phishingUrlsample/sddsvsdvsdvsdvs",
-                "12 : 19 PM",
-                "Facebook",
-                R.drawable.ic_no_photo_small,
-                false,
-                true,
-                "89 spam reports"
+            for (i in response.data?.recentScans?.payload?.results!!) {
+                var resentScansModel = RecentScansModel(
+                    i?.verified!!,
+                    i?.favicon!!,
+                    "domain.com",
+                    i?.full_url!!,
+                    commonFunctions.convertTimeStamp2Date(i?.createdAt!!.toString()),
+                    "i?",
+                    i?.appIcon,
+                    false,
+                    true,
+                    i?.reportSummary?.spam.toString()
 
-            )
-        )
+                )
+                scanList.add(resentScansModel)
+                loadRecentScans(scanList)
+            }
 
-        scanList.add(
-            RecentScansModel(
-                false,
-                R.drawable.ic_no_photo,
-                "facebook.com",
-                "http:///phishingUrlsample/sddsvsdvsdvsdvs",
-                "12 : 19 PM",
-                "Telegram",
-                R.drawable.ic_no_photo_small,
-                true,
-                false,
-                "89 spam reports"
+        }
 
-            )
-        )
 
-        scanList.add(
-            RecentScansModel(
-                true,
-                R.drawable.ic_no_photo,
-                "sbi.com",
-                "http:///phishingUrlsample/sddsvsdvsdvsdvs",
-                "12 : 19 PM",
-                "Instagram",
-                R.drawable.ic_no_photo_small,
-                false,
-                true,
-                "89 spam reports"
-
-            )
-        )
         return scanList
     }
 
     private fun createAppList(): ArrayList<AppDataModel> {
         var appList = ArrayList<AppDataModel>()
-        appList.add(
-            AppDataModel(
-                R.drawable.ic_no_photo,
-                144,
-                "Overall",
-                R.color.bottom_nav_color,
-                false
-            )
-        )
+        /* appList.add(
+             AppDataModel(
+                 R.drawable.ic_no_photo,
+                 144,
+                 "Overall",
+                 R.color.bottom_nav_color,
+                 false
+             )
+         )
 
-        appList.add(
-            AppDataModel(
-                R.drawable.ic_no_photo,
-                100,
-                "whatsapp",
-                R.color.orange_text,
-                false
-            )
-        )
+         appList.add(
+             AppDataModel(
+                 R.drawable.ic_no_photo,
+                 100,
+                 "whatsapp",
+                 R.color.orange_text,
+                 false
+             )
+         )
 
-        appList.add(
-            AppDataModel(
-                R.drawable.ic_no_photo,
-                40,
-                "Brave",
-                R.color.green,
-                false
-            )
-        )
+         appList.add(
+             AppDataModel(
+                 R.drawable.ic_no_photo,
+                 40,
+                 "Brave",
+                 R.color.green,
+                 false
+             )
+         )
 
-        appList.add(
-            AppDataModel(
-                R.drawable.ic_no_photo,
-                44,
-                "Telegram",
-                R.color.selected_color,
-                false
-            )
+         appList.add(
+             AppDataModel(
+                 R.drawable.ic_no_photo,
+                 44,
+                 "Telegram",
+                 R.color.selected_color,
+                 false
+             )
+         )
+         appList.add(
+             AppDataModel(
+                 R.drawable.ic_no_photo,
+                 44,
+                 "Telegram",
+                 R.color.yellow_text,
+                 false
+             )
+         )*/
+        val appScanHistory = AppScanHistoryQuery(
+            0,
+            100
         )
-        appList.add(
-            AppDataModel(
-                R.drawable.ic_no_photo,
-                44,
-                "Telegram",
-                R.color.yellow_text,
-                false
-            )
-        )
+        try {
+            launch {
+                val response: ApolloResponse<AppScanHistoryQuery.Data> =
+                    apolloClient.query(appScanHistory).execute()
+                // for (i in response)
+                println(response.data?.appScanHistory?.payload)
+                for (i in response.data?.appScanHistory?.payload!!) {
+                    var appScansModel = AppDataModel(
+                        R.drawable.ic_no_photo,
+                        i?.overallScans?.totalLinks,
+                        i?.overallScans?.safeLinks,
+                        i?.overallScans?.clickedLinks,
+                        i?.overallScans?.suspicousLinks,
+                        i?.overallScans?.scannedFromNotifications,
+                        i?.overallScans?.scannedWithinBrowser,
+                        i?.overallScans?.verifiedLinks,
+                        "Overall",
+                        R.color.selected_color,
+                        true
+
+                    )
+                    appList.add(appScansModel)
+                    tvSafeCount.text = appScansModel.safeLinks.toString()
+                    tvSuspiciousCount.text = appScansModel.suspiciousLinks.toString()
+                    tvBrowserCount.text = appScansModel.scannedWithinBrowser.toString()
+                    tvAppLinkCount.text = appScansModel.scannedFromNotification.toString()
+                    tvTotalCount.text = appScansModel.totalLinks.toString()
+                    tvClickedCount.text = appScansModel.clickedLinks.toString()
+                    tvVerifiedCount.text = appScansModel.verifiedLinks.toString()
+                }
+                loadTopAppList(appList)
+            }
+        } catch (ex: ApolloException) {
+            ex.stackTrace
+        }
         return appList
     }
 
@@ -346,18 +468,18 @@ class DashboardFragment : Fragment() {
             info1.visibility = View.GONE
             gifLoader.visibility = View.GONE
             rvAppList.visibility = View.VISIBLE
+        } else if (action == "notification") {
+            info1.visibility = View.GONE
+            gifLoader.visibility = View.GONE
         }
         yesBtn.setOnClickListener {
             dialog.dismiss()
             if (action == "overlay")
-                MainActivity.checkOverlayPermission(context as MainActivity)
             else if (action == "notification")
-                MainActivity.requestPermissions("")
+                MainActivity.allowNotificationAccess(context as MainActivity)
             else if (action == "browser") {
                 run {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        MainActivity.showLauncherSelection(context as MainActivity)
-                    }
+                    MainActivity.showLauncherSelection(context as MainActivity)
 
                 }
             }
@@ -370,11 +492,22 @@ class DashboardFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onResume() {
         super.onResume()
-        if (commonFunctions.checkConnection(requireContext())) {
+        if (commonFunctions.isDefaultBrowser(requireContext())) {
             progress = 33
-            if (Settings.canDrawOverlays(requireContext()))
+            if (Settings.canDrawOverlays(requireContext())) {
                 progress = 66
-            else {
+                /*  if (!sharedPreferences.isNLServiceRunning(requireContext())) {
+                      showPopupWindow(
+                          requireContext(),
+                          getString(R.string.notification_access),
+                          getString(R.string.text3),
+                          "",
+                          getString(R.string.allow),
+                          R.drawable.ic_read_ntif,
+                          "notification"
+                      )
+                  }*/
+            } else {
                 showPopupWindow(
                     requireContext(),
                     getString(R.string.draw_over_apps),

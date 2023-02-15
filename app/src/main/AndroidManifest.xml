@@ -8,6 +8,9 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission
+        android:name="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
+        tools:ignore="ProtectedPermissions" />
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -72,12 +75,12 @@
             android:exported="true"
             android:theme="@style/Theme.TrueLink.NoActionBar">
 
-            <intent-filter
-                android:label="scan">
+            <intent-filter android:label="scan">
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="http" />
                 <data android:scheme="https" />
 
@@ -94,6 +97,19 @@
             </intent-filter>
         </service>
         <service android:name=".service.PopupService" />
+        <service
+            android:name=".service.NotificationService"
+            android:debuggable="true"
+            android:exported="false"
+            android:label="@string/service_name"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
+            tools:ignore="HardcodedDebugMode">
+            <intent-filter>
+                <action android:name="android.service.
+                 notification.NotificationListenerService" />
+            </intent-filter>
+
+        </service>
 
         <provider
             android:name="androidx.core.content.FileProvider"

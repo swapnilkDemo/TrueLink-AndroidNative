@@ -161,22 +161,41 @@
                 android:visibility="gone"
                 app:drawableLeftCompat="@drawable/ic_bullet" />
 
-            <TextView
-                android:id="@+id/tv_source"
-                style="@style/textViewFontInter"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end|center"
                 android:background="@drawable/background_round_no_border"
                 android:backgroundTint="@color/secondary_color"
-                android:drawablePadding="@dimen/margin5"
-                android:gravity="end|center_vertical"
-                android:paddingStart="@dimen/margin5"
-                android:paddingEnd="@dimen/margin5"
-                android:text="@string/source"
-                android:textColor="@color/gray_200"
-                android:textSize="@dimen/text12"
-                app:drawableRightCompat="@drawable/ic_verified_link_small" />
+                android:orientation="horizontal"
+                android:padding="@dimen/margin1">
+
+                <TextView
+                    android:id="@+id/tv_source"
+                    style="@style/textViewFontInter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|center"
+
+                    android:gravity="end|center_vertical"
+                    android:paddingStart="@dimen/margin5"
+                    android:paddingEnd="@dimen/margin5"
+                    android:text="@string/source"
+                    android:textColor="@color/gray_200"
+                    android:textSize="@dimen/text12" />
+
+                <ImageView
+                    android:id="@+id/iv_app_icon"
+                    android:layout_width="@dimen/margin12"
+                    android:layout_height="@dimen/margin12"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/margin5"
+                    android:gravity="end|center_vertical" />
+                <!-- android:background="@drawable/background_round_no_border"
+                    android:backgroundTint="@color/secondary_color"
+                    android:drawablePadding="@dimen/margin5"
+                    app:drawableRightCompat="@drawable/ic_verified_link_small"-->
+            </LinearLayout>
+
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

@@ -140,6 +140,7 @@ meaning regardless of whether they appear in singular or in plural.</span></div>
     <string name="social_apps">Social Apps</string>
     <string name="browser_security">Browser Security</string>
     <string name="default_scanner">Default Scanner</string>
+    <string name="notification_access">Allow to access notifications</string>
     <string name="risk_warning">Your Device is at Risk</string>
     <string name="draw_over_apps">Allow to draw over other Apps</string>
     <string name="settings_completion">Complete your settings for maximum security</string>
@@ -162,6 +163,7 @@ meaning regardless of whether they appear in singular or in plural.</span></div>
         <item>@string/quarter</item>
     </string-array>
 
+    <string name="allow">Allow</string>
 
     <!---->
 
@@ -200,4 +202,5 @@ meaning regardless of whether they appear in singular or in plural.</span></div>
     <string name="category_and_scans">Social Media | Total Scans 1,785</string>
     <string name="created_on">Since 1996</string>
     <string name="alert_description">Alert Description</string>
+    <string name="service_name">Notification Service</string>
 </resources>

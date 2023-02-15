@@ -244,6 +244,7 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/tvSafeCount"
                                 style="@style/textViewFontSora"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -298,6 +299,7 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/tvSuspiciousCount"
                                 style="@style/textViewFontSora"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -358,6 +360,7 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/tvBrowserCount"
                                 style="@style/textViewFontSora"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -411,6 +414,7 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/tvAppLinkCount"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
@@ -462,6 +466,7 @@
                                 android:src="@drawable/ic_total_links" />
 
                             <TextView
+                                android:id="@+id/tvTotalCount"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
@@ -506,6 +511,7 @@
                                 android:src="@drawable/ic_clicked" />
 
                             <TextView
+                                android:id="@+id/tvClickedCount"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
@@ -539,6 +545,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
+                            android:layout_marginBottom="@dimen/margin5"
                             android:gravity="start"
                             android:orientation="horizontal">
 
@@ -550,6 +557,7 @@
                                 android:src="@drawable/ic_verified_link" />
 
                             <TextView
+                                android:id="@+id/tvVerifiedCount"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"

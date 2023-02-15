@@ -33,6 +33,7 @@ import com.swapnilk.truelink.service.MyReceiver
 import com.swapnilk.truelink.ui.user_profile.UpdateUserProfile
 import com.swapnilk.truelink.utils.CommonFunctions
 import com.swapnilk.truelink.utils.SharedPreferences
+import com.truelink.ScanResultsActivity
 import kotlinx.coroutines.*
 import java.io.DataInputStream
 import java.io.IOException
@@ -61,11 +62,14 @@ open class MainActivity : AppCompatActivity(), CoroutineScope {
 
         @RequiresApi(Build.VERSION_CODES.Q)
         fun showLauncherSelection(context: MainActivity) {
-            val intent = Intent(Settings.ACTION_MANAGE_DEFAULT_APPS_SETTINGS)
-            context.startActivity(intent)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                val intent = Intent(Settings.ACTION_MANAGE_DEFAULT_APPS_SETTINGS)
+                context.startActivity(intent)
+            }
             // resultLauncher.launch(intent)
 
         }
+
 
         /*  @RequiresApi(Build.VERSION_CODES.O)
           private var resultLauncher =
@@ -79,6 +83,11 @@ open class MainActivity : AppCompatActivity(), CoroutineScope {
 
         fun requestPermissions(permission: String) {
 
+        }
+
+        fun allowNotificationAccess(mainActivity: MainActivity) {
+            val intent = Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS")
+            mainActivity.startActivity(intent)
         }
     }
 
@@ -98,7 +107,7 @@ open class MainActivity : AppCompatActivity(), CoroutineScope {
 
     //  private lateinit var apolloHelper: ApolloHelper
     private lateinit var apolloClient: ApolloClient
-    protected var mReceiver: MyReceiver = MyReceiver()
+    private var mReceiver: MyReceiver = MyReceiver()
     override fun onDestroy() {
         super.onDestroy()
         job.cancel()
@@ -107,6 +116,7 @@ open class MainActivity : AppCompatActivity(), CoroutineScope {
     override fun onResume() {
         super.onResume()
         // showToolBar()
+        //  job.start()
         if (mReceiver == null) mReceiver = MyReceiver()
         registerReceiver(mReceiver, IntentFilter(INTENT_ACTION_NOTIFICATION))
     }
@@ -153,7 +163,10 @@ open class MainActivity : AppCompatActivity(), CoroutineScope {
         val action = intent.action
         val data = intent.data
         if (data != null) {
-            scanLink(data)
+          /*  var intent =Intent(this@MainActivity, ScanResultsActivity::class.java)
+            intent.putExtra("dara", data)
+            startActivity(intent)*/
+             scanLink(data)
         }
     }
 
@@ -172,9 +185,9 @@ open class MainActivity : AppCompatActivity(), CoroutineScope {
         val scanLinkInput = ScanLinkInput(
             data.toString(),
             ScanTriggerType.MANUAL,
-            Optional.present(data.userInfo),
+            Optional.Absent,
             Optional.present(AppType.SOCIAL_MEDIA),
-            Optional.present(data.scheme),
+            Optional.Absent,
             Optional.Absent,
             Optional.Absent,
             Optional.Absent,
@@ -185,13 +198,17 @@ open class MainActivity : AppCompatActivity(), CoroutineScope {
         )
 
         try {
-            launch {
-                var response: ApolloResponse<ScanLinkMutation.Data> =
-                    apolloClient.mutation(scanLink).execute()
-                handleScanResult(response)
-            }
-        } catch (e: ApolloException) {
+            if (job != null)
+                launch {
 
+                    var response: ApolloResponse<ScanLinkMutation.Data> =
+                        apolloClient.mutation(scanLink).execute()
+                    handleScanResult(response)
+                }
+            else
+                commonFunctions.showToast(this, "Scope ended")
+        } catch (e: ApolloException) {
+            e.stackTrace
         }
     }
 
