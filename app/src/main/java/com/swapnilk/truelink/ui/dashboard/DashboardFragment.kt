@@ -44,7 +44,7 @@ import okhttp3.OkHttpClient
 import pl.droidsonroids.gif.GifImageView
 import kotlin.coroutines.CoroutineContext
 
-class DashboardFragment : Fragment(), CoroutineScope {
+class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
     ////////////Start Coroutine for Background Task../////////////
     private var job: Job = Job()
     override val coroutineContext: CoroutineContext
@@ -109,7 +109,9 @@ class DashboardFragment : Fragment(), CoroutineScope {
          homeViewModel.text.observe(viewLifecycleOwner) {
              textView.text = it
          }*/
-
+        //////////////////Initialize listner////////////
+        mListener = this
+        ///////////////////////////////////////////////
         createAppList()
         createRecentScantList()
         setFilter()
@@ -176,8 +178,8 @@ class DashboardFragment : Fragment(), CoroutineScope {
 
     private fun loadTopAppList(appList: ArrayList<AppDataModel>) {
         binding.rvApps.apply {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = TopAppDataAdapter(appList, requireContext())
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, true)
+            adapter = TopAppDataAdapter(appList, requireContext(), 0)
 
         }
 
@@ -411,19 +413,13 @@ class DashboardFragment : Fragment(), CoroutineScope {
                             i?.overallScans?.scannedFromNotifications,
                             i?.overallScans?.scannedWithinBrowser,
                             i?.overallScans?.verifiedLinks,
-                            "Overall",
+                            i?.packageName,
                             R.color.selected_color,
-                            true
+                            false
 
                         )
                         appList.add(appScansModel)
-                        tvSafeCount.text = appScansModel.safeLinks.toString()
-                        tvSuspiciousCount.text = appScansModel.suspiciousLinks.toString()
-                        tvBrowserCount.text = appScansModel.scannedWithinBrowser.toString()
-                        tvAppLinkCount.text = appScansModel.scannedFromNotification.toString()
-                        tvTotalCount.text = appScansModel.totalLinks.toString()
-                        tvClickedCount.text = appScansModel.clickedLinks.toString()
-                        tvVerifiedCount.text = appScansModel.verifiedLinks.toString()
+
                     }
                     loadTopAppList(appList)
                 } catch (ex: Exception) {
@@ -546,5 +542,20 @@ class DashboardFragment : Fragment(), CoroutineScope {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onAppSelected(appScansModel: AppDataModel) {
+        tvSafeCount.text = appScansModel.safeLinks.toString()
+        tvSuspiciousCount.text = appScansModel.suspiciousLinks.toString()
+        tvBrowserCount.text = appScansModel.scannedWithinBrowser.toString()
+        tvAppLinkCount.text = appScansModel.scannedFromNotification.toString()
+        tvTotalCount.text = appScansModel.totalLinks.toString()
+        tvClickedCount.text = appScansModel.clickedLinks.toString()
+        tvVerifiedCount.text = appScansModel.verifiedLinks.toString()
+    }
+
+    companion object GlobalProperties {
+        lateinit var mListener: DataChangedInterface
+
     }
 }

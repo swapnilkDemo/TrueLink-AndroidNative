@@ -14,6 +14,7 @@ query AppScanHistory($skip: FilterSkip!, $limit: FilterLimit!) {
                 totalLinks
                 verifiedLinks
             }
+            packageName
         }
     }
 }

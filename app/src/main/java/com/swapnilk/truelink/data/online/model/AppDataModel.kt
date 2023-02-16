@@ -9,7 +9,7 @@ data class AppDataModel(
     val scannedFromNotification: Int?,
     val scannedWithinBrowser: Int?,
     val verifiedLinks: Int?,
-    val appName: String?,
+    val packageName: String?,
     val bgColor: Int?,
     val isSelected: Boolean?
 )

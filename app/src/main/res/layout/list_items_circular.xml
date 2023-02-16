@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:layout_margin="@dimen/margin5"
+    android:background="?android:attr/selectableItemBackground"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -20,7 +21,7 @@
             android:background="@drawable/background_circle"
             android:gravity="center"
             android:padding="@dimen/margin20"
-            android:src="@drawable/__icon__edit"
+            android:src="@drawable/ic_overall"
             app:backgroundTint="@color/light_background" />
 
         <TextView
@@ -50,7 +51,7 @@
         android:layout_gravity="center"
         android:layout_margin="@dimen/margin5"
         android:gravity="center"
-        android:text="App Name"
+        android:text="Overall"
         android:textColor="@color/white"
         android:textSize="@dimen/text14" />
 </LinearLayout>
