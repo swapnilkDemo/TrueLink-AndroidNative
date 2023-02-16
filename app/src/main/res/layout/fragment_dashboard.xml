@@ -605,7 +605,7 @@
                     android:background="@color/light_background"
                     android:elevation="4dp"
                     app:tabGravity="fill"
-                    app:tabIconTint="@color/selected_color"
+                    app:tabIconTint="@color/tab_selector"
                     app:tabIndicatorColor="@color/selected_color"
                     app:tabInlineLabel="true"
                     app:tabMaxWidth="0dp"
@@ -644,17 +644,18 @@
                         app:iconTint="@color/selected_color" />
                 </com.google.android.material.tabs.TabLayout>
 
-                <com.github.mikephil.charting.charts.HorizontalBarChart
-                    android:id="@+id/barchart"
+
+                <androidx.viewpager.widget.ViewPager
+                    android:id="@+id/viewPager"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/margin250" />
-
 
                 <TextView
                     android:id="@+id/tv_recent_header"
                     style="@style/textViewFontSora"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin10"
                     android:text="@string/recent_scan"
                     android:textColor="@color/white"
                     android:textSize="@dimen/text14" />

@@ -30,10 +30,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.swapnilk.truelink.databinding.ActivityMainBinding
 import com.swapnilk.truelink.service.ForegroundService
 import com.swapnilk.truelink.service.MyReceiver
+import com.swapnilk.truelink.ui.SigninActivity
 import com.swapnilk.truelink.ui.user_profile.UpdateUserProfile
 import com.swapnilk.truelink.utils.CommonFunctions
 import com.swapnilk.truelink.utils.SharedPreferences
-import com.truelink.ScanResultsActivity
 import kotlinx.coroutines.*
 import java.io.DataInputStream
 import java.io.IOException
@@ -57,6 +57,14 @@ open class MainActivity : AppCompatActivity(), CoroutineScope {
                 } else {
                     context.startService()
                 }
+            } else {
+                if (!Settings.canDrawOverlays(context)) {
+                    val intent = Intent(
+                        Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                        Uri.parse("package:" + context.packageName)
+                    )
+                    context.startActivityForResult(intent, 5469)
+                }
             }
         } // check for permission again when user grants it from
 
@@ -65,6 +73,11 @@ open class MainActivity : AppCompatActivity(), CoroutineScope {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 val intent = Intent(Settings.ACTION_MANAGE_DEFAULT_APPS_SETTINGS)
                 context.startActivity(intent)
+            } else {
+                context.startActivityForResult(
+                    Intent(Settings.ACTION_MANAGE_DEFAULT_APPS_SETTINGS),
+                    0
+                )
             }
             // resultLauncher.launch(intent)
 
@@ -163,10 +176,10 @@ open class MainActivity : AppCompatActivity(), CoroutineScope {
         val action = intent.action
         val data = intent.data
         if (data != null) {
-          /*  var intent =Intent(this@MainActivity, ScanResultsActivity::class.java)
-            intent.putExtra("dara", data)
-            startActivity(intent)*/
-             scanLink(data)
+            /*  var intent =Intent(this@MainActivity, ScanResultsActivity::class.java)
+              intent.putExtra("dara", data)
+              startActivity(intent)*/
+            scanLink(data)
         }
     }
 
@@ -286,6 +299,16 @@ open class MainActivity : AppCompatActivity(), CoroutineScope {
                 this@MainActivity,
                 navView,
                 getString(R.string.token_refresh),
+                false
+            )
+        } else if (response?.data?.tokenUpdate?.code == 400) {
+            sharedPreferences.setLoggedIn(false)
+            startActivity(Intent(this@MainActivity, SigninActivity::class.java))
+        } else {
+            commonFunctions.showErrorSnackBar(
+                this@MainActivity,
+                navView,
+                response?.data?.tokenUpdate?.message!!,
                 false
             )
         }

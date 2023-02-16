@@ -33,7 +33,7 @@ class TopAppDataAdapter(
         return ViewHolder(view)
     }
 
-    @SuppressLint("NotifyDataSetChanged")
+    @SuppressLint("NotifyDataSetChanged", "UseCompatLoadingForDrawables", "SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val appDataModel = appList[position]
         if (!TextUtils.isEmpty(appDataModel.packageName)) {
@@ -41,16 +41,17 @@ class TopAppDataAdapter(
             val appDetailsList = getAppNameAndIconFromPackageName(appDataModel.packageName)
             if (appDetailsList.size > 0) {
                 holder.tvAppName.text = appDetailsList[0].applicationInfo.loadLabel(packageManager)
-                val appIon = appDetailsList[0].applicationInfo.loadIcon(packageManager) as Drawable
+                val appIon = packageManager
+                    .getApplicationIcon("com.whatsapp") as Drawable
                 holder.ivAppIcon.setImageDrawable(appIon)
             } else {
+
                 holder.ivAppIcon.setImageDrawable(context.resources.getDrawable(R.drawable.ic_no_photo))
             }
-        } /*else {
-            holder.tvAppName.text = "Overall"
+        } else {
+            holder.tvAppName.text = context.getString(R.string.overall)
             holder.ivAppIcon.setImageDrawable(context.resources.getDrawable(R.drawable.ic_overall))
-        }*/
-        /* */
+        }
 
         if (appDataModel.totalLinks!! < 99)
             holder.tvBadge.text = appDataModel.totalLinks.toString()
@@ -60,14 +61,14 @@ class TopAppDataAdapter(
         holder.tvAppName.text = appDataModel.packageName
 
         if (selectedItem == position) {
-//            appDataModel.isSelected == true
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN)
                 holder.ivAppIcon.setBackgroundDrawable(
                     ContextCompat.getDrawable(context, R.drawable.background_circle_selected)
                 )
             else
                 holder.ivAppIcon.background =
-                    ContextCompat.getDrawable(context, R.drawable.background_circle_selected)
+                    context.resources.getDrawable(R.drawable.background_circle_selected)
+            //  ContextCompat.getDrawable(context, R.drawable.background_circle_selected)
             DashboardFragment.mListener.onAppSelected(appDataModel)
         } else {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN)
@@ -86,10 +87,8 @@ class TopAppDataAdapter(
             val flag: Boolean = appDataModel.isSelected == true
             for (i in 0 until appList.size) {
                 if (getPosition == i) {
-//                    appList[getPosition].isSelected == true
                     selectedItem = getPosition
                 } else {
-//                    appList[getPosition].isSelected == false
                 }
             }
             notifyDataSetChanged()
