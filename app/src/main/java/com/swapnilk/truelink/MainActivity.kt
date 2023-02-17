@@ -301,6 +301,8 @@ open class MainActivity : AppCompatActivity(), CoroutineScope {
                 getString(R.string.token_refresh),
                 false
             )
+            finish()
+            startActivity(Intent(this, MainActivity::class.java))
         } else if (response?.data?.tokenUpdate?.code == 400) {
             sharedPreferences.setLoggedIn(false)
             startActivity(Intent(this@MainActivity, SigninActivity::class.java))
