@@ -75,13 +75,7 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
         //////////////////////////Initialize required objects//////
         sharedPrefs = activity?.let { SharedPreferences(it) }!!
         commonFunctions = activity?.let { CommonFunctions(it) }!!
-        try {
-            apolloClient =
-                ApolloClient.Builder().serverUrl("https://truelink.neki.dev/graphql/").build()
-//            apiHelper = ApiHelper(activity!!)
-        } catch (e: ApolloException) {
-            e.message?.let { Log.d("Exception ", it) }
-        }
+
         // Inflate the layout for this fragment
         viewL = inflater.inflate(R.layout.bottom_sheet_otp, container, false)
         /////////////////Initalize UI////////////////
@@ -148,9 +142,18 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
                 } else {
                     //////////////////Initiate OTPVerification///////////////////
                     morphDoneAndRevert(requireActivity())
-                    if (commonFunctions.checkConnection(requireContext()))
-                        verifyOTP()
-                    else
+                    if (commonFunctions.checkConnection(requireContext())) {
+                        try {
+                            apolloClient =
+                                ApolloClient.Builder()
+                                    .serverUrl("https://truelink.neki.dev/graphql/").build()
+//            apiHelper = ApiHelper(activity!!)
+                            verifyOTP()
+                        } catch (e: ApolloException) {
+                            e.message?.let { Log.d("Exception ", it) }
+                        }
+
+                    } else
                         commonFunctions.showErrorSnackBar(
                             requireContext(),
                             pinView,
@@ -171,7 +174,25 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
 
         textResendOTP.run {
             setOnClickListener {
-                resendOTP()
+                if (commonFunctions.checkConnection(requireContext())) {
+                    try {
+                        apolloClient =
+                            ApolloClient.Builder()
+                                .serverUrl("https://truelink.neki.dev/graphql/").build()
+//            apiHelper = ApiHelper(activity!!)
+                        resendOTP()
+                    } catch (e: ApolloException) {
+                        e.message?.let { Log.d("Exception ", it) }
+                    }
+
+                } else {
+                    commonFunctions.showErrorSnackBar(
+                        requireContext(),
+                        pinView,
+                        getString(R.string.no_internet),
+                        true
+                    )
+                }
             }
         }
     }

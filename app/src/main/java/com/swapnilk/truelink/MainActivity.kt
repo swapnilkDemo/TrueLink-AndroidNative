@@ -141,13 +141,7 @@ open class MainActivity : AppCompatActivity(), CoroutineScope {
         sharedPreferences = SharedPreferences(this@MainActivity)
         commonFunctions = CommonFunctions(this@MainActivity)
         commonFunctions.setStatusBar(this@MainActivity)
-        try {
-            //apolloHelper = ApolloHelper(this@MainActivity)
-            apolloClient =
-                ApolloClient.Builder().serverUrl("https://truelink.neki.dev/graphql/").build()
-        } catch (e: Exception) {
-            e.stackTrace
-        }
+
         //////////////////////////////////////////////////////////////
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -166,16 +160,29 @@ open class MainActivity : AppCompatActivity(), CoroutineScope {
         setUpToolbar()
 
         val refreshToken = sharedPreferences.getRefreshToken();
-        if (!refreshToken.isNullOrEmpty() && commonFunctions.checkConnection(this@MainActivity))
-            refreshAccessToken(
-                refreshToken
-            )
+        if (!refreshToken.isNullOrEmpty()) {
+            if (commonFunctions.checkConnection(this@MainActivity)) {
+                try {
+                    //apolloHelper = ApolloHelper(this@MainActivity)
+                    apolloClient =
+                        ApolloClient.Builder().serverUrl("https://truelink.neki.dev/graphql/")
+                            .build()
+                } catch (e: Exception) {
+                    e.stackTrace
+                }
 
+                refreshAccessToken(
+                    refreshToken
+                )
+            } else commonFunctions.showErrorSnackBar(
+                this, toolbar, getString(R.string.no_internet), true
+            )
+        }
         //////////////////Handle Intent on click on Link//////////////////
         val intent = intent
         val action = intent.action
         val data = intent.data
-        if (data != null) {
+        if (data != null && commonFunctions.checkConnection(this)) {
             /*  var intent =Intent(this@MainActivity, ScanResultsActivity::class.java)
               intent.putExtra("dara", data)
               startActivity(intent)*/
@@ -211,23 +218,21 @@ open class MainActivity : AppCompatActivity(), CoroutineScope {
         )
 
         try {
-            if (job != null)
-                launch {
+            launch {
 
-                    var response: ApolloResponse<ScanLinkMutation.Data> =
-                        apolloClient.mutation(scanLink).execute()
-                    handleScanResult(response)
-                }
-            else
-                commonFunctions.showToast(this, "Scope ended")
+                var response: ApolloResponse<ScanLinkMutation.Data> =
+                    apolloClient.mutation(scanLink).execute()
+                handleScanResult(response)
+            }
         } catch (e: ApolloException) {
             e.stackTrace
         }
     }
 
     //////////////////////////////Handle response of scan link////////////////////
-    private fun handleScanResult(response: ApolloResponse<ScanLinkMutation.Data>) {
+    private suspend fun handleScanResult(response: ApolloResponse<ScanLinkMutation.Data>) {
         commonFunctions.showToast(this@MainActivity, "Links Scanned successfully")
+        yield()
     }
 
     private fun showToolBar() {
@@ -291,7 +296,7 @@ open class MainActivity : AppCompatActivity(), CoroutineScope {
     }
 
     ////////////////////handle refresh token response//////////////////
-    private fun afterResponse(response: ApolloResponse<TokenUpdateMutation.Data>) {
+    private suspend fun afterResponse(response: ApolloResponse<TokenUpdateMutation.Data>) {
         if (response?.data?.tokenUpdate?.success == true) {
             sharedPreferences.setAccessToken(response?.data?.tokenUpdate!!.payload!!.accessToken.toString())
             sharedPreferences.setRefreshToken(response?.data?.tokenUpdate!!.payload!!.refreshToken.toString())
@@ -314,6 +319,7 @@ open class MainActivity : AppCompatActivity(), CoroutineScope {
                 false
             )
         }
+        yield()
     }
 
     ////////////////////////Handle Navigation and Backpress//////////////////
@@ -348,7 +354,8 @@ open class MainActivity : AppCompatActivity(), CoroutineScope {
                 val out: Writer = OutputStreamWriter(theSocket.getOutputStream())
                 out.write("=$domain\r\n")
                 out.flush()
-                val theWhoisStream: DataInputStream = DataInputStream(theSocket.getInputStream())
+                val theWhoisStream: DataInputStream =
+                    DataInputStream(theSocket.getInputStream())
                 var s: String
                 while (theWhoisStream.readLine().also { s = it } != null) {
                     resultado = """

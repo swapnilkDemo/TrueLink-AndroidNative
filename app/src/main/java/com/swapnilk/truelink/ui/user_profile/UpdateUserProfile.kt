@@ -129,22 +129,25 @@ open class UpdateUserProfile : Fragment(), CoroutineScope {
         ////////////////////////////////GET shared Preferences///////////
         sharedPreferences = SharedPreferences(requireActivity())
         commonFunctions = CommonFunctions(requireContext())
-        //////////////////////////////Get Apollo Client//////////////////
-        try {
-            ///////////////////////Initialize ApolloClient////////////////////////////
-            val okHttpClient = OkHttpClient.Builder()
-                .addInterceptor(AuthorizationInterceptor(requireContext().applicationContext))
-                .build()
-            apolloClient = ApolloClient.Builder().serverUrl("https://truelink.neki.dev/graphql/")
-                .okHttpClient(okHttpClient).build()
 
-        } catch (e: Exception) {
-            e.stackTrace
-        }
 
         ////////////////////////////////////////////////////////////////
-        if (commonFunctions.checkConnection(requireContext())) getUserDetails()
-        else commonFunctions.showErrorSnackBar(
+        if (commonFunctions.checkConnection(requireContext())) {
+            //////////////////////////////Get Apollo Client//////////////////
+            try {
+                ///////////////////////Initialize ApolloClient////////////////////////////
+                val okHttpClient = OkHttpClient.Builder()
+                    .addInterceptor(AuthorizationInterceptor(requireContext().applicationContext))
+                    .build()
+                apolloClient =
+                    ApolloClient.Builder().serverUrl("https://truelink.neki.dev/graphql/")
+                        .okHttpClient(okHttpClient).build()
+
+            } catch (e: Exception) {
+                e.stackTrace
+            }
+            getUserDetails()
+        } else commonFunctions.showErrorSnackBar(
             requireContext(), ppvProfile, getString(R.string.no_internet), true
         )
         return root
@@ -207,7 +210,15 @@ open class UpdateUserProfile : Fragment(), CoroutineScope {
     private fun afterResponseProfileUrl(response: ApolloResponse<GetProfileUploadURLQuery.Data>) {
         if (response.data != null) {
             var url = response.data?.getProfileUploadURL!!.payload.toString()
-            UploadImageTask(requireContext(), myBitmap!!).execute(url)
+            if (commonFunctions.checkConnection(requireContext()))
+                UploadImageTask(requireContext(), myBitmap!!).execute(url)
+            else
+                commonFunctions.showErrorSnackBar(
+                    requireContext(),
+                    ppvProfile,
+                    getString(R.string.no_internet),
+                    true
+                )
         }
     }
 
@@ -349,7 +360,15 @@ open class UpdateUserProfile : Fragment(), CoroutineScope {
         btnSave.visibility = View.VISIBLE
 
         btnSave.setOnClickListener {
-            saveUser()
+            if (commonFunctions.checkConnection(requireContext()))
+                saveUser()
+            else
+                commonFunctions.showErrorSnackBar(
+                    requireContext(),
+                    ppvProfile,
+                    getString(R.string.no_internet),
+                    true
+                )
         }//////////////End Save OnClick
     }
 
@@ -586,9 +605,15 @@ open class UpdateUserProfile : Fragment(), CoroutineScope {
         else if (editGender.text.toString().equals("Female", ignoreCase = true)) Gender.FEMALE
         else Gender.OTHERS
 
-        if (myBitmap != null) {
+        if (myBitmap != null && commonFunctions.checkConnection(requireContext())) {
             getProfileUpdateUrl()
-        }
+        } else
+            commonFunctions.showErrorSnackBar(
+                requireContext(),
+                editName,
+                getString(R.string.no_internet),
+                true
+            )
 
         ////////////////Add required parameters//////////////////
         val updateUserInput = UpdateUserInput(

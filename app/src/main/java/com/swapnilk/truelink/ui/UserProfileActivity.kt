@@ -105,18 +105,27 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
         sharedPreferences = SharedPreferences(this@UserProfileActivity)
         commonFunctions = CommonFunctions(this@UserProfileActivity)
         commonFunctions.setStatusBar(this@UserProfileActivity)
-        ///////////////////////Initialize ApolloClient////////////////////////////
-        val okHttpClient = OkHttpClient.Builder()
-            .addInterceptor(AuthorizationInterceptor(this@UserProfileActivity)).build()
-        apolloClient = ApolloClient.Builder().serverUrl("https://truelink.neki.dev/graphql/")
-            .okHttpClient(okHttpClient).build()
+
 
         /////////////////////Initialize UI//////////////
         initialize()
         //////////////////////refresh Token if Expired///////////////////////
         val refreshToken = sharedPreferences.getRefreshToken();
-        if (!refreshToken.isNullOrEmpty() && commonFunctions.checkConnection(this@UserProfileActivity))
-            refreshAccessToken(refreshToken)
+        if (!refreshToken.isNullOrEmpty()) {
+            if (commonFunctions.checkConnection(this@UserProfileActivity)) {
+                ///////////////////////Initialize ApolloClient////////////////////////////
+                val okHttpClient = OkHttpClient.Builder()
+                    .addInterceptor(AuthorizationInterceptor(this@UserProfileActivity)).build()
+                apolloClient =
+                    ApolloClient.Builder().serverUrl("https://truelink.neki.dev/graphql/")
+                        .okHttpClient(okHttpClient).build()
+                refreshAccessToken(refreshToken)
+            } else {
+                commonFunctions.showErrorSnackBar(
+                    this, cardViewFemale, getString(R.string.no_internet), true
+                )
+            }
+        }
         /////////////////Request Permissions////////////
         getUserLocation()
         generateFCMToken()
@@ -340,9 +349,17 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
                 } else {
                     //////////////////Initiate Update///////////////////
                     morphDoneAndRevert(this@UserProfileActivity)
-                    if (commonFunctions.checkConnection(this@UserProfileActivity))
+
+                    if (commonFunctions.checkConnection(this@UserProfileActivity)) {
+                        ///////////////////////Initialize ApolloClient////////////////////////////
+                        val okHttpClient = OkHttpClient.Builder()
+                            .addInterceptor(AuthorizationInterceptor(this@UserProfileActivity))
+                            .build()
+                        apolloClient =
+                            ApolloClient.Builder().serverUrl("https://truelink.neki.dev/graphql/")
+                                .okHttpClient(okHttpClient).build()
                         updateUser()
-                    else
+                    } else
                         commonFunctions.showErrorSnackBar(
                             this@UserProfileActivity,
                             progressButton,

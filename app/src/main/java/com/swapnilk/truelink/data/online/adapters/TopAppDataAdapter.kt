@@ -2,12 +2,14 @@ package com.swapnilk.truelink.data.online.adapters
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.pm.PackageInfo
+import android.content.pm.ApplicationInfo
+import android.content.pm.PackageManager
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.text.TextUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,16 +39,16 @@ class TopAppDataAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val appDataModel = appList[position]
         if (!TextUtils.isEmpty(appDataModel.packageName)) {
-            val packageManager = context.packageManager
-            val appDetailsList = getAppNameAndIconFromPackageName(appDataModel.packageName)
-            if (appDetailsList.size > 0) {
-                holder.tvAppName.text = appDetailsList[0].applicationInfo.loadLabel(packageManager)
-                val appIon = packageManager
-                    .getApplicationIcon("com.whatsapp") as Drawable
-                holder.ivAppIcon.setImageDrawable(appIon)
+            if (getAppIconFromPackageName(appDataModel.packageName!!) != null) {
+                holder.ivAppIcon.setImageDrawable(getAppIconFromPackageName(appDataModel.packageName!!))
             } else {
-
                 holder.ivAppIcon.setImageDrawable(context.resources.getDrawable(R.drawable.ic_no_photo))
+            }
+            if (getAppNameFromPackageName(appDataModel.packageName) != null) {
+                holder.tvAppName.text =
+                    getAppNameFromPackageName(appDataModel.packageName)
+            } else {
+                holder.tvAppName.text = appDataModel.packageName
             }
         } else {
             holder.tvAppName.text = context.getString(R.string.overall)
@@ -58,17 +60,17 @@ class TopAppDataAdapter(
         else
             holder.tvBadge.text = "99+"
         appDataModel.bgColor?.let { setTextViewDrawableColor(holder.tvBadge, it) }
-        holder.tvAppName.text = appDataModel.packageName
 
         if (selectedItem == position) {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN)
-                holder.ivAppIcon.setBackgroundDrawable(
-                    ContextCompat.getDrawable(context, R.drawable.background_circle_selected)
-                )
+                holder.ivAppIcon.background =
+                    context.resources.getDrawable(
+                        R.drawable.background_circle_selected
+                    )
             else
                 holder.ivAppIcon.background =
-                    context.resources.getDrawable(R.drawable.background_circle_selected)
-            //  ContextCompat.getDrawable(context, R.drawable.background_circle_selected)
+                    ContextCompat.getDrawable(context, R.drawable.background_circle_selected)
+
             DashboardFragment.mListener.onAppSelected(appDataModel)
         } else {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN)
@@ -80,11 +82,12 @@ class TopAppDataAdapter(
                     ContextCompat.getDrawable(context, R.drawable.background_circle)
         }
 
+
+
         holder.itemView.setOnClickListener {
             val getPosition =
                 position as Int // Here we get the position that we have set for the checkbox using setTag.
 
-            val flag: Boolean = appDataModel.isSelected == true
             for (i in 0 until appList.size) {
                 if (getPosition == i) {
                     selectedItem = getPosition
@@ -118,21 +121,27 @@ class TopAppDataAdapter(
 
     }
 
-    private fun getAppNameAndIconFromPackageName(packageName: String?): ArrayList<PackageInfo> {
-        val appDetails: ArrayList<PackageInfo> = ArrayList<PackageInfo>()
+    private fun getAppNameFromPackageName(packageName: String?): CharSequence {
+        var applicationInfo: ApplicationInfo? = null
         try {
-            val packageManager = context.packageManager
-            val packageInfoList = packageManager.getInstalledPackages(
-                0
-            );
-            for (i in packageInfoList) {
-                if (i.packageName.equals(packageName)) {
-                    appDetails.add(i)
-                }
-            }
-        } catch (ex: Exception) {
-            ex.stackTrace
+            applicationInfo = context.packageManager.getApplicationInfo(packageName!!, 0)
+        } catch (e: PackageManager.NameNotFoundException) {
+            Log.d("TAG", "The package with the given name cannot be found on the system.")
         }
-        return appDetails
+        return (if (applicationInfo != null) context.packageManager.getApplicationLabel(
+            applicationInfo
+        ) else "Unknown")
     }
+
+    private fun getAppIconFromPackageName(packageName: String): Drawable? {
+        var icon: Drawable? = null
+        try {
+            icon =
+                context.packageManager.getApplicationIcon(packageName)
+        } catch (e: PackageManager.NameNotFoundException) {
+            e.printStackTrace()
+        }
+        return icon;
+    }
+
 }

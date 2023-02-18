@@ -75,13 +75,7 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
         sharedPrefs = SharedPreferences(applicationContext)
         commonFunctions = CommonFunctions(applicationContext)
         commonFunctions.setStatusBar(this@SigninActivity)
-        try {
-            apolloClient =
-                ApolloClient.Builder().serverUrl("https://truelink.neki.dev/graphql/").build()
-//            apiHelper = ApiHelper(this@SigninActivity)
-        } catch (e: ApolloException) {
-            e.message?.let { Log.d("Exception ", it) }
-        }
+
         /////////////Check if previously logged in user////////////
         if (sharedPrefs.isLoggedIn()) startMain()
         else initialize()
@@ -125,7 +119,24 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
                         //circularProgressButton.isEnabled = false
                         //////////////////Initiate Login///////////////////
                         morphDoneAndRevert(this@SigninActivity)
-                        login()
+                        if (commonFunctions.checkConnection(this@SigninActivity)) {
+                            try {
+                                apolloClient =
+                                    ApolloClient.Builder()
+                                        .serverUrl("https://truelink.neki.dev/graphql/").build()
+//            apiHelper = ApiHelper(this@SigninActivity)
+                            } catch (e: ApolloException) {
+                                e.message?.let { Log.d("Exception ", it) }
+                            }
+                            login()
+                        } else {
+                            commonFunctions.showErrorSnackBar(
+                                this@SigninActivity,
+                                editPhone,
+                                getString(R.string.no_internet),
+                                true
+                            )
+                        }
 
                     } else commonFunctions.showErrorSnackBar(
                         this@SigninActivity,
@@ -224,8 +235,7 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
             behavior.skipCollapsed = true
             behavior.peekHeight = SAVE_ALL
         }
-        bottomSheetDialog.findViewById<TextView>(R.id.txt_privacy)
-            ?.setText(Html.fromHtml(getString(R.string.privacy_text)))
+        bottomSheetDialog.findViewById<TextView>(R.id.txt_privacy)?.text = Html.fromHtml(getString(R.string.privacy_text))
 
         bottomSheetDialog.findViewById<CircularProgressButton?>(R.id.btn_accept)
             ?.setOnClickListener {

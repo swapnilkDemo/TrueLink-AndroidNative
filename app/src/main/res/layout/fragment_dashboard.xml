@@ -650,6 +650,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/margin250" />
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_senders"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin10"
+                    android:scrollbars="horizontal"
+                    android:visibility="gone"
+                    tools:listitem="@layout/list_senders_chip" />
+
                 <TextView
                     android:id="@+id/tv_recent_header"
                     style="@style/textViewFontSora"

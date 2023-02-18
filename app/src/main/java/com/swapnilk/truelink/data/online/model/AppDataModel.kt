@@ -1,5 +1,7 @@
 package com.swapnilk.truelink.data.online.model
 
+import com.example.AppScanHistoryQuery
+
 data class AppDataModel(
     val appIconUrl: Int?,
     val totalLinks: Int?,
@@ -11,5 +13,6 @@ data class AppDataModel(
     val verifiedLinks: Int?,
     val packageName: String?,
     val bgColor: Int?,
-    val isSelected: Boolean?
+    val isSelected: Boolean?,
+    val senders: List<AppScanHistoryQuery.Sender?>?
 )

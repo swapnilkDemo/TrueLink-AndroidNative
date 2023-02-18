@@ -5,7 +5,12 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
+import android.content.res.Resources
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.Uri
@@ -25,6 +30,10 @@ import com.google.android.material.snackbar.Snackbar
 import com.ozcanalasalvar.library.utils.DateUtils
 import com.ozcanalasalvar.library.view.popup.DatePickerPopup
 import com.swapnilk.truelink.R
+import java.io.IOException
+import java.io.InputStream
+import java.net.HttpURLConnection
+import java.net.URL
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -167,5 +176,15 @@ class CommonFunctions(context: Context) {
         // This is the default browser's packageName
         val packageName = resolveInfo?.activityInfo?.packageName
         return !TextUtils.isEmpty(packageName) && packageName == "com.swapnilk.truelink"
+    }
+
+    @Throws(IOException::class)
+    fun drawableFromUrl(url: String?): Drawable? {
+        val x: Bitmap
+        val connection: HttpURLConnection = URL(url).openConnection() as HttpURLConnection
+        connection.connect()
+        val input: InputStream = connection.inputStream
+        x = BitmapFactory.decodeStream(input)
+        return BitmapDrawable(Resources.getSystem(), x)
     }
 }

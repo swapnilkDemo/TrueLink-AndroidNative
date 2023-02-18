@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.ApolloResponse
+import com.apollographql.apollo3.api.Optional
 import com.apollographql.apollo3.exception.ApolloException
 import com.apollographql.apollo3.network.okHttpClient
 import com.example.AppScanHistoryQuery
@@ -33,6 +34,7 @@ import com.swapnilk.truelink.MainActivity
 import com.swapnilk.truelink.R
 import com.swapnilk.truelink.data.online.AuthorizationInterceptor
 import com.swapnilk.truelink.data.online.adapters.RecentScansAdapter
+import com.swapnilk.truelink.data.online.adapters.SenderDataAdapter
 import com.swapnilk.truelink.data.online.adapters.TopAppDataAdapter
 import com.swapnilk.truelink.data.online.model.AppDataModel
 import com.swapnilk.truelink.data.online.model.RecentScansModel
@@ -74,7 +76,7 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
     lateinit var tvTotalCount: TextView
     lateinit var tvClickedCount: TextView
     lateinit var tvVerifiedCount: TextView
-
+    lateinit var rvSender: RecyclerView
 
     private lateinit var commonFunctions: CommonFunctions
     private lateinit var sharedPreferences: SharedPreferences
@@ -91,19 +93,6 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
         commonFunctions = CommonFunctions(requireContext())
         sharedPreferences = SharedPreferences(requireContext())
 
-        //////////////////////////////Get Apollo Client//////////////////
-        try {
-            ///////////////////////Initialize ApolloClient////////////////////////////
-            val okHttpClient = OkHttpClient.Builder()
-                .addInterceptor(AuthorizationInterceptor(requireContext().applicationContext))
-                .build()
-            apolloClient = ApolloClient.Builder().serverUrl("https://truelink.neki.dev/graphql/")
-                .okHttpClient(okHttpClient).build()
-
-        } catch (e: Exception) {
-            e.stackTrace
-        }
-
         val homeViewModel =
             ViewModelProvider(this)[HomeViewModel::class.java]
 
@@ -117,8 +106,29 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
         //////////////////Initialize listner////////////
         mListener = this
         ///////////////////////////////////////////////
-        createAppList()
-        createRecentScantList()
+        if (commonFunctions.checkConnection(requireContext())) {
+            //////////////////////////////Get Apollo Client//////////////////
+            try {
+                ///////////////////////Initialize ApolloClient////////////////////////////
+                val okHttpClient = OkHttpClient.Builder()
+                    .addInterceptor(AuthorizationInterceptor(requireContext().applicationContext))
+                    .build()
+                apolloClient =
+                    ApolloClient.Builder().serverUrl("https://truelink.neki.dev/graphql/")
+                        .okHttpClient(okHttpClient).build()
+
+            } catch (e: Exception) {
+                e.stackTrace
+            }
+            createAppList(30, "")
+            createRecentScantList(30, "", null)
+        } else
+            commonFunctions.showErrorSnackBar(
+                requireContext(),
+                rvSender,
+                getString(R.string.no_internet),
+                true
+            )
         setFilter()
         loadTabs()
 
@@ -180,14 +190,15 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
         tvVerifiedCount = binding.tvVerifiedCount
         tvAppLinkCount = binding.tvAppLinkCount
         tvBrowserCount = binding.tvBrowserCount
+
+        rvSender = binding.rvSenders
     }
 
     private fun loadTopAppList(appList: ArrayList<AppDataModel>) {
         binding.rvApps.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, true)
-            adapter = TopAppDataAdapter(appList, requireContext(), 0)
-            // smoothScrollToPosition(0)
-            (layoutManager as LinearLayoutManager).scrollToPositionWithOffset(0, 0)
+            adapter = TopAppDataAdapter(appList, requireContext(), appList.size - 1)
+            scrollToPosition(appList.size - 1)
         }
 
     }
@@ -255,11 +266,19 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
 
     }
 
-    private fun createRecentScantList(): ArrayList<RecentScansModel> {
+    private fun createRecentScantList(
+        filterDay: Int?,
+        packageName: String,
+        sender: List<String>?,
+    ): ArrayList<RecentScansModel> {
         var scanList = ArrayList<RecentScansModel>()
         val recentScans = RecentScansQuery(
             0,
-            100
+            100,
+            Optional.present(packageName),
+            Optional.present(filterDay),
+            Optional.present(sender)
+
         )
         launch {
             val response: ApolloResponse<RecentScansQuery.Data> =
@@ -293,11 +312,15 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
         return scanList
     }
 
-    private fun createAppList(): ArrayList<AppDataModel> {
+    private fun createAppList(queryParam: Int?, packageName: String?): ArrayList<AppDataModel> {
         var appList = ArrayList<AppDataModel>()
         val appScanHistory = AppScanHistoryQuery(
             0,
-            100
+            100,
+            Optional.present(queryParam!!),
+            0,
+            100,
+            Optional.present(packageName)
         )
         try {
             launch {
@@ -318,7 +341,8 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
                             i?.overallScans?.verifiedLinks,
                             i?.packageName,
                             R.color.selected_color,
-                            false
+                            false,
+                            i?.senders
 
                         )
                         appList.add(appScansModel)
@@ -456,6 +480,47 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
         tvTotalCount.text = appScansModel.totalLinks.toString()
         tvClickedCount.text = appScansModel.clickedLinks.toString()
         tvVerifiedCount.text = appScansModel.verifiedLinks.toString()
+        if (appScansModel.senders != null && appScansModel.senders.isNotEmpty()) {
+            rvSender.apply {
+                visibility = View.VISIBLE
+                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                adapter = SenderDataAdapter(
+                    appScansModel.senders,
+                    requireContext(),
+                    appScansModel.packageName
+                )
+                //   scrollToPosition(appList.size - 1)
+            }
+        } else {
+            rvSender.visibility = View.GONE
+        }
+        if (commonFunctions.checkConnection(requireContext()))
+            createRecentScantList(30, appScansModel.packageName.toString(), null)
+        else
+            commonFunctions.showErrorSnackBar(
+                requireContext(),
+                rvSender,
+                getString(R.string.no_internet),
+                true
+            )
+    }
+
+    override fun onSenderSelected(sender: AppScanHistoryQuery.Sender, packageName: String?) {
+        var senderList: ArrayList<String> = ArrayList()
+        senderList.add(sender.sender.toString())
+        if (commonFunctions.checkConnection(requireContext()))
+            createRecentScantList(
+                30,
+                packageName!!,
+                senderList
+            )
+        else
+            commonFunctions.showErrorSnackBar(
+                requireContext(),
+                rvSender,
+                getString(R.string.no_internet),
+                true
+            )
     }
 
     companion object GlobalProperties {
