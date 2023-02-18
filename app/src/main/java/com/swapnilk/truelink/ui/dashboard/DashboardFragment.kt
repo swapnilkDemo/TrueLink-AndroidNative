@@ -165,7 +165,7 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
     }
 
     private fun setSendersFilter() {
-        val dialog = BottomSheetDialog(requireContext())
+        val dialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialog)
         dialog.setCancelable(false)
         val view = layoutInflater.inflate(R.layout.bottom_sheet_dialog, null)
         dialog.setContentView(view)

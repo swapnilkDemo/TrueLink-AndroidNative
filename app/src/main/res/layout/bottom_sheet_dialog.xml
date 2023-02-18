@@ -26,7 +26,7 @@
             android:padding="@dimen/margin5"
             android:text="@string/title_bottom_sheet"
             android:textColor="@color/gray_200"
-            android:textSize="@dimen/text24" />
+            android:textSize="@dimen/text16" />
 
         <androidx.appcompat.widget.SearchView
             android:id="@+id/search_view"
@@ -34,7 +34,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin10"
             android:background="@drawable/background_round_no_border"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            app:defaultQueryHint="@string/search_senders" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_senders"
