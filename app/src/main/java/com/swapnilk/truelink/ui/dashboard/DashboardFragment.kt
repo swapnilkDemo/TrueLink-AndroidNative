@@ -17,14 +17,18 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager.widget.ViewPager
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.ApolloResponse
 import com.apollographql.apollo3.exception.ApolloException
 import com.apollographql.apollo3.network.okHttpClient
 import com.example.AppScanHistoryQuery
 import com.example.RecentScansQuery
+import com.github.mikephil.charting.formatter.IAxisValueFormatter
+import com.github.mikephil.charting.formatter.ValueFormatter
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayout.TabLayoutOnPageChangeListener
 import com.swapnilk.truelink.MainActivity
 import com.swapnilk.truelink.R
 import com.swapnilk.truelink.data.online.AuthorizationInterceptor
@@ -44,7 +48,7 @@ import okhttp3.OkHttpClient
 import pl.droidsonroids.gif.GifImageView
 import kotlin.coroutines.CoroutineContext
 
-class DashboardFragment : Fragment(), CoroutineScope {
+class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
     ////////////Start Coroutine for Background Task../////////////
     private var job: Job = Job()
     override val coroutineContext: CoroutineContext
@@ -56,6 +60,7 @@ class DashboardFragment : Fragment(), CoroutineScope {
     // onDestroyView.
     private val binding get() = _binding!!
     private lateinit var tabGraph: TabLayout
+    private lateinit var viewPager: ViewPager
     lateinit var seekBar: SeekBar
     lateinit var imageViewSettings: ImageView
     lateinit var imageViewSocial: ImageView
@@ -109,7 +114,9 @@ class DashboardFragment : Fragment(), CoroutineScope {
          homeViewModel.text.observe(viewLifecycleOwner) {
              textView.text = it
          }*/
-
+        //////////////////Initialize listner////////////
+        mListener = this
+        ///////////////////////////////////////////////
         createAppList()
         createRecentScantList()
         setFilter()
@@ -156,6 +163,7 @@ class DashboardFragment : Fragment(), CoroutineScope {
 
     private fun bindViews() {
         tabGraph = binding.tabGraph
+        viewPager = binding.viewPager
         seekBar = binding.seekBar
 //        seekBar.thumb.mutate().alpha = 255
         seekBar.isEnabled = false
@@ -176,9 +184,10 @@ class DashboardFragment : Fragment(), CoroutineScope {
 
     private fun loadTopAppList(appList: ArrayList<AppDataModel>) {
         binding.rvApps.apply {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = TopAppDataAdapter(appList, requireContext())
-
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, true)
+            adapter = TopAppDataAdapter(appList, requireContext(), 0)
+            // smoothScrollToPosition(0)
+            (layoutManager as LinearLayoutManager).scrollToPositionWithOffset(0, 0)
         }
 
     }
@@ -206,6 +215,11 @@ class DashboardFragment : Fragment(), CoroutineScope {
     }
 
     private fun loadTabs() {
+        var adapter =
+            ViewPagerAdapter(requireContext(), activity?.supportFragmentManager, tabGraph.tabCount)
+        viewPager.adapter = adapter
+        viewPager.addOnPageChangeListener(TabLayoutOnPageChangeListener(tabGraph))
+        viewPager.currentItem = 0
         tabGraph.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 val tabLayout =
@@ -221,7 +235,9 @@ class DashboardFragment : Fragment(), CoroutineScope {
                 tabTextView.setTypeface(null, Typeface.NORMAL)
             }
 
-            override fun onTabReselected(tab: TabLayout.Tab) {}
+            override fun onTabReselected(tab: TabLayout.Tab) {
+
+            }
         })
     }
 
@@ -241,69 +257,6 @@ class DashboardFragment : Fragment(), CoroutineScope {
 
     private fun createRecentScantList(): ArrayList<RecentScansModel> {
         var scanList = ArrayList<RecentScansModel>()
-        /* scanList.add(
-             RecentScansModel(
-                 true,
-                 R.drawable.ic_no_photo,
-                 "amazon.com",
-                 "http:///phishingUrlsample/sddsvsdvsdvsdvs",
-                 "12 : 19 PM",
-                 "Whatsapp",
-                 R.drawable.ic_no_photo_small,
-                 false,
-                 true,
-                 "89 spam reports"
-
-             )
-         )
-
-         scanList.add(
-             RecentScansModel(
-                 true,
-                 R.drawable.ic_no_photo,
-                 "flipkart.com",
-                 "http:///phishingUrlsample/sddsvsdvsdvsdvs",
-                 "12 : 19 PM",
-                 "Facebook",
-                 R.drawable.ic_no_photo_small,
-                 false,
-                 true,
-                 "89 spam reports"
-
-             )
-         )
-
-         scanList.add(
-             RecentScansModel(
-                 false,
-                 R.drawable.ic_no_photo,
-                 "facebook.com",
-                 "http:///phishingUrlsample/sddsvsdvsdvsdvs",
-                 "12 : 19 PM",
-                 "Telegram",
-                 R.drawable.ic_no_photo_small,
-                 true,
-                 false,
-                 "89 spam reports"
-
-             )
-         )
-
-         scanList.add(
-             RecentScansModel(
-                 true,
-                 R.drawable.ic_no_photo,
-                 "sbi.com",
-                 "http:///phishingUrlsample/sddsvsdvsdvsdvs",
-                 "12 : 19 PM",
-                 "Instagram",
-                 R.drawable.ic_no_photo_small,
-                 false,
-                 true,
-                 "89 spam reports"
-
-             )
-         )*/
         val recentScans = RecentScansQuery(
             0,
             100
@@ -342,54 +295,6 @@ class DashboardFragment : Fragment(), CoroutineScope {
 
     private fun createAppList(): ArrayList<AppDataModel> {
         var appList = ArrayList<AppDataModel>()
-        /* appList.add(
-             AppDataModel(
-                 R.drawable.ic_no_photo,
-                 144,
-                 "Overall",
-                 R.color.bottom_nav_color,
-                 false
-             )
-         )
-
-         appList.add(
-             AppDataModel(
-                 R.drawable.ic_no_photo,
-                 100,
-                 "whatsapp",
-                 R.color.orange_text,
-                 false
-             )
-         )
-
-         appList.add(
-             AppDataModel(
-                 R.drawable.ic_no_photo,
-                 40,
-                 "Brave",
-                 R.color.green,
-                 false
-             )
-         )
-
-         appList.add(
-             AppDataModel(
-                 R.drawable.ic_no_photo,
-                 44,
-                 "Telegram",
-                 R.color.selected_color,
-                 false
-             )
-         )
-         appList.add(
-             AppDataModel(
-                 R.drawable.ic_no_photo,
-                 44,
-                 "Telegram",
-                 R.color.yellow_text,
-                 false
-             )
-         )*/
         val appScanHistory = AppScanHistoryQuery(
             0,
             100
@@ -411,19 +316,13 @@ class DashboardFragment : Fragment(), CoroutineScope {
                             i?.overallScans?.scannedFromNotifications,
                             i?.overallScans?.scannedWithinBrowser,
                             i?.overallScans?.verifiedLinks,
-                            "Overall",
+                            i?.packageName,
                             R.color.selected_color,
-                            true
+                            false
 
                         )
                         appList.add(appScansModel)
-                        tvSafeCount.text = appScansModel.safeLinks.toString()
-                        tvSuspiciousCount.text = appScansModel.suspiciousLinks.toString()
-                        tvBrowserCount.text = appScansModel.scannedWithinBrowser.toString()
-                        tvAppLinkCount.text = appScansModel.scannedFromNotification.toString()
-                        tvTotalCount.text = appScansModel.totalLinks.toString()
-                        tvClickedCount.text = appScansModel.clickedLinks.toString()
-                        tvVerifiedCount.text = appScansModel.verifiedLinks.toString()
+
                     }
                     loadTopAppList(appList)
                 } catch (ex: Exception) {
@@ -483,6 +382,7 @@ class DashboardFragment : Fragment(), CoroutineScope {
         yesBtn.setOnClickListener {
             dialog.dismiss()
             if (action == "overlay")
+                MainActivity.checkOverlayPermission(context as MainActivity)
             else if (action == "notification")
                 MainActivity.allowNotificationAccess(context as MainActivity)
             else if (action == "browser") {
@@ -504,17 +404,17 @@ class DashboardFragment : Fragment(), CoroutineScope {
             progress = 33
             if (Settings.canDrawOverlays(requireContext())) {
                 progress = 66
-                /*  if (!sharedPreferences.isNLServiceRunning(requireContext())) {
-                      showPopupWindow(
-                          requireContext(),
-                          getString(R.string.notification_access),
-                          getString(R.string.text3),
-                          "",
-                          getString(R.string.allow),
-                          R.drawable.ic_read_ntif,
-                          "notification"
-                      )
-                  }*/
+                /* if (!sharedPreferences.isNLServiceRunning(requireContext())) {
+                     showPopupWindow(
+                         requireContext(),
+                         getString(R.string.notification_access),
+                         getString(R.string.text3),
+                         "",
+                         getString(R.string.allow),
+                         R.drawable.ic_read_ntif,
+                         "notification"
+                     )
+                 }*/
             } else {
                 showPopupWindow(
                     requireContext(),
@@ -546,5 +446,26 @@ class DashboardFragment : Fragment(), CoroutineScope {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onAppSelected(appScansModel: AppDataModel) {
+        tvSafeCount.text = appScansModel.safeLinks.toString()
+        tvSuspiciousCount.text = appScansModel.suspiciousLinks.toString()
+        tvBrowserCount.text = appScansModel.scannedWithinBrowser.toString()
+        tvAppLinkCount.text = appScansModel.scannedFromNotification.toString()
+        tvTotalCount.text = appScansModel.totalLinks.toString()
+        tvClickedCount.text = appScansModel.clickedLinks.toString()
+        tvVerifiedCount.text = appScansModel.verifiedLinks.toString()
+    }
+
+    companion object GlobalProperties {
+        lateinit var mListener: DataChangedInterface
+
+    }
+
+    class yAxisValueFormatter : ValueFormatter(), IAxisValueFormatter {
+        override fun getFormattedValue(value: Float): String {
+            return "" + value.toInt()
+        }
     }
 }
