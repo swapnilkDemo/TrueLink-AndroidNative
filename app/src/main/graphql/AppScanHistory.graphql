@@ -1,5 +1,5 @@
-query AppScanHistory($skip: FilterSkip!, $limit: FilterLimit!) {
-    appScanHistory(skip: $skip, limit: $limit) {
+query AppScanHistory($skip: FilterSkip!, $limit: FilterLimit!, $days: Int, $sendersSkip2: FilterSkip!, $sendersLimit2: FilterLimit!, $packageName: String) {
+    appScanHistory(skip: $skip, limit: $limit, days: $days, packageName: $packageName) {
         code
         success
         message
@@ -13,6 +13,13 @@ query AppScanHistory($skip: FilterSkip!, $limit: FilterLimit!) {
                 suspicousLinks
                 totalLinks
                 verifiedLinks
+            }
+            packageName
+            senders(skip: $sendersSkip2, limit: $sendersLimit2) {
+                image
+                sender
+                suspiciousLinks
+                linksCount
             }
         }
     }

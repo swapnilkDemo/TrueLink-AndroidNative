@@ -1,5 +1,5 @@
-query RecentScans($skip: FilterSkip!, $limit: FilterLimit!) {
-    recentScans(skip: $skip, limit: $limit) {
+query RecentScans($skip: FilterSkip!, $limit: FilterLimit!, $packageName: String, $days: Int, $sender: [String], $clicked: Boolean) {
+    recentScans(skip: $skip, limit: $limit, packageName: $packageName, days: $days, sender: $sender, clicked: $clicked) {
         code
         success
         message
@@ -10,7 +10,6 @@ query RecentScans($skip: FilterSkip!, $limit: FilterLimit!) {
                 createdAt
                 favicon
                 full_url
-
                 reportSummary {
                     spam
                     malware
@@ -18,9 +17,9 @@ query RecentScans($skip: FilterSkip!, $limit: FilterLimit!) {
                     fradulent
                     others
                 }
-
                 verified
             }
+            total
         }
     }
 }
