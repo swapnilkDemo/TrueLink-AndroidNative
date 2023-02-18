@@ -27,6 +27,8 @@ import com.example.AppScanHistoryQuery
 import com.example.RecentScansQuery
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.TabLayoutOnPageChangeListener
@@ -34,7 +36,8 @@ import com.swapnilk.truelink.MainActivity
 import com.swapnilk.truelink.R
 import com.swapnilk.truelink.data.online.AuthorizationInterceptor
 import com.swapnilk.truelink.data.online.adapters.RecentScansAdapter
-import com.swapnilk.truelink.data.online.adapters.SenderDataAdapter
+import com.swapnilk.truelink.data.online.adapters.SenderDataAdapterChip
+import com.swapnilk.truelink.data.online.adapters.SenderDataAdapterList
 import com.swapnilk.truelink.data.online.adapters.TopAppDataAdapter
 import com.swapnilk.truelink.data.online.model.AppDataModel
 import com.swapnilk.truelink.data.online.model.RecentScansModel
@@ -42,6 +45,7 @@ import com.swapnilk.truelink.databinding.FragmentDashboardBinding
 import com.swapnilk.truelink.ui.home.HomeViewModel
 import com.swapnilk.truelink.utils.CommonFunctions
 import com.swapnilk.truelink.utils.SharedPreferences
+import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -68,7 +72,7 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
     lateinit var imageViewSocial: ImageView
     lateinit var imageViewBrowser: ImageView
     lateinit var cvPermissions: MaterialCardView
-    lateinit var tvFilter: AutoCompleteTextView
+    lateinit var tvRangeFilter: AutoCompleteTextView
     lateinit var tvSafeCount: TextView
     lateinit var tvSuspiciousCount: TextView
     lateinit var tvBrowserCount: TextView
@@ -77,10 +81,15 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
     lateinit var tvClickedCount: TextView
     lateinit var tvVerifiedCount: TextView
     lateinit var rvSender: RecyclerView
+    lateinit var llSenders: LinearLayout
+    lateinit var ivSenderFilter: ImageView
+    lateinit var llOverall: LinearLayout
+    lateinit var ivAppIcon: ImageView
 
     private lateinit var commonFunctions: CommonFunctions
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var apolloClient: ApolloClient
+    private var sendersList: ArrayList<AppScanHistoryQuery.Sender?> = ArrayList()
 
     var progress: Int = 0
 
@@ -129,9 +138,13 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
                 getString(R.string.no_internet),
                 true
             )
-        setFilter()
+        setRangeFilter()
         loadTabs()
 
+        ivSenderFilter.setOnClickListener {
+            setSendersFilter()
+
+        }
         if (!commonFunctions.isDefaultBrowser(requireContext()))
             showPopupWindow(
                 requireContext(),
@@ -151,18 +164,57 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
         return root
     }
 
-    private fun setFilter() {
+    private fun setSendersFilter() {
+        val dialog = BottomSheetDialog(requireContext())
+        dialog.setCancelable(false)
+        val view = layoutInflater.inflate(R.layout.bottom_sheet_dialog, null)
+        dialog.setContentView(view)
+        dialog.show()
+        val linearLayout: LinearLayout? =
+            dialog.findViewById<LinearLayout>(R.id.ll_child)
+        val behavior = linearLayout?.let { BottomSheetBehavior.from(it) }
+        if (behavior != null) {
+            behavior.state = BottomSheetBehavior.STATE_EXPANDED
+            behavior.skipCollapsed = true
+            behavior.peekHeight = BottomSheetBehavior.SAVE_ALL
+        }
+        val btnClose = view.findViewById<TextView>(R.id.txt_dialog_header)
+        var senderIcon = view.findViewById<CircleImageView>(R.id.iv_sender_icon)
+
+        var rvSenders: RecyclerView = view.findViewById(R.id.rv_senders)
+
+        rvSenders.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            var dividerItemDecoration = DividerItemDecoration(
+                context,
+                (layoutManager as LinearLayoutManager).orientation
+            )
+            addItemDecoration(dividerItemDecoration)
+            adapter = SenderDataAdapterList(
+                sendersList,
+                requireContext(),
+                ""
+            )
+        }
+
+        btnClose.setOnClickListener {
+            dialog.dismiss()
+        }
+
+    }
+
+    private fun setRangeFilter() {
         var filterArray = resources.getStringArray(R.array.filter)
-        tvFilter.setAdapter(
+        tvRangeFilter.setAdapter(
             ArrayAdapter<String>(
                 requireContext(), android.R.layout.simple_spinner_dropdown_item, filterArray
             )
         )
 
-        tvFilter.setOnTouchListener(object : View.OnTouchListener {
+        tvRangeFilter.setOnTouchListener(object : View.OnTouchListener {
             @SuppressLint("ClickableViewAccessibility")
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-                tvFilter.showDropDown()
+                tvRangeFilter.showDropDown()
 
                 return v?.onTouchEvent(event) ?: true
             }
@@ -181,7 +233,7 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
         imageViewSocial = binding.ivSocial
         imageViewBrowser = binding.ivBrowser
         cvPermissions = binding.cvPermissions
-        tvFilter = binding.tvFilter
+        tvRangeFilter = binding.tvFilter
 
         tvSafeCount = binding.tvSafeCount
         tvSuspiciousCount = binding.tvSuspiciousCount
@@ -192,6 +244,10 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
         tvBrowserCount = binding.tvBrowserCount
 
         rvSender = binding.rvSenders
+        llSenders = binding.llSenders
+        ivSenderFilter = binding.ivFilterSender
+        llOverall = binding.llOverall
+        ivAppIcon = binding.ivAppIcon
     }
 
     private fun loadTopAppList(appList: ArrayList<AppDataModel>) {
@@ -480,11 +536,30 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
         tvTotalCount.text = appScansModel.totalLinks.toString()
         tvClickedCount.text = appScansModel.clickedLinks.toString()
         tvVerifiedCount.text = appScansModel.verifiedLinks.toString()
+        sendersList.clear()
+        sendersList = appScansModel.senders as ArrayList<AppScanHistoryQuery.Sender?>
+        if (appScansModel.packageName != null) {
+            llOverall.visibility = View.GONE
+            ivAppIcon.visibility = View.VISIBLE
+            var appIcon = commonFunctions.getAppIconFromPackageName(
+                appScansModel.packageName,
+                requireContext()
+            )
+            if (appIcon != null)
+                ivAppIcon.setImageDrawable(
+                    appIcon
+                )
+            else
+                ivAppIcon.setImageDrawable(context?.getDrawable(R.drawable.ic_no_photo))
+        } else {
+            llOverall.visibility = View.VISIBLE
+            ivAppIcon.visibility = View.GONE
+        }
         if (appScansModel.senders != null && appScansModel.senders.isNotEmpty()) {
             rvSender.apply {
-                visibility = View.VISIBLE
+                llSenders.visibility = View.VISIBLE
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                adapter = SenderDataAdapter(
+                adapter = SenderDataAdapterChip(
                     appScansModel.senders,
                     requireContext(),
                     appScansModel.packageName
@@ -492,7 +567,7 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
                 //   scrollToPosition(appList.size - 1)
             }
         } else {
-            rvSender.visibility = View.GONE
+            llSenders.visibility = View.GONE
         }
         if (commonFunctions.checkConnection(requireContext()))
             createRecentScantList(30, appScansModel.packageName.toString(), null)

@@ -82,6 +82,8 @@ dependencies {
     implementation "com.airbnb.android:lottie:3.4.0"
     ///////////////////////////Load Gif//////////////////////////
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.17'
+    ///////////////////////Get Palette color////////////////////////
+    implementation 'androidx.palette:palette:1.0.0'
     ////////////////////////////////////////////////////////////////
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'

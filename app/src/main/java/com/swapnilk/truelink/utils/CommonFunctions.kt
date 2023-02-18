@@ -3,11 +3,13 @@ package com.swapnilk.truelink.utils
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
@@ -19,12 +21,14 @@ import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.TextUtils
 import android.text.style.ForegroundColorSpan
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
+import androidx.palette.graphics.Palette
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.ozcanalasalvar.library.utils.DateUtils
@@ -186,5 +190,65 @@ class CommonFunctions(context: Context) {
         val input: InputStream = connection.inputStream
         x = BitmapFactory.decodeStream(input)
         return BitmapDrawable(Resources.getSystem(), x)
+    }
+
+    /////////////////Get App Name From Package Name/////////////////
+    fun getAppNameFromPackageName(packageName: String?, context: Context): CharSequence {
+        var applicationInfo: ApplicationInfo? = null
+        try {
+            applicationInfo = context.packageManager.getApplicationInfo(packageName!!, 0)
+        } catch (e: PackageManager.NameNotFoundException) {
+            Log.d("TAG", "The package with the given name cannot be found on the system.")
+        }
+        return (if (applicationInfo != null) context.packageManager.getApplicationLabel(
+            applicationInfo
+        ) else "Unknown")
+    }
+
+    ///////////////////Get App Icon From Package Name////////////////////////
+    fun getAppIconFromPackageName(packageName: String, context: Context): Drawable? {
+        var icon: Drawable? = null
+        try {
+            icon =
+                context.packageManager.getApplicationIcon(packageName)
+        } catch (e: PackageManager.NameNotFoundException) {
+            e.printStackTrace()
+        }
+        return icon;
+    }
+
+    //////////////////////Get Dominant color from image///////////////
+    open fun getDominantColor(drawable: Drawable?, context: Context): Int {
+        val bitmap = getBitmapFromVector(drawable)
+        /* val newBitmap = Bitmap.createScaledBitmap(bitmap!!, 1, 1, true)
+         val color = newBitmap.getPixel(0, 0)
+         newBitmap.recycle()
+         var strColor = color.toString().replaceFirstChar { "#" }*/
+        var dominantColor = context.getColor(R.color.selected_color)
+        Palette.Builder(bitmap!!).generate {
+
+            dominantColor =
+                it?.getDominantColor(ContextCompat.getColor(context!!, R.color.btnColor))!!
+
+        }
+        return dominantColor
+    }
+
+    //////////////////Get Bitmap Form Vector Drawable////////////////
+    private fun getBitmapFromVector(drawable: Drawable?): Bitmap? {
+        return try {
+            val bitmap: Bitmap = Bitmap.createBitmap(
+                drawable!!.intrinsicWidth,
+                drawable.intrinsicHeight,
+                Bitmap.Config.ARGB_8888
+            )
+            val canvas = Canvas(bitmap)
+            drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight())
+            drawable.draw(canvas)
+            bitmap
+        } catch (ex: Exception) {
+            ex.stackTrace
+            null
+        }
     }
 }

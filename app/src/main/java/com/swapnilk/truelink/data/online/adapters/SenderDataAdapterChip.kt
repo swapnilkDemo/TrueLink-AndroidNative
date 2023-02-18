@@ -11,12 +11,12 @@ import com.swapnilk.truelink.R
 import com.swapnilk.truelink.ui.dashboard.DashboardFragment
 import com.swapnilk.truelink.utils.CommonFunctions
 
-class SenderDataAdapter(
+class SenderDataAdapterChip(
     val senders: List<AppScanHistoryQuery.Sender?>,
     val context: Context,
     val packageName: String?
 ) :
-    RecyclerView.Adapter<SenderDataAdapter.ViewHolder>() {
+    RecyclerView.Adapter<SenderDataAdapterChip.ViewHolder>() {
     var commonFunctions: CommonFunctions = CommonFunctions(context)
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -27,7 +27,7 @@ class SenderDataAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(context)
         val view = layoutInflater.inflate(R.layout.list_senders_chip, parent, false)
-        return SenderDataAdapter.ViewHolder(view)
+        return SenderDataAdapterChip.ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

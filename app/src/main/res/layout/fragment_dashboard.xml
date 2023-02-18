@@ -218,6 +218,15 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
+                    <ImageView
+                        android:id="@+id/iv_app_icon"
+                        android:layout_width="@dimen/margin55"
+                        android:layout_height="@dimen/margin55"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/margin10"
+                        android:src="@drawable/ic_no_photo"
+                        android:visibility="gone" />
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -322,115 +331,122 @@
                 </LinearLayout>
 
                 <!--View separator-->
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginStart="@dimen/margin20"
-                    android:layout_marginEnd="@dimen/margin20"
-                    android:background="@color/transparent50" />
-
                 <LinearLayout
+                    android:id="@+id/ll_overall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/margin10"
-                        android:layout_weight="1"
-                        android:gravity="start"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:gravity="start"
-                            android:src="@drawable/ic_scan_browser" />
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginLeft="@dimen/margin20"
-                            android:gravity="start"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/tvBrowserCount"
-                                style="@style/textViewFontSora"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:gravity="start"
-                                android:text="00"
-                                android:textColor="@color/white"
-                                android:textSize="@dimen/text16" />
-
-                            <TextView
-                                style="@style/textViewFontInter"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:gravity="start"
-                                android:text="@string/browser_link"
-                                android:textColor="@color/transparent50"
-                                android:textSize="@dimen/text10" />
-                        </LinearLayout>
-                    </LinearLayout>
-                    <!--View separator-->
                     <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:layout_marginBottom="@dimen/margin10"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginStart="@dimen/margin20"
+                        android:layout_marginEnd="@dimen/margin20"
                         android:background="@color/transparent50" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="@dimen/margin20"
-                        android:layout_weight="1"
-                        android:gravity="start"
                         android:orientation="horizontal">
 
-                        <ImageView
-                            android:layout_width="wrap_content"
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
+                            android:layout_margin="@dimen/margin10"
+                            android:layout_weight="1"
                             android:gravity="start"
-                            android:src="@drawable/ic_app_link" />
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:gravity="start"
+                                android:src="@drawable/ic_scan_browser" />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="@dimen/margin20"
+                                android:gravity="start"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/tvBrowserCount"
+                                    style="@style/textViewFontSora"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:gravity="start"
+                                    android:text="00"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/text16" />
+
+                                <TextView
+                                    style="@style/textViewFontInter"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:gravity="start"
+                                    android:text="@string/browser_link"
+                                    android:textColor="@color/transparent50"
+                                    android:textSize="@dimen/text10" />
+                            </LinearLayout>
+                        </LinearLayout>
+                        <!--View separator-->
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:layout_marginBottom="@dimen/margin10"
+                            android:background="@color/transparent50" />
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_marginLeft="@dimen/margin20"
+                            android:layout_weight="1"
                             android:gravity="start"
-                            android:orientation="vertical">
+                            android:orientation="horizontal">
 
-                            <TextView
-                                android:id="@+id/tvAppLinkCount"
-                                android:layout_width="match_parent"
+                            <ImageView
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:gravity="start"
-                                android:text="00"
-                                android:textColor="@color/white"
-                                android:textSize="@dimen/text16" />
+                                android:src="@drawable/ic_app_link" />
 
-                            <TextView
-                                style="@style/textViewFontInter"
-                                android:layout_width="match_parent"
+                            <LinearLayout
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
+                                android:layout_marginLeft="@dimen/margin20"
                                 android:gravity="start"
-                                android:text="@string/app_link"
-                                android:textColor="@color/transparent50"
-                                android:textSize="@dimen/text10" />
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/tvAppLinkCount"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:gravity="start"
+                                    android:text="00"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/text16" />
+
+                                <TextView
+                                    style="@style/textViewFontInter"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:gravity="start"
+                                    android:text="@string/app_link"
+                                    android:textColor="@color/transparent50"
+                                    android:textSize="@dimen/text10" />
+                            </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
@@ -650,14 +666,31 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/margin250" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_senders"
+                <LinearLayout
+                    android:id="@+id/ll_senders"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/margin10"
-                    android:scrollbars="horizontal"
-                    android:visibility="gone"
-                    tools:listitem="@layout/list_senders_chip" />
+                    android:layout_gravity="center"
+                    android:orientation="horizontal">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_senders"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/margin10"
+                        android:layout_weight="1"
+                        android:scrollbars="horizontal"
+                        tools:listitem="@layout/list_senders_chip" />
+
+                    <ImageView
+                        android:id="@+id/iv_filter_sender"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_filter" />
+                </LinearLayout>
+
 
                 <TextView
                     android:id="@+id/tv_recent_header"

@@ -2,14 +2,11 @@ package com.swapnilk.truelink.data.online.adapters
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.pm.ApplicationInfo
-import android.content.pm.PackageManager
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.text.TextUtils
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.swapnilk.truelink.R
 import com.swapnilk.truelink.data.online.model.AppDataModel
 import com.swapnilk.truelink.ui.dashboard.DashboardFragment
+import com.swapnilk.truelink.utils.CommonFunctions
 
 
 class TopAppDataAdapter(
@@ -28,7 +26,7 @@ class TopAppDataAdapter(
     var selectedItem: Int
 ) :
     RecyclerView.Adapter<TopAppDataAdapter.ViewHolder>() {
-
+    private var commonFunctions = CommonFunctions(context)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(context)
         val view = inflater.inflate(R.layout.list_items_circular, parent, false)
@@ -39,14 +37,18 @@ class TopAppDataAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val appDataModel = appList[position]
         if (!TextUtils.isEmpty(appDataModel.packageName)) {
-            if (getAppIconFromPackageName(appDataModel.packageName!!) != null) {
-                holder.ivAppIcon.setImageDrawable(getAppIconFromPackageName(appDataModel.packageName!!))
+            var appIcon: Drawable? =
+                commonFunctions.getAppIconFromPackageName(appDataModel.packageName!!, context)
+            if (appIcon != null) {
+                holder.ivAppIcon.setImageDrawable(appIcon)
             } else {
                 holder.ivAppIcon.setImageDrawable(context.resources.getDrawable(R.drawable.ic_no_photo))
             }
-            if (getAppNameFromPackageName(appDataModel.packageName) != null) {
+            var appName =
+                commonFunctions.getAppNameFromPackageName(appDataModel.packageName, context)
+            if (appName != null) {
                 holder.tvAppName.text =
-                    getAppNameFromPackageName(appDataModel.packageName)
+                    appName
             } else {
                 holder.tvAppName.text = appDataModel.packageName
             }
@@ -59,7 +61,14 @@ class TopAppDataAdapter(
             holder.tvBadge.text = appDataModel.totalLinks.toString()
         else
             holder.tvBadge.text = "99+"
-        appDataModel.bgColor?.let { setTextViewDrawableColor(holder.tvBadge, it) }
+        setTextViewDrawableColor(
+            holder.tvBadge,
+            appDataModel.bgColor!!
+        )
+        /* commonFunctions.getDominantColor(
+                holder.ivAppIcon.drawable,
+                context
+            )*/
 
         if (selectedItem == position) {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN)
@@ -119,29 +128,6 @@ class TopAppDataAdapter(
                 )
         }
 
-    }
-
-    private fun getAppNameFromPackageName(packageName: String?): CharSequence {
-        var applicationInfo: ApplicationInfo? = null
-        try {
-            applicationInfo = context.packageManager.getApplicationInfo(packageName!!, 0)
-        } catch (e: PackageManager.NameNotFoundException) {
-            Log.d("TAG", "The package with the given name cannot be found on the system.")
-        }
-        return (if (applicationInfo != null) context.packageManager.getApplicationLabel(
-            applicationInfo
-        ) else "Unknown")
-    }
-
-    private fun getAppIconFromPackageName(packageName: String): Drawable? {
-        var icon: Drawable? = null
-        try {
-            icon =
-                context.packageManager.getApplicationIcon(packageName)
-        } catch (e: PackageManager.NameNotFoundException) {
-            e.printStackTrace()
-        }
-        return icon;
     }
 
 }
