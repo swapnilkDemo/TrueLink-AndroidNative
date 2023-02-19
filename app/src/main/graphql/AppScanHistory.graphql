@@ -18,6 +18,7 @@ query AppScanHistory($skip: FilterSkip!, $limit: FilterLimit!, $days: Int, $send
             senders(skip: $sendersSkip2, limit: $sendersLimit2) {
                 image
                 sender
+                safeLinks
                 suspiciousLinks
                 linksCount
             }

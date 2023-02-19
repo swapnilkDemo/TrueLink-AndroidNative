@@ -41,17 +41,20 @@
             android:id="@+id/rv_senders"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin60"
             tools:listitem="@layout/list_senders_item" />
 
-        <androidx.cardview.widget.CardView
+        <LinearLayout
             android:id="@+id/cv_bottom"
             android:layout_width="match_parent"
             android:layout_height="@dimen/margin60"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="-60dp"
+            android:layout_marginRight="5dp"
             android:layout_marginBottom="@dimen/margin10"
             android:gravity="center_vertical"
+            android:orientation="horizontal"
             app:cardElevation="5dp"
             app:cardUseCompatPadding="true">
 
@@ -60,7 +63,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:layout_margin="@dimen/margin10"
+                android:layout_marginRight="@dimen/margin5"
                 android:layout_weight="1"
                 android:background="@drawable/background_round_selected_border"
                 android:enabled="false"
@@ -75,7 +78,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:layout_margin="@dimen/margin10"
+                android:layout_marginLeft="@dimen/margin5"
                 android:layout_weight="1"
                 android:background="@drawable/background_round_no_border"
                 android:backgroundTint="@color/selected_color"
@@ -85,7 +88,7 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/text12"
                 app:backgroundTint="@null" />
-        </androidx.cardview.widget.CardView>
+        </LinearLayout>
     </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

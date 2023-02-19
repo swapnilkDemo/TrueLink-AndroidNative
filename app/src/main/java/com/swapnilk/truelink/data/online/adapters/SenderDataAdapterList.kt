@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.AppScanHistoryQuery
 import com.squareup.picasso.Picasso
 import com.swapnilk.truelink.R
-import com.swapnilk.truelink.ui.dashboard.DashboardFragment
 import com.swapnilk.truelink.utils.CommonFunctions
 import de.hdodenhof.circleimageview.CircleImageView
 
@@ -21,6 +20,7 @@ class SenderDataAdapterList(
 ) :
     RecyclerView.Adapter<SenderDataAdapterList.ViewHolder>() {
     var commonFunctions: CommonFunctions = CommonFunctions(context)
+    var selectedItemsList: ArrayList<AppScanHistoryQuery.Sender> = ArrayList()
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var ivSenderIcon: CircleImageView = itemView.findViewById(R.id.iv_sender_icon)
@@ -41,17 +41,25 @@ class SenderDataAdapterList(
         var sender: AppScanHistoryQuery.Sender = senders[position]!!
         if (sender.sender != null) {
             holder.tvSenderName.text = sender.sender
-            Picasso.with(context)
-                .load(sender.image)
-                .into(holder.ivSenderIcon)
+            if (sender.image != null)
+                Picasso.with(context)
+                    .load(sender.image)
+                    .into(holder.ivSenderIcon)
 
             holder.tvSuspiciousLinks.text =
                 sender.suspiciousLinks.toString() + " " + context.getString(R.string.suspicious_link)
             holder.tvSafeLinks.text =
-                sender.linksCount.toString() + " " + context.getString(R.string.safe_links_1)
+                sender.safeLinks.toString() + " " + context.getString(R.string.safe_links_1)
             holder.tvTotalLinks.text = sender.linksCount.toString()
             holder.itemView.setOnClickListener {
-                DashboardFragment.mListener.onSenderSelected(sender, packageName)
+                if (!selectedItemsList.contains(sender)) {
+                    selectedItemsList.add(sender)
+                    holder.itemView.setBackgroundColor(context.resources.getColor(R.color.light_background))
+                } else {
+                    selectedItemsList.remove(sender)
+                    holder.itemView.setBackgroundColor(context.resources.getColor(R.color.primary_color))
+                }
+                // DashboardFragment.mListener.onSenderSelected(sender, packageName)
             }
         } else {
         }
