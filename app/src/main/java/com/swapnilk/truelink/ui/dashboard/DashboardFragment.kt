@@ -35,10 +35,7 @@ import com.google.android.material.tabs.TabLayout.TabLayoutOnPageChangeListener
 import com.swapnilk.truelink.MainActivity
 import com.swapnilk.truelink.R
 import com.swapnilk.truelink.data.online.AuthorizationInterceptor
-import com.swapnilk.truelink.data.online.adapters.RecentScansAdapter
-import com.swapnilk.truelink.data.online.adapters.SenderDataAdapterChip
-import com.swapnilk.truelink.data.online.adapters.SenderDataAdapterList
-import com.swapnilk.truelink.data.online.adapters.TopAppDataAdapter
+import com.swapnilk.truelink.data.online.adapters.*
 import com.swapnilk.truelink.data.online.model.AppDataModel
 import com.swapnilk.truelink.data.online.model.RecentScansModel
 import com.swapnilk.truelink.databinding.FragmentDashboardBinding
@@ -85,11 +82,13 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
     lateinit var ivSenderFilter: ImageView
     lateinit var llOverall: LinearLayout
     lateinit var ivAppIcon: ImageView
+    lateinit var ivTopAppFilter: ImageView
 
     private lateinit var commonFunctions: CommonFunctions
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var apolloClient: ApolloClient
     private var sendersList: ArrayList<AppScanHistoryQuery.Sender?> = ArrayList()
+    private var appList = ArrayList<AppDataModel>()
 
     var progress: Int = 0
 
@@ -145,6 +144,10 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
             setSendersFilter()
 
         }
+
+        ivTopAppFilter.setOnClickListener {
+            setTopAppsFilter()
+        }
         if (!commonFunctions.isDefaultBrowser(requireContext()))
             showPopupWindow(
                 requireContext(),
@@ -162,6 +165,44 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
             updateSeekbarProgress(requireContext())
         }
         return root
+    }
+
+    private fun setTopAppsFilter() {
+        val dialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialog)
+        dialog.setCancelable(false)
+        val view = layoutInflater.inflate(R.layout.bottom_sheet_dialog, null)
+        dialog.setContentView(view)
+        dialog.show()
+        val linearLayout: LinearLayout? =
+            dialog.findViewById<LinearLayout>(R.id.ll_child)
+        val behavior = linearLayout?.let { BottomSheetBehavior.from(it) }
+        if (behavior != null) {
+            behavior.state = BottomSheetBehavior.STATE_EXPANDED
+            behavior.skipCollapsed = true
+            behavior.peekHeight = BottomSheetBehavior.SAVE_ALL
+        }
+        val btnClose = view.findViewById<TextView>(R.id.txt_dialog_header)
+        val tvDialogTitle = view.findViewById<TextView>(R.id.txt_dialog_header)
+        tvDialogTitle.text = getString(R.string.top_apps)
+        var rvTopApps: RecyclerView = view.findViewById(R.id.rv_senders)
+        var searchView: SearchView = view.findViewById(R.id.search_view)
+        searchView.queryHint = getString(R.string.search_apps)
+        rvTopApps.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            var dividerItemDecoration = DividerItemDecoration(
+                context,
+                (layoutManager as LinearLayoutManager).orientation
+            )
+            addItemDecoration(dividerItemDecoration)
+            adapter = AppDataAdapterList(
+                appList,
+                requireContext()
+            )
+        }
+
+        btnClose.setOnClickListener {
+            dialog.dismiss()
+        }
     }
 
     private fun setSendersFilter() {
@@ -248,6 +289,7 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
         ivSenderFilter = binding.ivFilterSender
         llOverall = binding.llOverall
         ivAppIcon = binding.ivAppIcon
+        ivTopAppFilter = binding.ivFilterTopApps
     }
 
     private fun loadTopAppList(appList: ArrayList<AppDataModel>) {
@@ -369,7 +411,7 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
     }
 
     private fun createAppList(queryParam: Int?, packageName: String?): ArrayList<AppDataModel> {
-        var appList = ArrayList<AppDataModel>()
+        appList.clear()
         val appScanHistory = AppScanHistoryQuery(
             0,
             100,

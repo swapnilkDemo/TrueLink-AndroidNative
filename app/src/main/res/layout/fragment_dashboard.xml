@@ -161,13 +161,30 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_apps"
+
+        <LinearLayout
+            android:id="@+id/ll_apps"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin5"
-            tools:itemCount="1"
-            tools:listitem="@layout/list_items_circular" />
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_apps"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin5"
+                android:layout_weight="1"
+                tools:itemCount="1"
+                tools:listitem="@layout/list_items_circular" />
+
+            <ImageView
+                android:id="@+id/iv_filter_top_apps"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_filter" />
+        </LinearLayout>
 
 
         <com.google.android.material.card.MaterialCardView
