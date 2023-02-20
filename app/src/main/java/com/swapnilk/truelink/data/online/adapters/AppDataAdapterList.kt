@@ -36,8 +36,9 @@ class AppDataAdapterList(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val appDataModel = appList[position]
         if (appDataModel != null) {
-            holder.tvAppName.text =
-                commonFunctions.getAppNameFromPackageName(appDataModel.packageName, context)
+            if (appDataModel.packageName != null)
+                holder.tvAppName.text =
+                    commonFunctions.getAppNameFromPackageName(appDataModel.packageName, context)
             holder.tvSafeLinks.text = appDataModel.safeLinks.toString()
             holder.tvSuspiciousLinks.text = appDataModel.suspiciousLinks.toString()
             holder.tvTotalLinks.text = appDataModel.totalLinks.toString()
