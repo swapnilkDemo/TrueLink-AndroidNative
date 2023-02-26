@@ -1,0 +1,21 @@
+query RecentScansLatest($skip: FilterSkip!, $limit: FilterLimit!, $sender: [String], $packageName: String, $days: Int, $clicked: Boolean) {
+  recentScans(skip: $skip, limit: $limit, sender: $sender, packageName: $packageName, days: $days, clicked: $clicked) {
+    code
+    success
+    message
+    payload {
+      results {
+        appIcon
+        category
+        createdAt
+        favicon
+        full_url
+        https
+        verified
+        reportSummary {
+          phishing
+        }
+      }
+    }
+  }
+}

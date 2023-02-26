@@ -29,7 +29,7 @@ class ScanDetailsFragment : Fragment() {
     }
 
     private fun showToolBar() {
-        TODO("Not yet implemented")
+        //TODO("Not yet implemented")
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

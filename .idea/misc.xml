@@ -29,6 +29,7 @@
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/ic_safe_link.xml" value="0.138" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/ic_safe_link_small.xml" value="0.1435" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/ic_save.xml" value="0.138" />
+        <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/ic_suspicious.xml" value="0.1435" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/ic_suspicious_small.xml" value="0.1435" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/ic_total_links.xml" value="0.138" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/ic_unlock.xml" value="0.138" />
@@ -41,10 +42,12 @@
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/bottom_sheet_dialog.xml" value="0.12" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/bottom_sheet_otp.xml" value="0.165625" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/bottom_sheet_privacy.xml" value="0.165625" />
+        <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/content_scan_details.xml" value="0.1765625" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/custom_popup.xml" value="0.12072368421052632" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/fragment_bar_chart.xml" value="0.1921875" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/fragment_bulk_scan.xml" value="0.11151315789473684" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/fragment_dashboard.xml" value="0.1" />
+        <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/fragment_scan_details.xml" value="0.1765625" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/fragment_update_user_profile.xml" value="0.10460526315789474" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/list_items_circular.xml" value="0.1921875" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/list_items_recent_scan.xml" value="0.22" />

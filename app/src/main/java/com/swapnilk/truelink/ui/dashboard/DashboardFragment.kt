@@ -25,7 +25,7 @@ import com.apollographql.apollo3.api.Optional
 import com.apollographql.apollo3.exception.ApolloException
 import com.apollographql.apollo3.network.okHttpClient
 import com.example.AppScanHistoryQuery
-import com.example.RecentScansQuery
+import com.example.RecentScansLatestQuery
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -355,7 +355,7 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
 
         binding.rvRecentScan.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            adapter = RecentScansAdapter(scanList, requireContext())
+            adapter = RecentScansAdapter(scanList, requireContext(), parentFragmentManager)
             var dividerItemDecoration = DividerItemDecoration(
                 context,
                 (layoutManager as LinearLayoutManager).orientation
@@ -371,16 +371,17 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
         sender: List<String>?,
     ): ArrayList<RecentScansModel> {
         var scanList = ArrayList<RecentScansModel>()
-        val recentScans = RecentScansQuery(
+        val recentScans = RecentScansLatestQuery(
             0,
             100,
+            Optional.present(sender),
             Optional.present(packageName),
             Optional.present(filterDay),
-            Optional.present(sender)
+            Optional.Absent
 
         )
         launch {
-            val response: ApolloResponse<RecentScansQuery.Data> =
+            val response: ApolloResponse<RecentScansLatestQuery.Data> =
                 apolloClient.query(recentScans).execute()
 
             try {
@@ -395,7 +396,7 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
                         i?.appIcon,
                         false,
                         true,
-                        i?.reportSummary?.spam.toString()
+                        i?.reportSummary?.phishing.toString()
 
                     )
                     scanList.add(resentScansModel)

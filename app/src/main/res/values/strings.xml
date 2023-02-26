@@ -210,4 +210,5 @@ meaning regardless of whether they appear in singular or in plural.</span></div>
     <string name="created_on">Since 1996</string>
     <string name="alert_description">Alert Description</string>
     <string name="service_name">Notification Service</string>
+    <string name="title_scan_details">Scan Details</string>
 </resources>

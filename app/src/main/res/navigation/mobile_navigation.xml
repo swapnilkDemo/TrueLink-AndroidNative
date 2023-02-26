@@ -34,4 +34,10 @@
         android:name="com.swapnilk.truelink.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
+
+    <fragment
+        android:id="@+id/nav_scan_details"
+        android:name="com.swapnilk.truelink.ui.scan_details.ScanDetailsFragment"
+        android:label="@string/title_scan_details"
+        tools:layout="@layout/fragment_scan_details" />
 </navigation>

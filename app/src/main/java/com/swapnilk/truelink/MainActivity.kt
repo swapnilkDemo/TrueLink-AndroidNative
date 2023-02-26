@@ -1,7 +1,13 @@
 package com.swapnilk.truelink
 
+import android.R
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.ColorSpace.Model
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -12,6 +18,8 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.apollographql.apollo3.ApolloClient
@@ -44,8 +52,20 @@ import kotlin.coroutines.CoroutineContext
 
 
 open class MainActivity : AppCompatActivity(), CoroutineScope {
+    private val fm = supportFragmentManager
+
     companion object GlobalFields {
         val INTENT_ACTION_NOTIFICATION = "it.gmariotti.notification"
+
+        fun addFragmentToActivity(fragment: Fragment?, fm: FragmentManager) {
+
+            if (fragment == null) return
+//            val fm = supportFragmentManager
+            val tr = fm.beginTransaction()
+            tr.add(R.id.nav_host_fragment, fragment)
+            tr.commitAllowingStateLoss()
+            var curFragment = fragment
+        }
 
         @RequiresApi(Build.VERSION_CODES.O)
         fun checkOverlayPermission(context: MainActivity) {
@@ -79,22 +99,6 @@ open class MainActivity : AppCompatActivity(), CoroutineScope {
                     0
                 )
             }
-            // resultLauncher.launch(intent)
-
-        }
-
-
-        /*  @RequiresApi(Build.VERSION_CODES.O)
-          private var resultLauncher =
-              registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                  if (result.resultCode == Activity.RESULT_OK) {
-                      // There are no request codes
-                      val data: Intent? = result.data
-                      //doSomeOperations()
-                  }
-              }*/
-
-        fun requestPermissions(permission: String) {
 
         }
 
@@ -133,6 +137,7 @@ open class MainActivity : AppCompatActivity(), CoroutineScope {
         if (mReceiver == null) mReceiver = MyReceiver()
         registerReceiver(mReceiver, IntentFilter(INTENT_ACTION_NOTIFICATION))
     }
+
 
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -187,6 +192,33 @@ open class MainActivity : AppCompatActivity(), CoroutineScope {
               intent.putExtra("dara", data)
               startActivity(intent)*/
             scanLink(data)
+        }
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(onNotice,  IntentFilter("Msg"));
+    }
+
+    private val onNotice: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent) {
+            // String pack = intent.getStringExtra("package");
+            val title = intent.getStringExtra("title")
+            val text = intent.getStringExtra("text")
+            //int id = intent.getIntExtra("icon",0);
+            val remotePackageContext: Context? = null
+            try {
+//                remotePackageContext = getApplicationContext().createPackageContext(pack, 0);
+//                Drawable icon = remotePackageContext.getResources().getDrawable(id);
+//                if(icon !=null) {
+//                    ((ImageView) findViewById(R.id.imageView)).setBackground(icon);
+//                }
+                val byteArray = intent.getByteArrayExtra("icon")
+                var bmp: Bitmap? = null
+                if (byteArray != null) {
+                    bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+                }
+
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+            }
         }
     }
 
@@ -247,19 +279,10 @@ open class MainActivity : AppCompatActivity(), CoroutineScope {
 
         ivProfile.setOnClickListener {
             val userFragment = UpdateUserProfile()
-            addFragmentToActivity(userFragment)
+            addFragmentToActivity(userFragment, fm)
         }
     }
 
-    private fun addFragmentToActivity(fragment: Fragment?) {
-
-        if (fragment == null) return
-        val fm = supportFragmentManager
-        val tr = fm.beginTransaction()
-        tr.add(R.id.nav_host_fragment, fragment)
-        tr.commitAllowingStateLoss()
-        var curFragment = fragment
-    }
 
     ///////////////Set Badge to alert navigation/////////////////
     private fun setBadgeToAlert() {

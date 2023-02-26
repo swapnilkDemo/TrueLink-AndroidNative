@@ -7,12 +7,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
+import com.swapnilk.truelink.MainActivity
 import com.swapnilk.truelink.R
 import com.swapnilk.truelink.data.online.model.RecentScansModel
+import com.swapnilk.truelink.ui.scan_details.ScanDetailsFragment
 
-class RecentScansAdapter(private val scanList: ArrayList<RecentScansModel>, val context: Context) :
+class RecentScansAdapter(
+    private val scanList: ArrayList<RecentScansModel>,
+    val context: Context,
+    val fm: FragmentManager
+) :
     RecyclerView.Adapter<RecentScansAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(context)
@@ -61,6 +68,11 @@ class RecentScansAdapter(private val scanList: ArrayList<RecentScansModel>, val 
             .load(recentScansModel.sourceIcon)
             .into(holder.ivSource)
 
+
+        holder.itemView.setOnClickListener {
+            val scanDetailsFragment: ScanDetailsFragment = ScanDetailsFragment()
+            MainActivity.addFragmentToActivity(scanDetailsFragment, fm)
+        }
     }
 
     override fun getItemCount(): Int {

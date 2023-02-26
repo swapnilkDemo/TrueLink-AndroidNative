@@ -23,12 +23,12 @@ open class MyReceiver : BroadcastReceiver() {
                 extras!!.getParcelable<Parcelable>(Notification.EXTRA_LARGE_ICON) as Bitmap?
             val notificationText = extras!!.getCharSequence(Notification.EXTRA_TEXT)
             val notificationSubText = extras!!.getCharSequence(Notification.EXTRA_SUB_TEXT)
-           /* title.setText(notificationTitle)
-            text.setText(notificationText)
-            subtext.setText(notificationSubText)
+            title?.text = notificationTitle
+            text?.text = notificationText
+            subtext?.text = notificationSubText
             if (notificationLargeIcon != null) {
-                largeIcon.setImageBitmap(notificationLargeIcon)
-            }*/
+                largeIcon?.setImageBitmap(notificationLargeIcon)
+            }
         }
 
     }
