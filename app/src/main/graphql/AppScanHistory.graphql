@@ -22,6 +22,12 @@ query AppScanHistory($skip: FilterSkip!, $limit: FilterLimit!, $days: Int, $send
                 suspiciousLinks
                 linksCount
             }
+             statistics {
+                    allScans
+                    safeScans
+                    suspiciousScans
+                    verifiedScans
+                  }
         }
     }
 }

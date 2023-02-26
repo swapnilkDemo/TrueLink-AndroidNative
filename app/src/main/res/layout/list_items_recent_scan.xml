@@ -110,13 +110,11 @@
             android:orientation="horizontal">
 
             <TextView
-
                 android:id="@+id/tv_phishing"
                 style="@style/textViewFontInter"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center"
-                android:layout_weight="1"
                 android:background="@drawable/background_round_no_border"
                 android:backgroundTint="@color/purple"
                 android:drawablePadding="@dimen/margin5"
@@ -132,11 +130,10 @@
             <TextView
                 android:id="@+id/tv_social_media"
                 style="@style/textViewFontInter"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center"
                 android:layout_marginLeft="@dimen/margin5"
-                android:layout_weight="1"
                 android:drawablePadding="@dimen/margin5"
                 android:maxLines="1"
                 android:text="@string/social_media"

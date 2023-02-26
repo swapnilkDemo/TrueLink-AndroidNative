@@ -12,8 +12,13 @@ query RecentScansLatest($skip: FilterSkip!, $limit: FilterLimit!, $sender: [Stri
         full_url
         https
         verified
+        domainName
+        appName
         reportSummary {
-          phishing
+            spam
+            malware
+            phishing
+            fradulent
         }
       }
     }

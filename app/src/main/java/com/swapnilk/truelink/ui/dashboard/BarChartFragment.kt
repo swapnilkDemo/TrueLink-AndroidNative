@@ -19,7 +19,7 @@ import com.swapnilk.truelink.databinding.FragmentBarChartBinding
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-class BarChartFragment : Fragment() {
+class BarChartFragment(val statistics: List<List<String?>?>?) : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -45,7 +45,7 @@ class BarChartFragment : Fragment() {
         _binding = FragmentBarChartBinding.inflate(inflater, container, false)
         val root: View = binding.root
         bindViews()
-        loadGraph()
+        loadGraph(statistics)
         return root
     }
 
@@ -54,22 +54,26 @@ class BarChartFragment : Fragment() {
     }
 
     companion object {
-        @JvmStatic
+       /* @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            BarChartFragment().apply {
+            BarChartFragment(statistics = null.allScansMap).apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)
                 }
-            }
+            }*/
     }
 
     @SuppressLint("ResourceAsColor")
-    private fun loadGraph() {
+    private fun loadGraph(statistics: List<List<String?>?>?) {
         val xAxisList: ArrayList<String> = ArrayList()
         val yAxisList: ArrayList<String> = ArrayList()
 
-        xAxisList.add("SocialMedia")
+        for (i in statistics!!){
+            i?.get(0)?.let { xAxisList.add(it) }
+            i?.get(1)?.let { yAxisList.add(it) }
+        }
+       /* xAxisList.add("SocialMedia")
         xAxisList.add("News")
         xAxisList.add("E-Commerce")
         xAxisList.add("Technology")
@@ -81,7 +85,7 @@ class BarChartFragment : Fragment() {
         yAxisList.add("87")
         yAxisList.add("72")
         yAxisList.add("49")
-        yAxisList.add("28")
+        yAxisList.add("28")*/
 
         val entries = java.util.ArrayList<BarEntry>()
 

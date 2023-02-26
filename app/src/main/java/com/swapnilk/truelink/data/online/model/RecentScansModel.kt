@@ -8,8 +8,11 @@ data class RecentScansModel(
     val time: String?,
     val source: String?,
     val sourceIcon: String?,
-    val isPhishing: Boolean?,
-    val isSocialMedia: Boolean?,
-    val reportCount: String?
+    val phishing: Int?,
+    val spam: Int?,
+    val malware: Int?,
+    val fradulent: Int?,
+    val category: String?,
+    val https: Boolean?
 ) {
 }

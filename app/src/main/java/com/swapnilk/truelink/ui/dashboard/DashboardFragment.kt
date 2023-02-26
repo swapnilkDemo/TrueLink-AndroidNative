@@ -139,7 +139,6 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
                 true
             )
         setRangeFilter()
-        loadTabs()
 
         ivSenderFilter.setOnClickListener {
             setSendersFilter()
@@ -182,6 +181,8 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
             behavior.skipCollapsed = true
             behavior.peekHeight = BottomSheetBehavior.SAVE_ALL
         }
+        val cvBottom = view.findViewById<LinearLayout>(R.id.cv_bottom)
+        cvBottom.visibility = View.GONE
         val btnClose = view.findViewById<TextView>(R.id.txt_dialog_header)
         val tvDialogTitle = view.findViewById<TextView>(R.id.txt_dialog_header)
         tvDialogTitle.text = getString(R.string.top_apps)
@@ -197,7 +198,8 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
             addItemDecoration(dividerItemDecoration)
             adapter = AppDataAdapterList(
                 appList,
-                requireContext()
+                requireContext(),
+                dialog
             )
         }
 
@@ -324,9 +326,14 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
         }
     }
 
-    private fun loadTabs() {
+    private fun loadTabs(statistics: AppDataModel) {
         var adapter =
-            ViewPagerAdapter(requireContext(), activity?.supportFragmentManager, tabGraph.tabCount)
+            ViewPagerAdapter(
+                requireContext(),
+                activity?.supportFragmentManager,
+                tabGraph.tabCount,
+                statistics
+            )
         viewPager.adapter = adapter
         viewPager.addOnPageChangeListener(TabLayoutOnPageChangeListener(tabGraph))
         viewPager.currentItem = 0
@@ -343,6 +350,10 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
                     (tabGraph.getChildAt(0) as ViewGroup).getChildAt(tab.position) as LinearLayout
                 val tabTextView = tabLayout.getChildAt(1) as TextView
                 tabTextView.setTypeface(null, Typeface.NORMAL)
+                if (tabTextView.text.equals(R.string.tab_all)) {
+
+                }
+
             }
 
             override fun onTabReselected(tab: TabLayout.Tab) {
@@ -389,14 +400,17 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
                     var resentScansModel = RecentScansModel(
                         i?.verified!!,
                         i?.favicon!!,
-                        "domain.com",
+                        i?.domainName,
                         i?.full_url!!,
                         commonFunctions.convertTimeStamp2Date(i?.createdAt!!.toString()),
-                        "i?",
+                        i?.appName,
                         i?.appIcon,
-                        false,
-                        true,
-                        i?.reportSummary?.phishing.toString()
+                        i?.reportSummary?.phishing,
+                        i?.reportSummary?.spam,
+                        i?.reportSummary?.malware,
+                        i?.reportSummary?.fradulent,
+                        i?.category,
+                        i?.https
 
                     )
                     scanList.add(resentScansModel)
@@ -442,7 +456,11 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
                             i?.packageName,
                             R.color.selected_color,
                             false,
-                            i?.senders
+                            i?.senders,
+                            i?.statistics?.allScans,
+                            i?.statistics?.safeScans,
+                            i?.statistics?.verifiedScans,
+                            i?.statistics?.suspiciousScans
 
                         )
                         appList.add(appScansModel)
@@ -622,6 +640,9 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
                 getString(R.string.no_internet),
                 true
             )
+
+        loadTabs(appScansModel)
+
     }
 
     override fun onSenderSelected(sender: AppScanHistoryQuery.Sender, packageName: String?) {

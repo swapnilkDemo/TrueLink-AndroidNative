@@ -14,5 +14,9 @@ data class AppDataModel(
     val packageName: String?,
     val bgColor: Int?,
     val isSelected: Boolean?,
-    val senders: List<AppScanHistoryQuery.Sender?>?
+    val senders: List<AppScanHistoryQuery.Sender?>?,
+    val allScansMap: List<List<String?>?>?,
+    val safeScansMap: List<List<String?>?>?,
+    val verifiedScansMap: List<List<String?>?>?,
+    val suspiciousScansMap: List<List<String?>?>?
 )
