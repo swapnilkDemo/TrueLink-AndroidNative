@@ -44,10 +44,7 @@ import com.swapnilk.truelink.ui.home.HomeViewModel
 import com.swapnilk.truelink.utils.CommonFunctions
 import com.swapnilk.truelink.utils.SharedPreferences
 import de.hdodenhof.circleimageview.CircleImageView
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import okhttp3.OkHttpClient
 import pl.droidsonroids.gif.GifImageView
 import kotlin.coroutines.CoroutineContext
@@ -378,6 +375,7 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
 
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     private fun createRecentScantList(
         filterDay: Int?,
         packageName: String,
@@ -393,41 +391,45 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
             Optional.Absent
 
         )
-        launch {
-            val response: ApolloResponse<RecentScansLatestQuery.Data> =
-                apolloClient.query(recentScans).execute()
+       GlobalScope.launch(Dispatchers.Main){
+           try {
+               val response: ApolloResponse<RecentScansLatestQuery.Data> =
+                   apolloClient.query(recentScans).execute()
 
-            try {
-                for (i in response.data?.recentScans?.payload?.results!!) {
-                    var resentScansModel = RecentScansModel(
-                        i?.verified!!,
-                        i?.favicon!!,
-                        i?.domainName,
-                        i?.full_url!!,
-                        commonFunctions.convertTimeStamp2Date(i?.createdAt!!.toString()),
-                        i?.appName,
-                        i?.appIcon,
-                        i?.reportSummary?.phishing,
-                        i?.reportSummary?.spam,
-                        i?.reportSummary?.malware,
-                        i?.reportSummary?.fradulent,
-                        i?.category,
-                        i?.https
+               for (i in response.data?.recentScans?.payload?.results!!) {
+                   var resentScansModel = RecentScansModel(
+                       i?.verified!!,
+                       i?.favicon!!,
+                       i?.domainName,
+                       i?.full_url!!,
+                       commonFunctions.convertTimeStamp2Date(i?.createdAt!!.toString()),
+                       i?.appName,
+                       i?.appIcon,
+                       i?.reportSummary?.phishing,
+                       i?.reportSummary?.spam,
+                       i?.reportSummary?.malware,
+                       i?.reportSummary?.fradulent,
+                       i?.category,
+                       i?.https
 
-                    )
-                    scanList.add(resentScansModel)
-                    loadRecentScans(scanList)
-                }
-            } catch (ex: Exception) {
-                ex.stackTrace
-            }
+                   )
+                   scanList.add(resentScansModel)
+                   loadRecentScans(scanList)
+               }
+           }catch (ex: ApolloException){
 
-        }
+           }catch (ex: java.lang.NullPointerException){
+
+           }finally {
+
+           }
+       }
 
 
         return scanList
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     private fun createAppList(queryParam: Int?, packageName: String?): ArrayList<AppDataModel> {
         appList.clear()
         val appScanHistory = AppScanHistoryQuery(
@@ -438,44 +440,44 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
             100,
             Optional.present(packageName)
         )
-        try {
-            launch {
+        GlobalScope.launch(Dispatchers.Main) {
+            try {
                 val response: ApolloResponse<AppScanHistoryQuery.Data> =
                     apolloClient.query(appScanHistory).execute()
                 // for (i in response)
                 println(response.data?.appScanHistory?.payload)
-                try {
-                    for (i in response.data?.appScanHistory?.payload!!) {
-                        var appScansModel = AppDataModel(
-                            i?.icon,
-                            i?.appName,
-                            i?.overallScans?.totalLinks,
-                            i?.overallScans?.safeLinks,
-                            i?.overallScans?.clickedLinks,
-                            i?.overallScans?.suspicousLinks,
-                            i?.overallScans?.scannedFromNotifications,
-                            i?.overallScans?.scannedWithinBrowser,
-                            i?.overallScans?.verifiedLinks,
-                            i?.packageName,
-                            R.color.selected_color,
-                            false,
-                            i?.senders,
-                            i?.statistics?.allScans,
-                            i?.statistics?.safeScans,
-                            i?.statistics?.verifiedScans,
-                            i?.statistics?.suspiciousScans
+                for (i in response.data?.appScanHistory?.payload!!) {
+                    var appScansModel = AppDataModel(
+                        i?.icon,
+                        i?.appName,
+                        i?.overallScans?.totalLinks,
+                        i?.overallScans?.safeLinks,
+                        i?.overallScans?.clickedLinks,
+                        i?.overallScans?.suspicousLinks,
+                        i?.overallScans?.scannedFromNotifications,
+                        i?.overallScans?.scannedWithinBrowser,
+                        i?.overallScans?.verifiedLinks,
+                        i?.packageName,
+                        R.color.selected_color,
+                        false,
+                        i?.senders,
+                        i?.statistics?.allScans,
+                        i?.statistics?.safeScans,
+                        i?.statistics?.verifiedScans,
+                        i?.statistics?.suspiciousScans
 
-                        )
-                        appList.add(appScansModel)
+                    )
+                    appList.add(appScansModel)
 
-                    }
-                    loadTopAppList(appList)
-                } catch (ex: Exception) {
-                    ex.stackTrace
                 }
+                loadTopAppList(appList)
+            } catch (ex: ApolloException) {
+                ex.stackTrace
+            } catch (ex: NullPointerException) {
+                ex.stackTrace
+            } finally {
+
             }
-        } catch (ex: ApolloException) {
-            ex.stackTrace
         }
         return appList
     }

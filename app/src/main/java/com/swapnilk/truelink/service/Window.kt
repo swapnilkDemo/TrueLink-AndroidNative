@@ -132,22 +132,24 @@ class Window(  // declaring required variables
     }
 
 @SuppressLint("SetTextI18n")
-fun open(full_url: String,
-         domain: String,
-         totalScans: Int,
-         flag: String,
-         spamReports: Int,
-         malwareReports: Int,
-         phishingReports: Int,
-         fakewebReports: Int,
-         totalReports: Int,
-         severityInt: Int,
-         originIp: String,
-         category: String,
-         createdOn: String,
-         connectionType: String,
-         location: String,
-         hosting: String) {
+fun open(
+    full_url: String?,
+    domain: String?,
+    totalScans: Int?,
+    flag: String?,
+    spamReports: Int?,
+    malwareReports: Int?,
+    phishingReports: Int?,
+    fakewebReports: Int?,
+    totalReports: Int?,
+    severityInt: Int?,
+    originIp: String?,
+    category: String?,
+    createdOn: String?,
+    connectionType: String?,
+    location: String?,
+    hosting: String?
+) {
 //        set title text
         domainText!!.text = domain
         totalScanText!!.text = "$category | Total Scans $totalScans"
@@ -161,7 +163,7 @@ fun open(full_url: String,
         }
 
 //        substring full_url if it is too long
-        if (full_url.length > 25) {
+        if (full_url?.length!! > 25) {
             val substring = full_url.substring(0, 25)
             fullUrlText!!.text = "${substring}..."
         }else {
@@ -169,19 +171,19 @@ fun open(full_url: String,
         }
 
 //        check if flag contains malware, phishing, fakeweb
-        if (flag.contains("MALWARE")) {
+        if (flag?.contains("MALWARE") == true) {
             flagText!!.text = "Malware"
             tagIcon!!.setImageResource(R.drawable.malwareicon)
             spamReportsText!!.text = "$malwareReports Malware Reports"
-        } else if (flag.contains("PHISHING")) {
+        } else if (flag?.contains("PHISHING") == true) {
             flagText!!.text = "PHISHING"
             tagIcon!!.setImageResource(R.drawable.phishing_icon)
             spamReportsText!!.text = "$phishingReports Phishing Reports"
-        } else if (flag.contains("FAKE SITE")) {
+        } else if (flag?.contains("FAKE SITE") == true) {
             flagText!!.text = "FAKE SITE"
             tagIcon!!.setImageResource(R.drawable.fakeicon)
             spamReportsText!!.text = "$fakewebReports Fake Web Reports"
-        } else if (flag.contains("SPAM")) {
+        } else if (flag?.contains("SPAM") == true) {
             flagText!!.text = "SPAM"
             tagIcon!!.setImageResource(R.drawable.spam_icon)
             spamReportsText!!.text = "$spamReports Spam Reports"
@@ -222,7 +224,7 @@ fun open(full_url: String,
         originIPText?.text = originIp
         locationText?.text = location
 //    substring hosting if it is too long
-        if (hosting.length > 12) {
+        if (hosting?.length!! > 12) {
             val substring = hosting.substring(0, 12)
             hostingText!!.text = "${substring}..."
         }else {

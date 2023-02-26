@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.ColorSpace.Model
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -25,6 +24,7 @@ import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.ApolloResponse
 import com.apollographql.apollo3.api.Optional
 import com.apollographql.apollo3.exception.ApolloException
+import com.apollographql.apollo3.network.okHttpClient
 import com.auth0.android.jwt.JWT
 import com.example.ScanLinkMutation
 import com.example.TokenUpdateMutation
@@ -34,6 +34,7 @@ import com.example.type.ScanTriggerType
 import com.example.type.WhoisInput
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.swapnilk.truelink.data.online.AuthorizationInterceptor
 import com.swapnilk.truelink.databinding.ActivityMainBinding
 import com.swapnilk.truelink.service.ForegroundService
 import com.swapnilk.truelink.service.MyReceiver
@@ -41,7 +42,9 @@ import com.swapnilk.truelink.ui.SigninActivity
 import com.swapnilk.truelink.ui.user_profile.UpdateUserProfile
 import com.swapnilk.truelink.utils.CommonFunctions
 import com.swapnilk.truelink.utils.SharedPreferences
+import com.truelink.ScanResultsActivity
 import kotlinx.coroutines.*
+import okhttp3.OkHttpClient
 import java.io.DataInputStream
 import java.io.IOException
 import java.io.OutputStreamWriter
@@ -168,9 +171,12 @@ open class MainActivity : AppCompatActivity(), CoroutineScope {
             if (commonFunctions.checkConnection(this@MainActivity)) {
                 try {
                     //apolloHelper = ApolloHelper(this@MainActivity)
+                    val okHttpClient = OkHttpClient.Builder()
+                        .addInterceptor(AuthorizationInterceptor(applicationContext))
+                        .build()
                     apolloClient =
                         ApolloClient.Builder().serverUrl("https://truelink.neki.dev/graphql/")
-                            .build()
+                            .okHttpClient(okHttpClient).build()
                 } catch (e: Exception) {
                     e.stackTrace
                 }
@@ -193,7 +199,7 @@ open class MainActivity : AppCompatActivity(), CoroutineScope {
             scanLink(data)
         }
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(onNotice,  IntentFilter("Msg"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(onNotice, IntentFilter("Msg"));
     }
 
     private val onNotice: BroadcastReceiver = object : BroadcastReceiver() {
@@ -222,6 +228,7 @@ open class MainActivity : AppCompatActivity(), CoroutineScope {
     }
 
     ///////////////////Scan Link/////////////////////////////////////////
+    @OptIn(DelicateCoroutinesApi::class)
     private fun scanLink(data: Uri) {
         val whoStr = consultWhois(data.host.toString())
         val whoisInput = WhoisInput(
@@ -248,22 +255,27 @@ open class MainActivity : AppCompatActivity(), CoroutineScope {
             scanLinkInput
         )
 
-        try {
-            launch {
-
+        GlobalScope.launch(Dispatchers.Main) {
+            try {
                 var response: ApolloResponse<ScanLinkMutation.Data> =
                     apolloClient.mutation(scanLink).execute()
                 handleScanResult(response)
+            } catch (e: ApolloException) {
+                e.stackTrace
+            } catch (e: NullPointerException) {
+
+            } finally {
+
             }
-        } catch (e: ApolloException) {
-            e.stackTrace
         }
     }
 
     //////////////////////////////Handle response of scan link////////////////////
     private suspend fun handleScanResult(response: ApolloResponse<ScanLinkMutation.Data>) {
         commonFunctions.showToast(this@MainActivity, "Links Scanned successfully")
-        yield()
+        var scanResultIntent = Intent(this@MainActivity, ScanResultsActivity::class.java)
+        scanResultIntent.putExtra("response", "response")
+        startActivity(scanResultIntent)
     }
 
     private fun showToolBar() {
@@ -291,27 +303,29 @@ open class MainActivity : AppCompatActivity(), CoroutineScope {
     }
 
     /////////////////Refresh token if expired/////////////////
+    @OptIn(DelicateCoroutinesApi::class)
     private fun refreshAccessToken(refreshToken: String) {
         val jwt = JWT(sharedPreferences.getAccessToken().toString())
         if (jwt.isExpired(10)) {
             var tokenRefresh = TokenUpdateMutation(
                 refreshToken
             )
-
-            try {
-                launch {
+            GlobalScope.launch(Dispatchers.Main) {
+                try {
                     var response: ApolloResponse<TokenUpdateMutation.Data> =
                         apolloClient.mutation(tokenRefresh).execute()
                     afterResponse(response)
+                } catch (e: ApolloException) {
+                    e.stackTrace
+                    commonFunctions.showToast(this@MainActivity, e.message)
+
+                } catch (e: java.lang.NullPointerException) {
+                    e.stackTrace
+                    commonFunctions.showToast(this@MainActivity, e.message)
+
+                } finally {
+
                 }
-            } catch (e: Exception) {
-                e.stackTrace
-                commonFunctions.showToast(this@MainActivity, e.message)
-
-            } catch (e: ApolloException) {
-                e.stackTrace
-                commonFunctions.showToast(this@MainActivity, e.message)
-
             }
         }
 

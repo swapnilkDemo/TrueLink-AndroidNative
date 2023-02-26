@@ -47,7 +47,24 @@ class ScanResultsActivity : Activity() {
         bundle.putString("data", data.toString())
         serviceIntent.putExtras(bundle)
         applicationContext.startService(serviceIntent)
-       // window.open();
+        window.open(
+            "null",
+            "null",
+            1,
+            "SPAM",
+            1,
+            0,
+            0,
+            0,
+            1,
+            1,
+            "null",
+            "null",
+            "null",
+            "null",
+            "null",
+            "null"
+        );
         finish()
     }
 

@@ -73,19 +73,6 @@ class BarChartFragment(val statistics: List<List<String?>?>?) : Fragment() {
             i?.get(0)?.let { xAxisList.add(it) }
             i?.get(1)?.let { yAxisList.add(it) }
         }
-       /* xAxisList.add("SocialMedia")
-        xAxisList.add("News")
-        xAxisList.add("E-Commerce")
-        xAxisList.add("Technology")
-        xAxisList.add("Suspicious")
-        xAxisList.add("Other")
-
-        yAxisList.add("138")
-        yAxisList.add("68")
-        yAxisList.add("87")
-        yAxisList.add("72")
-        yAxisList.add("49")
-        yAxisList.add("28")*/
 
         val entries = java.util.ArrayList<BarEntry>()
 

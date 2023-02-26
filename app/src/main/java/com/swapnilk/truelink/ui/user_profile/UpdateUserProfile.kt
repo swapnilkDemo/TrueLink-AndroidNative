@@ -509,7 +509,7 @@ open class UpdateUserProfile : Fragment(), CoroutineScope {
         return Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1
     }
 
-    fun getPickImageResultUri(data: Intent?): Uri? {
+    private fun getPickImageResultUri(data: Intent?): Uri? {
         var isCamera = true
         if (data != null) {
             val action = data.action
@@ -520,19 +520,8 @@ open class UpdateUserProfile : Fragment(), CoroutineScope {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-
-        // save file url in bundle as it will be null on scren orientation
-        // changes
         outState.putParcelable("pic_uri", picUri)
     }
-
-    /* protected fun onRestoreInstanceState(savedInstanceState: Bundle) {
-         super.onRestoreInstanceState(savedInstanceState)
-
-         // get the file url
-         picUri = savedInstanceState.getParcelable("pic_uri")
-     }*/
-
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         var bitmap: Bitmap? = null
@@ -821,7 +810,7 @@ open class UpdateUserProfile : Fragment(), CoroutineScope {
     }
 
 
-    fun getAllBrowsers() {
+    fun getAllBrowsers(): List<ResolveInfo> {
         val allLaunchers = ArrayList<String>()
 
         val allApps = Intent(Intent.ACTION_MAIN)
@@ -838,6 +827,7 @@ open class UpdateUserProfile : Fragment(), CoroutineScope {
                 Log.e("match", myAppList[i].activityInfo.packageName + "")
             }
         }
+        return myAppList
     }
 }
 
