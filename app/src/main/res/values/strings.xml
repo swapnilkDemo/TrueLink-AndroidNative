@@ -184,7 +184,7 @@ meaning regardless of whether they appear in singular or in plural.</span></div>
     <string name="full_url">shorturl.at/bgoWYKoLdjo…</string>
     <string name="tag_icon">phishing</string>
     <string name="tagged_as_name">PHISHING PAGE</string>
-    <string name="reports_count">38 Spam Reports</string>
+    <string name="reports_count">Reports</string>
     <string name="origin_ip_text">10.101.20.202</string>
     <string name="origin_ip_title">Origin IP</string>
     <string name="origin_ip_icon">TODO</string>

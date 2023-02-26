@@ -15,6 +15,8 @@ query AppScanHistory($skip: FilterSkip!, $limit: FilterLimit!, $days: Int, $send
                 verifiedLinks
             }
             packageName
+            appName
+            icon
             senders(skip: $sendersSkip2, limit: $sendersLimit2) {
                 image
                 sender

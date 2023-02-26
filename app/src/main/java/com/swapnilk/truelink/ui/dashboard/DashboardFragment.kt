@@ -51,6 +51,7 @@ import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import pl.droidsonroids.gif.GifImageView
 import kotlin.coroutines.CoroutineContext
+import kotlin.properties.Delegates
 
 class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
     ////////////Start Coroutine for Background Task../////////////
@@ -297,8 +298,9 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
 
     private fun loadTopAppList(appList: ArrayList<AppDataModel>) {
         binding.rvApps.apply {
+            selectedItem = appList.size - 1
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, true)
-            adapter = TopAppDataAdapter(appList, requireContext(), appList.size - 1)
+            adapter = TopAppDataAdapter(appList, requireContext(), selectedItem)
             scrollToPosition(appList.size - 1)
         }
 
@@ -445,7 +447,8 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
                 try {
                     for (i in response.data?.appScanHistory?.payload!!) {
                         var appScansModel = AppDataModel(
-                            R.drawable.ic_no_photo,
+                            i?.icon,
+                            i?.appName,
                             i?.overallScans?.totalLinks,
                             i?.overallScans?.safeLinks,
                             i?.overallScans?.clickedLinks,
@@ -665,6 +668,7 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
 
     companion object GlobalProperties {
         lateinit var mListener: DataChangedInterface
+        var selectedItem by Delegates.notNull<Int>()
 
     }
 

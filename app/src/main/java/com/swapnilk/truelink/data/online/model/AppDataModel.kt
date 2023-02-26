@@ -3,7 +3,8 @@ package com.swapnilk.truelink.data.online.model
 import com.example.AppScanHistoryQuery
 
 data class AppDataModel(
-    val appIconUrl: Int?,
+    val appIconUrl: String?,
+    val appName: String?,
     val totalLinks: Int?,
     val safeLinks: Int?,
     val clickedLinks: Int?,

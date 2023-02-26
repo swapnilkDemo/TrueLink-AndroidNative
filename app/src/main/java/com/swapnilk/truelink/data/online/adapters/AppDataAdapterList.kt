@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.squareup.picasso.Picasso
 import com.swapnilk.truelink.R
 import com.swapnilk.truelink.data.online.model.AppDataModel
 import com.swapnilk.truelink.ui.dashboard.DashboardFragment
@@ -15,9 +16,9 @@ import com.swapnilk.truelink.utils.CommonFunctions
 import de.hdodenhof.circleimageview.CircleImageView
 
 class AppDataAdapterList(
-    val appList: ArrayList<AppDataModel>,
+    private val appList: ArrayList<AppDataModel>,
     val context: Context,
-    val dialog: BottomSheetDialog
+    private val dialog: BottomSheetDialog
 ) :
     RecyclerView.Adapter<AppDataAdapterList.ViewHolder>() {
     var commonFunctions: CommonFunctions = CommonFunctions(context)
@@ -42,14 +43,26 @@ class AppDataAdapterList(
         val appDataModel = appList[position]
         if (appDataModel != null) {
             if (appDataModel.packageName != null) {
-                holder.tvAppName.text =
-                    commonFunctions.getAppNameFromPackageName(appDataModel.packageName, context)
-                holder.ivAppIcon.setImageDrawable(
-                    commonFunctions.getAppIconFromPackageName(
+                if (commonFunctions.getAppNameFromPackageName(
                         appDataModel.packageName,
                         context
+                    ) != "Unknown"
+                ) {
+                    holder.tvAppName.text =
+                        commonFunctions.getAppNameFromPackageName(appDataModel.packageName, context)
+                    holder.ivAppIcon.setImageDrawable(
+                        commonFunctions.getAppIconFromPackageName(
+                            appDataModel.packageName,
+                            context
+                        )
                     )
-                )
+                } else {
+                    holder.tvAppName.text = appDataModel.appName
+                    Picasso.with(context)
+                        .load(appDataModel.appIconUrl)
+                        .placeholder(R.drawable.ic_no_photo)
+                        .into(holder.ivAppIcon)
+                }
             } else {
                 holder.tvAppName.text = context.getString(R.string.overall)
                 holder.ivAppIcon.setImageDrawable(context.resources.getDrawable(R.drawable.ic_overall))
@@ -61,6 +74,7 @@ class AppDataAdapterList(
 
             holder.itemView.setOnClickListener {
                 DashboardFragment.mListener.onAppSelected(appDataModel)
+                DashboardFragment.selectedItem = position
                 dialog.dismiss()
             }
         }

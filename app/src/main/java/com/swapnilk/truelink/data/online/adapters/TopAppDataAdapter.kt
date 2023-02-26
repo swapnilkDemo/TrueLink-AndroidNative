@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
-import android.graphics.drawable.Drawable
 import android.os.Build
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -14,6 +13,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import com.swapnilk.truelink.R
 import com.swapnilk.truelink.data.online.model.AppDataModel
 import com.swapnilk.truelink.ui.dashboard.DashboardFragment
@@ -37,21 +37,27 @@ class TopAppDataAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val appDataModel = appList[position]
         if (!TextUtils.isEmpty(appDataModel.packageName)) {
-            var appIcon: Drawable? =
-                commonFunctions.getAppIconFromPackageName(appDataModel.packageName!!, context)
-            if (appIcon != null) {
-                holder.ivAppIcon.setImageDrawable(appIcon)
-            } else {
-                holder.ivAppIcon.setImageDrawable(context.resources.getDrawable(R.drawable.ic_no_photo))
-            }
-            var appName =
-                commonFunctions.getAppNameFromPackageName(appDataModel.packageName, context)
-            if (appName != null) {
+            if (commonFunctions.getAppNameFromPackageName(
+                    appDataModel.packageName,
+                    context
+                ) != "Unknown"
+            ) {
                 holder.tvAppName.text =
-                    appName
+                    commonFunctions.getAppNameFromPackageName(appDataModel.packageName, context)
+                holder.ivAppIcon.setImageDrawable(
+                    commonFunctions.getAppIconFromPackageName(
+                        appDataModel.packageName!!,
+                        context
+                    )
+                )
             } else {
-                holder.tvAppName.text = appDataModel.packageName
+                holder.tvAppName.text = appDataModel.appName
+                Picasso.with(context)
+                    .load(appDataModel.appIconUrl)
+                    .placeholder(R.drawable.ic_no_photo)
+                    .into(holder.ivAppIcon)
             }
+
         } else {
             holder.tvAppName.text = context.getString(R.string.overall)
             holder.ivAppIcon.setImageDrawable(context.resources.getDrawable(R.drawable.ic_overall))

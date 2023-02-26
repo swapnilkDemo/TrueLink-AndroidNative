@@ -63,6 +63,7 @@ dependencies {
     ////////////////////////////////////////////////////////////
     ///////////....... GraphQL Queries.................////////
     implementation 'com.apollographql.apollo3:apollo-runtime:3.7.3'
+    implementation 'com.apollographql.apollo:apollo-coroutines-support:3.7.3'
     ////////////////////Firebase Tools////////////////////////
     implementation 'com.google.firebase:firebase-crashlytics-ktx:18.3.5'
     implementation 'com.google.firebase:firebase-analytics-ktx:21.2.0'

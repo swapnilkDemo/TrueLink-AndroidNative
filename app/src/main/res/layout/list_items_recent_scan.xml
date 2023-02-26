@@ -109,38 +109,69 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/tv_phishing"
-                style="@style/textViewFontInter"
+            <LinearLayout
+                android:id="@+id/ll_result"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="start|center"
                 android:background="@drawable/background_round_no_border"
                 android:backgroundTint="@color/purple"
-                android:drawablePadding="@dimen/margin5"
-                android:maxLines="1"
-                android:paddingLeft="@dimen/margin10"
-                android:paddingRight="@dimen/margin10"
-                android:text="@string/phishing"
-                android:textColor="@color/gray_200"
-                android:textSize="@dimen/text12"
-                android:visibility="gone"
-                app:drawableLeftCompat="@drawable/ic_social_media" />
+                android:orientation="horizontal"
+                android:padding="@dimen/margin1"
+                android:visibility="gone">
 
-            <TextView
-                android:id="@+id/tv_social_media"
-                style="@style/textViewFontInter"
+                <ImageView
+                    android:id="@+id/iv_result_icon"
+                    android:layout_width="@dimen/margin16"
+                    android:layout_height="@dimen/margin16"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/margin5"
+                    android:layout_marginEnd="@dimen/margin5"
+                    android:gravity="end|center_vertical"
+                    android:src="@drawable/ic_phishing" />
+
+                <TextView
+                    android:id="@+id/tv_phishing"
+                    style="@style/textViewFontInter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:paddingRight="@dimen/margin10"
+                    android:text="@string/phishing"
+                    android:textColor="@color/gray_200"
+                    android:textSize="@dimen/text12" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_category"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="start|center"
-                android:layout_marginLeft="@dimen/margin5"
-                android:drawablePadding="@dimen/margin5"
-                android:maxLines="1"
-                android:text="@string/social_media"
-                android:textColor="@color/gray_200"
-                android:textSize="@dimen/text12"
-                android:visibility="gone"
-                app:drawableLeftCompat="@drawable/ic_social_media" />
+                android:orientation="horizontal"
+                android:padding="@dimen/margin1"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/iv_category_icon"
+                    android:layout_width="@dimen/margin16"
+                    android:layout_height="@dimen/margin16"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/margin5"
+                    android:layout_marginEnd="@dimen/margin5"
+                    android:gravity="end|center_vertical"
+                    android:src="@drawable/ic_social_media" />
+
+                <TextView
+                    android:id="@+id/tv_social_media"
+                    style="@style/textViewFontInter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center"
+                    android:maxLines="1"
+                    android:text="@string/social_media"
+                    android:textColor="@color/gray_200"
+                    android:textSize="@dimen/text12" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/tv_report_count"
