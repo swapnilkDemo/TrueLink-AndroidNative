@@ -73,8 +73,8 @@ class AppDataAdapterList(
             holder.ivArrowRight.visibility = View.VISIBLE
 
             holder.itemView.setOnClickListener {
-                DashboardFragment.mListener.onAppSelected(appDataModel)
                 DashboardFragment.selectedItem = position
+                DashboardFragment.mListener.onAppSelected(appDataModel)
                 dialog.dismiss()
             }
         }

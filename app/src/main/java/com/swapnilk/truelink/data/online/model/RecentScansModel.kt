@@ -11,7 +11,7 @@ data class RecentScansModel(
     val phishing: Int?,
     val spam: Int?,
     val malware: Int?,
-    val fradulent: Int?,
+    val fraudulent: Int?,
     val category: String?,
     val https: Boolean?
 ) {

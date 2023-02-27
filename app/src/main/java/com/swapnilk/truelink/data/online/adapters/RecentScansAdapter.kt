@@ -52,7 +52,7 @@ class RecentScansAdapter(
             holder.llCategory.visibility = View.GONE
             holder.llResult.visibility = View.VISIBLE
             val max1: Int = max(recentScansModel.phishing!!, recentScansModel.malware!!)
-            val max2: Int = max(recentScansModel.spam!!, recentScansModel.fradulent!!)
+            val max2: Int = max(recentScansModel.spam!!, recentScansModel.fraudulent!!)
             val max3: Int = maxOf(max1, max2)
             if (max3 != null) {
                 holder.tvSpamCount.visibility = View.VISIBLE
@@ -70,9 +70,9 @@ class RecentScansAdapter(
                             )
                         )
                     }
-                    recentScansModel.fradulent -> {
+                    recentScansModel.fraudulent -> {
                         holder.tvSpamCount.text =
-                            recentScansModel.fradulent.toString() + " " + context.getString(R.string.reports_count)
+                            recentScansModel.fraudulent.toString() + " " + context.getString(R.string.reports_count)
                         holder.tvPhishing.text = context.getText(R.string.fraudulent)
                         holder.ivResultIcon.setImageDrawable(context.getDrawable(R.drawable.ic_fake))
                         holder.llResult.background.setTint(

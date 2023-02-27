@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.text.TextUtils
+import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.annotation.RequiresApi
@@ -30,6 +31,7 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.TabLayoutOnPageChangeListener
@@ -48,7 +50,7 @@ import kotlinx.coroutines.*
 import okhttp3.OkHttpClient
 import pl.droidsonroids.gif.GifImageView
 import kotlin.coroutines.CoroutineContext
-import kotlin.properties.Delegates
+
 
 class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
     ////////////Start Coroutine for Background Task../////////////
@@ -76,18 +78,21 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
     lateinit var tvTotalCount: TextView
     lateinit var tvClickedCount: TextView
     lateinit var tvVerifiedCount: TextView
-    lateinit var rvSender: RecyclerView
+    lateinit var rvSenderChip: RecyclerView
     lateinit var llSenders: LinearLayout
     lateinit var ivSenderFilter: ImageView
     lateinit var llOverall: LinearLayout
     lateinit var ivAppIcon: ImageView
     lateinit var ivTopAppFilter: ImageView
+    lateinit var tvEmptyList: TextView
+    lateinit var progressBar: ProgressBar
 
     private lateinit var commonFunctions: CommonFunctions
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var apolloClient: ApolloClient
     private var sendersList: ArrayList<AppScanHistoryQuery.Sender?> = ArrayList()
     private var appList = ArrayList<AppDataModel>()
+    private var scanList = ArrayList<RecentScansModel>()
 
     var progress: Int = 0
 
@@ -127,16 +132,16 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
             } catch (e: Exception) {
                 e.stackTrace
             }
-            createAppList(30, "")
-            createRecentScantList(30, "", null)
+            createAppList(dayFilter, "")
+            //createRecentScantList(dayFilter, "", null)
         } else
             commonFunctions.showErrorSnackBar(
                 requireContext(),
-                rvSender,
+                rvSenderChip,
                 getString(R.string.no_internet),
                 true
             )
-        setRangeFilter()
+        setDateRangeFilter()
 
         ivSenderFilter.setOnClickListener {
             setSendersFilter()
@@ -165,6 +170,7 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
         return root
     }
 
+    /////////////////////////Show App Filter Screen////////////////////////////////
     private fun setTopAppsFilter() {
         val dialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialog)
         dialog.setCancelable(false)
@@ -206,6 +212,7 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
         }
     }
 
+    ///////////////////////////////Show Senders Filter screen ////////////////////////
     private fun setSendersFilter() {
         val dialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialog)
         dialog.setCancelable(false)
@@ -223,9 +230,9 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
         val btnClose = view.findViewById<TextView>(R.id.txt_dialog_header)
         var senderIcon = view.findViewById<CircleImageView>(R.id.iv_sender_icon)
 
-        var rvSenders: RecyclerView = view.findViewById(R.id.rv_senders)
+        var rvSendersList: RecyclerView = view.findViewById(R.id.rv_senders)
 
-        rvSenders.apply {
+        rvSendersList.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             var dividerItemDecoration = DividerItemDecoration(
                 context,
@@ -243,9 +250,33 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
             dialog.dismiss()
         }
 
+        var btnClearFilter: MaterialButton = view.findViewById(R.id.btn_clear_filter)
+        var btnApplyFilter: MaterialButton = view.findViewById(R.id.btn_apply_filter)
+
+        btnClearFilter.setOnClickListener {
+            selectedItemsList.clear()
+            rvSendersList.adapter?.notifyDataSetChanged()
+        }
+
+        btnApplyFilter.setOnClickListener {
+
+            val senderStrList: MutableList<String> = ArrayList()
+            for (i in selectedItemsList) {
+                val strName = i.sender.toString()
+                senderStrList.add(strName)
+            }
+            dialog.dismiss()
+            createRecentScantList(
+                dayFilter,
+                appList[selectedItem].packageName.toString(),
+                senderStrList
+            )
+        }
+
     }
 
-    private fun setRangeFilter() {
+    //////////////////////////Show DaY Filters//////////////////////////
+    private fun setDateRangeFilter() {
         var filterArray = resources.getStringArray(R.array.filter)
         tvRangeFilter.setAdapter(
             ArrayAdapter<String>(
@@ -261,6 +292,19 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
                 return v?.onTouchEvent(event) ?: true
             }
         })
+        tvRangeFilter.onItemClickListener =
+            (AdapterView.OnItemClickListener { parent, view, position, id ->
+                when (position) {
+                    0 -> dayFilter = 30
+                    1 -> dayFilter = 60
+                    2 -> dayFilter = 90
+                }
+                var packageName: String = ""
+                if (appList.size > 0)
+                    packageName = appList[selectedItem].packageName.toString()
+                createAppList(dayFilter, packageName)
+                //createRecentScantList(dayFilter, "", null)
+            })
         // tvFilter.setText(tvFilter.adapter.getItem(0).toString())
     }
 
@@ -285,24 +329,29 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
         tvAppLinkCount = binding.tvAppLinkCount
         tvBrowserCount = binding.tvBrowserCount
 
-        rvSender = binding.rvSenders
+        rvSenderChip = binding.rvSenders
         llSenders = binding.llSenders
         ivSenderFilter = binding.ivFilterSender
         llOverall = binding.llOverall
         ivAppIcon = binding.ivAppIcon
         ivTopAppFilter = binding.ivFilterTopApps
+
+        progressBar = binding.progressBar
     }
 
+    /////////////////////////////Set Top RecyclerView///////////////////
     private fun loadTopAppList(appList: ArrayList<AppDataModel>) {
         binding.rvApps.apply {
-            selectedItem = appList.size - 1
+            if (selectedItem == -1)
+                selectedItem = appList.size - 1
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, true)
             adapter = TopAppDataAdapter(appList, requireContext(), selectedItem)
-            scrollToPosition(appList.size - 1)
+            scrollToPosition(selectedItem)
         }
 
     }
 
+    /////////////////////////////Permission Progress//////////////////
     private fun updateSeekbarProgress(context: Context) {
         seekBar.progress = progress
         if (progress <= 33) {
@@ -325,6 +374,7 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
         }
     }
 
+    //////////////////////Load Graph/////////////////////////////
     private fun loadTabs(statistics: AppDataModel) {
         var adapter =
             ViewPagerAdapter(
@@ -361,8 +411,8 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
         })
     }
 
+    ///////////////////////////////Set Recent Scans RecyclerView////////////////////////
     private fun loadRecentScans(scanList: ArrayList<RecentScansModel>) {
-
         binding.rvRecentScan.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             adapter = RecentScansAdapter(scanList, requireContext(), parentFragmentManager)
@@ -371,6 +421,8 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
                 (layoutManager as LinearLayoutManager).orientation
             )
             addItemDecoration(dividerItemDecoration)
+            isNestedScrollingEnabled = false
+            //swapAdapter(adapter, true)
         }
 
     }
@@ -379,9 +431,9 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
     private fun createRecentScantList(
         filterDay: Int?,
         packageName: String,
-        sender: List<String>?,
-    ): ArrayList<RecentScansModel> {
-        var scanList = ArrayList<RecentScansModel>()
+        sender: List<String?>?,
+    ) {
+        scanList.clear()
         val recentScans = RecentScansLatestQuery(
             0,
             100,
@@ -391,42 +443,49 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
             Optional.Absent
 
         )
-       GlobalScope.launch(Dispatchers.Main){
-           try {
-               val response: ApolloResponse<RecentScansLatestQuery.Data> =
-                   apolloClient.query(recentScans).execute()
+        GlobalScope.launch(Dispatchers.Main) {
+            try {
+                progressBar.visibility = View.VISIBLE
+                var faviconStr = ""
+                val response: ApolloResponse<RecentScansLatestQuery.Data> =
+                    apolloClient.query(recentScans).execute()
+                for (i in response.data?.recentScans?.payload?.results!!) {
+                    if (i?.favicon != null)
+                        faviconStr = i.favicon
+                    val resentScansModel = RecentScansModel(
+                        i?.verified!!,
+                        faviconStr,
+                        i.domainName,
+                        i.full_url!!,
+                        commonFunctions.convertTimeStamp2Date(i?.createdAt!!.toString()),
+                        i.appName,
+                        i.appIcon,
+                        i.reportSummary?.phishing,
+                        i.reportSummary?.spam,
+                        i.reportSummary?.malware,
+                        i.reportSummary?.fradulent,
+                        i.category,
+                        i.https
 
-               for (i in response.data?.recentScans?.payload?.results!!) {
-                   var resentScansModel = RecentScansModel(
-                       i?.verified!!,
-                       i?.favicon!!,
-                       i?.domainName,
-                       i?.full_url!!,
-                       commonFunctions.convertTimeStamp2Date(i?.createdAt!!.toString()),
-                       i?.appName,
-                       i?.appIcon,
-                       i?.reportSummary?.phishing,
-                       i?.reportSummary?.spam,
-                       i?.reportSummary?.malware,
-                       i?.reportSummary?.fradulent,
-                       i?.category,
-                       i?.https
+                    )
+                    scanList.add(resentScansModel)
+                }
+                loadRecentScans(scanList)
+                if (scanList.size > 0) {
+                    binding.tvEmptyView.visibility = View.GONE
+                } else
+                    binding.tvEmptyView.visibility = View.VISIBLE
+            } catch (ex: ApolloException) {
+                ex.stackTrace
+            } catch (ex: java.lang.NullPointerException) {
+                ex.stackTrace
+                Log.d("Exception ", ex.message.toString())
+            } finally {
+                progressBar.visibility = View.GONE
 
-                   )
-                   scanList.add(resentScansModel)
-                   loadRecentScans(scanList)
-               }
-           }catch (ex: ApolloException){
+            }
+        }
 
-           }catch (ex: java.lang.NullPointerException){
-
-           }finally {
-
-           }
-       }
-
-
-        return scanList
     }
 
     @OptIn(DelicateCoroutinesApi::class)
@@ -442,6 +501,7 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
         )
         GlobalScope.launch(Dispatchers.Main) {
             try {
+                progressBar.visibility = View.VISIBLE
                 val response: ApolloResponse<AppScanHistoryQuery.Data> =
                     apolloClient.query(appScanHistory).execute()
                 // for (i in response)
@@ -476,7 +536,7 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
             } catch (ex: NullPointerException) {
                 ex.stackTrace
             } finally {
-
+                progressBar.visibility = View.GONE
             }
         }
         return appList
@@ -595,6 +655,7 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
         _binding = null
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onAppSelected(appScansModel: AppDataModel) {
         tvSafeCount.text = appScansModel.safeLinks.toString()
         tvSuspiciousCount.text = appScansModel.suspiciousLinks.toString()
@@ -623,7 +684,7 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
             ivAppIcon.visibility = View.GONE
         }
         if (appScansModel.senders != null && appScansModel.senders.isNotEmpty()) {
-            rvSender.apply {
+            rvSenderChip.apply {
                 llSenders.visibility = View.VISIBLE
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 adapter = SenderDataAdapterChip(
@@ -637,11 +698,11 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
             llSenders.visibility = View.GONE
         }
         if (commonFunctions.checkConnection(requireContext()))
-            createRecentScantList(30, appScansModel.packageName.toString(), null)
+            createRecentScantList(dayFilter, appScansModel.packageName.toString(), null)
         else
             commonFunctions.showErrorSnackBar(
                 requireContext(),
-                rvSender,
+                rvSenderChip,
                 getString(R.string.no_internet),
                 true
             )
@@ -650,19 +711,21 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
 
     }
 
-    override fun onSenderSelected(sender: AppScanHistoryQuery.Sender, packageName: String?) {
-        var senderList: ArrayList<String> = ArrayList()
-        senderList.add(sender.sender.toString())
+    override fun onSenderSelected(
+        senderList: List<String?>?,
+        packageName: String?
+    ) {
+
         if (commonFunctions.checkConnection(requireContext()))
             createRecentScantList(
-                30,
+                dayFilter,
                 packageName!!,
                 senderList
             )
         else
             commonFunctions.showErrorSnackBar(
                 requireContext(),
-                rvSender,
+                rvSenderChip,
                 getString(R.string.no_internet),
                 true
             )
@@ -670,8 +733,9 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
 
     companion object GlobalProperties {
         lateinit var mListener: DataChangedInterface
-        var selectedItem by Delegates.notNull<Int>()
-
+        var selectedItem: Int = -1
+        var dayFilter: Int = 30
+        var selectedItemsList: ArrayList<AppScanHistoryQuery.Sender> = ArrayList()
     }
 
     class yAxisValueFormatter : ValueFormatter(), IAxisValueFormatter {

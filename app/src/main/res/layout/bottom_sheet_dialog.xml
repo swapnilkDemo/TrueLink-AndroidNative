@@ -66,7 +66,6 @@
                 android:layout_marginRight="@dimen/margin5"
                 android:layout_weight="1"
                 android:background="@drawable/background_round_selected_border"
-                android:enabled="false"
                 android:text="@string/clear_filter"
                 android:textAllCaps="false"
                 android:textColor="@color/selected_color"
@@ -80,14 +79,11 @@
                 android:layout_gravity="bottom"
                 android:layout_marginLeft="@dimen/margin5"
                 android:layout_weight="1"
-                android:background="@drawable/background_round_no_border"
-                android:backgroundTint="@color/selected_color"
-                android:enabled="false"
+                android:background="@drawable/background_round_no_border_selected"
                 android:text="@string/apply_filter"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textSize="@dimen/text12"
-                app:backgroundTint="@null" />
+                android:textSize="@dimen/text12"/>
         </LinearLayout>
     </LinearLayout>
 

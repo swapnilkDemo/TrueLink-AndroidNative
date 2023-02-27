@@ -38,7 +38,9 @@ class SenderDataAdapterChip(
                 holder.chip.chipIcon = commonFunctions.drawableFromUrl(sender.image)
 
             holder.itemView.setOnClickListener {
-                DashboardFragment.mListener.onSenderSelected(sender, packageName)
+                var senderList: List<String> = ArrayList()
+                senderList.toMutableList().add(sender.sender.toString())
+                DashboardFragment.mListener.onSenderSelected(senderList, packageName)
             }
         } else {
             holder.chip.visibility = View.GONE

@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.AppScanHistoryQuery
 import com.squareup.picasso.Picasso
 import com.swapnilk.truelink.R
+import com.swapnilk.truelink.ui.dashboard.DashboardFragment.GlobalProperties.selectedItemsList
 import com.swapnilk.truelink.utils.CommonFunctions
 import de.hdodenhof.circleimageview.CircleImageView
 
@@ -20,7 +21,6 @@ class SenderDataAdapterList(
 ) :
     RecyclerView.Adapter<SenderDataAdapterList.ViewHolder>() {
     var commonFunctions: CommonFunctions = CommonFunctions(context)
-    var selectedItemsList: ArrayList<AppScanHistoryQuery.Sender> = ArrayList()
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var ivSenderIcon: CircleImageView = itemView.findViewById(R.id.iv_sender_icon)
@@ -51,6 +51,12 @@ class SenderDataAdapterList(
             holder.tvSafeLinks.text =
                 sender.safeLinks.toString() + " " + context.getString(R.string.safe_links_1)
             holder.tvTotalLinks.text = sender.linksCount.toString()
+
+            if (selectedItemsList.contains(sender))
+                holder.itemView.setBackgroundColor(context.resources.getColor(R.color.light_background))
+            else
+                holder.itemView.setBackgroundColor(context.resources.getColor(R.color.primary_color))
+
             holder.itemView.setOnClickListener {
                 if (!selectedItemsList.contains(sender)) {
                     selectedItemsList.add(sender)

@@ -17,8 +17,7 @@
             android:layout_height="@dimen/margin60"
             android:layout_gravity="center"
             android:background="@drawable/background_circle"
-            android:gravity="center"
-            android:src="@drawable/ic_no_photo" />
+            android:gravity="center" />
 
         <ImageView
             android:id="@+id/tv_sender_tick"
