@@ -20,6 +20,7 @@
         android:indeterminate="true"
         android:indeterminateDrawable="@drawable/progress_indeterminate"
         android:indeterminateTintMode="src_atop"
+        android:interpolator="@anim/linear_interpolator"
         android:visibility="gone" />
 
     <ScrollView

@@ -176,6 +176,47 @@ meaning regardless of whether they appear in singular or in plural.</span></div>
     <string name="malware">Malware</string>
     <string name="spam">Spam</string>
     <string name="empty_list">No previous records found.</string>
+    <string name="safe">Safe</string>
+    <string name="medium">Medium</string>
+    <string name="critical">Critical</string>
+    <string name="high">High</string>
+    <string name="open">Open</string>
+    <string name="report">Report</string>
+    <string name="not_spam">Not Spam</string>
+    <string name="sandbox">Sandbox</string>
+    <string name="worldwide">Worldwide</string>
+    <string name="reports">Reports</string>
+    <string name="scanned_on">Scanned On</string>
+    <string name="sent_by">Send By</string>
+    <string name="technical_info">Technical Info</string>
+    <string name="created_at">Created at - 22 Feb 23</string>
+    <string name="shorten_link">"Shorten Link           :    "</string>
+    <string name="site_domain">"Site Domain            :    "</string>
+    <string name="scanned_url">"Scanned URL          :    "</string>
+    <string name="page_title">"Page Title                  :    "</string>
+    <string name="origin">Origin IP</string>
+    <string name="location">Server Location</string>
+    <string name="hosting">Hosting </string>
+    <string name="connection">Connection</string>
+    <string name="registrar">Domain Registrar </string>
+    <string name="seo">SEO Score</string>
+    <string name="detailed_report">Detailed Report</string>
+    <string name="meta_tags">Meta Tags</string>
+    <string name="web_info">Website Info</string>
+    <string name="title">Title</string>
+    <string name="heading">Heading</string>
+    <string name="description">Description</string>
+    <string name="author">Author</string>
+    <string name="image">Image</string>
+    <string name="copyrights">Copyrights</string>
+    <string name="about_us">About Us</string>
+    <string name="contact_us">Contact Us</string>
+    <string name="listing">Google Listing</string>
+    <string name="cloud">Cloudflare</string>
+    <string name="sitemap">Sitemap</string>
+    <string name="ssl">SSL Enabled</string>
+    <string name="other_param">Other Parameters</string>
+
     <!---->
 
 

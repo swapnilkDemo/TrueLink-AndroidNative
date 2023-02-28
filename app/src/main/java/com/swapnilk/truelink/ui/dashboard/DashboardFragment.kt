@@ -144,7 +144,10 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
         setDateRangeFilter()
 
         ivSenderFilter.setOnClickListener {
-            setSendersFilter()
+            var strPackageName: String = ""
+            if (appList.size > 0)
+                strPackageName = appList[selectedItem].packageName.toString()
+            setSendersFilter(strPackageName)
 
         }
 
@@ -213,7 +216,7 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
     }
 
     ///////////////////////////////Show Senders Filter screen ////////////////////////
-    private fun setSendersFilter() {
+    private fun setSendersFilter(strPackageName: String) {
         val dialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialog)
         dialog.setCancelable(false)
         val view = layoutInflater.inflate(R.layout.bottom_sheet_dialog, null)
@@ -259,20 +262,12 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
         }
 
         btnApplyFilter.setOnClickListener {
-
-            val senderStrList: MutableList<String> = ArrayList()
-            for (i in selectedItemsList) {
-                val strName = i.sender.toString()
-                senderStrList.add(strName)
-            }
             dialog.dismiss()
-            createRecentScantList(
-                dayFilter,
-                appList[selectedItem].packageName.toString(),
-                senderStrList
+            mListener.onSenderSelected(
+                selectedItemsList,
+                packageName
             )
         }
-
     }
 
     //////////////////////////Show DaY Filters//////////////////////////
@@ -436,8 +431,10 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
         scanList.clear()
         val recentScans = RecentScansLatestQuery(
             0,
-            100,
-            Optional.present(sender),
+            1,
+            if (sender != null && sender.isNotEmpty())
+                Optional.present(sender)
+            else Optional.Absent,
             Optional.present(packageName),
             Optional.present(filterDay),
             Optional.Absent
@@ -493,10 +490,10 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
         appList.clear()
         val appScanHistory = AppScanHistoryQuery(
             0,
-            100,
+            10,
             Optional.present(queryParam!!),
             0,
-            100,
+            10,
             Optional.present(packageName)
         )
         GlobalScope.launch(Dispatchers.Main) {
@@ -667,6 +664,7 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
         sendersList.clear()
         sendersList = appScansModel.senders as ArrayList<AppScanHistoryQuery.Sender?>
         if (appScansModel.packageName != null) {
+            packageName = appScansModel.packageName
             llOverall.visibility = View.GONE
             ivAppIcon.visibility = View.VISIBLE
             var appIcon = commonFunctions.getAppIconFromPackageName(
@@ -683,7 +681,7 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
             llOverall.visibility = View.VISIBLE
             ivAppIcon.visibility = View.GONE
         }
-        if (appScansModel.senders != null && appScansModel.senders.isNotEmpty()) {
+        if (sendersList.size > 0) {
             rvSenderChip.apply {
                 llSenders.visibility = View.VISIBLE
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
@@ -712,15 +710,20 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
     }
 
     override fun onSenderSelected(
-        senderList: List<String?>?,
+        senderList: ArrayList<AppScanHistoryQuery.Sender>,
         packageName: String?
     ) {
+        val senderStrList: MutableList<String> = ArrayList()
+        for (i in selectedItemsList) {
+            val strName = i.sender.toString()
+            senderStrList.add(strName)
+        }
 
         if (commonFunctions.checkConnection(requireContext()))
             createRecentScantList(
                 dayFilter,
                 packageName!!,
-                senderList
+                senderStrList
             )
         else
             commonFunctions.showErrorSnackBar(
@@ -736,6 +739,7 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
         var selectedItem: Int = -1
         var dayFilter: Int = 30
         var selectedItemsList: ArrayList<AppScanHistoryQuery.Sender> = ArrayList()
+        var packageName = ""
     }
 
     class yAxisValueFormatter : ValueFormatter(), IAxisValueFormatter {

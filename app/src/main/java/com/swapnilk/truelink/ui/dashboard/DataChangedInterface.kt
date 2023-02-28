@@ -5,5 +5,5 @@ import com.swapnilk.truelink.data.online.model.AppDataModel
 
 interface DataChangedInterface {
     fun onAppSelected(appDataModel: AppDataModel)
-    fun onSenderSelected(senderList: List<String?>?, packageName: String?)
+    fun onSenderSelected(senderList: ArrayList<AppScanHistoryQuery.Sender>, packageName: String?)
 }

@@ -83,7 +83,8 @@
                 android:text="@string/apply_filter"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textSize="@dimen/text12"/>
+                android:textSize="@dimen/text12"
+                app:backgroundTint="@null" />
         </LinearLayout>
     </LinearLayout>
 
