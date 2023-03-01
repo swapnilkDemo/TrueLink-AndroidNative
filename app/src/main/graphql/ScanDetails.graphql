@@ -1,0 +1,119 @@
+query GetScanDetails($linkHash: String!, $days: Int!, $type: ReportSummaryGraphType!, $startDate: String, $endDate: String, $skip: FilterSkip!, $limit: FilterLimit!, $sortOrder: SortOrder!) {
+  getScanDetails(link_hash: $linkHash) {
+    code
+    success
+    message
+    payload {
+      ReportSummary(days: $days, type: $type, startDate: $startDate, endDate: $endDate) {
+        data {
+          date
+          value
+        }
+        total
+      }
+      UserReports(skip: $skip, limit: $limit, sortOrder: $sortOrder) {
+        reports {
+          comment
+          createdAt
+          dislikes
+          domain
+          files {
+            file1
+            file2
+            file3
+            file4
+          }
+          flag
+          hidden
+          likes
+          link
+          location {
+            coordinates
+            type
+            properties {
+              city
+              country
+              state
+            }
+          }
+          reaction {
+            createdAt
+            reaction
+            user {
+              avatar
+              fullname
+              uid
+            }
+          }
+          reportId
+          severity
+          user {
+            address
+            avatar
+            country
+            fullname
+            gender
+            location {
+              type
+              coordinates
+              properties {
+                city
+                country
+                state
+              }
+            }
+            uid
+          }
+        }
+      }
+      createdAt
+      finishedAt
+      flag
+      link {
+        category
+        favicon
+        full_url
+        hash
+        ipinfo {
+          ip
+        }
+        totalReports
+        username
+        whois {
+          creationDate
+          registrar
+          nameServers
+          name
+        }
+      }
+      location {
+        coordinates
+        type
+        properties {
+          city
+          country
+          state
+        }
+      }
+      progress
+      quickScan {
+        SEOScore
+        headers
+        siteMap
+      }
+      scanId
+      severity
+      siteDetails {
+        about_us
+        author
+        contact_us
+        description
+        heading
+        og_image
+        title
+      }
+      status
+      triggers
+    }
+  }
+}

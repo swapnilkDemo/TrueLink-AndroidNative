@@ -44,6 +44,13 @@ import java.util.*
 
 
 class CommonFunctions(context: Context) {
+
+    ////////////////////////Get Server URL////////////////
+    fun getServerUrl(): String {
+        /////////////////////////Change Server URl Here////////////
+        return "https://truelink.neki.dev/graphql/"
+    }
+
     /////////////////////////Set Dark theme//////////////////
     @RequiresApi(Build.VERSION_CODES.P)
     fun setStatusBar(context: Activity) {

@@ -11,5 +11,7 @@
         android:id="@+id/toolbar_scan_details"
         layout="@layout/toolbar_scan_details" />
 
-    <include layout="@layout/content_scan_details" />
+    <include
+        android:id="@+id/content"
+        layout="@layout/content_scan_details" />
 </LinearLayout>

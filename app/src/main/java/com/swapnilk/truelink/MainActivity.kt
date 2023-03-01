@@ -175,7 +175,7 @@ open class MainActivity : AppCompatActivity(), CoroutineScope {
                         .addInterceptor(AuthorizationInterceptor(applicationContext))
                         .build()
                     apolloClient =
-                        ApolloClient.Builder().serverUrl("https://truelink.neki.dev/graphql/")
+                        ApolloClient.Builder().serverUrl(commonFunctions.getServerUrl())
                             .okHttpClient(okHttpClient).build()
                 } catch (e: Exception) {
                     e.stackTrace

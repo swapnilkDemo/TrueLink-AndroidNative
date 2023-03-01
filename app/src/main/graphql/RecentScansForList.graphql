@@ -5,6 +5,7 @@ query RecentScansLatest($skip: FilterSkip!, $limit: FilterLimit!, $sender: [Stri
     message
     payload {
       results {
+       hash
         appIcon
         category
         createdAt

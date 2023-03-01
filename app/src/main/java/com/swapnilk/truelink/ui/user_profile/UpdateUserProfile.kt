@@ -140,7 +140,7 @@ open class UpdateUserProfile : Fragment(), CoroutineScope {
                     .addInterceptor(AuthorizationInterceptor(requireContext().applicationContext))
                     .build()
                 apolloClient =
-                    ApolloClient.Builder().serverUrl("https://truelink.neki.dev/graphql/")
+                    ApolloClient.Builder().serverUrl(commonFunctions.getServerUrl())
                         .okHttpClient(okHttpClient).build()
 
             } catch (e: Exception) {

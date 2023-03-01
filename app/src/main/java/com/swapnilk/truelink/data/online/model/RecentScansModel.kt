@@ -1,6 +1,6 @@
 package com.swapnilk.truelink.data.online.model
 
-data class RecentScansModel(
+data class RecentScansModel (
     val isVerified: Boolean?,
     val faviconUrl: String?,
     val domainName: String?,
@@ -13,6 +13,7 @@ data class RecentScansModel(
     val malware: Int?,
     val fraudulent: Int?,
     val category: String?,
-    val https: Boolean?
+    val https: Boolean?,
+    val hashId: String
 ) {
 }

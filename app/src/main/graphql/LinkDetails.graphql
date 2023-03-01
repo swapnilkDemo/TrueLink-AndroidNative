@@ -1,0 +1,137 @@
+query GetLinksInfo($skip: FilterSkip!, $limit: FilterLimit!, $sortOrder: SortOrder!, $days: Int!, $type: LinksSummaryGraphType!) {
+  getLinksInfo {
+    code
+    success
+    message
+    payload {
+      Scans(skip: $skip, limit: $limit, sortOrder: $sortOrder) {
+        scans {
+          createdAt
+          finishedAt
+          flag
+          link {
+            category
+            favicon
+            full_url
+            ipinfo {
+              city
+              country_name
+              hostname
+              ip
+              latitude
+              longitude
+              timezone
+            }
+            netloc
+            protocol
+            reports {
+              createdAt
+              domain
+              user {
+                avatar
+                city
+                country
+                fullname
+                state
+                uid
+              }
+              comment
+              dislikes
+              likes
+              files {
+                file1
+                file2
+                file3
+                file4
+              }
+              flag
+              hidden
+              link
+              location {
+                coordinates
+                properties {
+                  city
+                  country
+                  state
+                }
+                type
+              }
+              reaction {
+                createdAt
+                reaction
+                user {
+                  avatar
+                  city
+                  country
+                  fullname
+                  state
+                  uid
+                }
+              }
+              reportId
+              severity
+            }
+            totalReports
+            username
+            whois {
+              country
+              creationDate
+              domainName
+              linkScanned
+              name
+              nameServers
+              registrar
+            }
+            queries
+          }
+          location {
+            coordinates
+            properties {
+              city
+              country
+              state
+            }
+            type
+          }
+          progress
+          scanId
+          severity
+          siteDetails {
+            about_us
+            author
+            contact_us
+            description
+            google_site_verification
+            heading
+            keywords
+            metaTags
+            name
+            og_image
+            og_type
+            robots
+            title
+          }
+          status
+          triggers
+          quickScan {
+            SEOScore
+            TLSexpired
+            headers
+            hostingProvider
+            serverLocation
+            siteMap
+          }
+        }
+        total
+        totalSuspicious
+      }
+      Summary(days: $days, type: $type) {
+        data {
+          date
+          value
+        }
+        total
+      }
+    }
+  }
+}

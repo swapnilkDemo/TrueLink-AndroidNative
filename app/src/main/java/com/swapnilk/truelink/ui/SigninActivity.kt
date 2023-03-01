@@ -123,7 +123,7 @@ class SigninActivity : AppCompatActivity(), CoroutineScope {
                             try {
                                 apolloClient =
                                     ApolloClient.Builder()
-                                        .serverUrl("https://truelink.neki.dev/graphql/").build()
+                                        .serverUrl(commonFunctions.getServerUrl()).build()
 //            apiHelper = ApiHelper(this@SigninActivity)
                             } catch (e: ApolloException) {
                                 e.message?.let { Log.d("Exception ", it) }

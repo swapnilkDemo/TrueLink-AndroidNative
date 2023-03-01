@@ -126,7 +126,8 @@ class RecentScansAdapter(
 
 
         holder.itemView.setOnClickListener {
-            val scanDetailsFragment: ScanDetailsFragment = ScanDetailsFragment()
+            val scanDetailsFragment: ScanDetailsFragment = ScanDetailsFragment.newInstance(recentScansModel)
+
             MainActivity.addFragmentToActivity(scanDetailsFragment, fm)
         }
     }

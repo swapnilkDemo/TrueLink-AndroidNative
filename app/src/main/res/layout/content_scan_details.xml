@@ -1,1140 +1,1764 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primary_color"
+    tools:context=".ui.user_profile.UpdateUserProfile">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/light_background"
-        android:orientation="vertical">
 
-        <RelativeLayout
-            android:id="@+id/activity_landing"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="@style/ProgressDialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:elevation="@dimen/margin10"
+        android:indeterminate="true"
+        android:indeterminateDrawable="@drawable/progress_indeterminate"
+        android:indeterminateTintMode="src_atop"
+        android:interpolator="@anim/linear_interpolator"
+        android:visibility="gone" />
 
-            <LinearLayout
-                android:id="@+id/parent"
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:background="@color/orange"
-                android:orientation="horizontal" />
-
-            <pl.droidsonroids.gif.GifImageView
-                android:layout_width="@dimen/margin200"
-                android:layout_height="@dimen/margin200"
-                android:layout_below="@+id/parent"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="-120dp"
-                android:src="@drawable/spam" />
-
-        </RelativeLayout>
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@color/light_background"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tv_domain_name"
-                style="@style/textViewFontSora"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/margin20"
-                android:drawablePadding="@dimen/margin10"
-                android:gravity="center"
-                android:paddingLeft="@dimen/margin5"
-                android:text="@string/recent_scan"
-                android:textColor="@color/white"
-                android:textSize="@dimen/text18"
-                android:textStyle="bold"
-                app:drawableLeftCompat="@drawable/ic_unlock" />
+            <RelativeLayout
+                android:id="@+id/activity_landing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/tv_url"
-                style="@style/textViewFontInter"
-                android:layout_width="@dimen/margin250"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/margin5"
-                android:background="@drawable/background_round_no_border"
-                android:backgroundTint="@color/secondary_color"
-                android:gravity="center"
-                android:maxLines="1"
-                android:paddingLeft="@dimen/margin10"
-                android:text="@string/url"
-                android:textColor="@color/gray_200"
-                android:textSize="@dimen/text16" />
+                <LinearLayout
+                    android:id="@+id/parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:background="@color/orange"
+                    android:orientation="horizontal" />
+
+                <pl.droidsonroids.gif.GifImageView
+                    android:id="@+id/gif_iv_spam"
+                    android:layout_width="@dimen/margin200"
+                    android:layout_height="@dimen/margin200"
+                    android:layout_below="@+id/parent"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="-120dp"
+                    android:src="@drawable/spam" />
+
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/margin5"
-                android:orientation="horizontal">
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_domain_name"
+                    style="@style/textViewFontSora"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/margin20"
+                    android:drawablePadding="@dimen/margin10"
+                    android:gravity="center"
+                    android:paddingLeft="@dimen/margin5"
+                    android:text="@string/recent_scan"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text18"
+                    android:textStyle="bold"
+                    app:drawableLeftCompat="@drawable/ic_unlock" />
+
+                <TextView
+                    android:id="@+id/tv_url"
+                    style="@style/textViewFontInter"
+                    android:layout_width="@dimen/margin250"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/margin5"
+                    android:background="@drawable/background_round_no_border"
+                    android:backgroundTint="@color/secondary_color"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:paddingLeft="@dimen/margin10"
+                    android:text="@string/url"
+                    android:textColor="@color/gray_200"
+                    android:textSize="@dimen/text16" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/margin5"
+                    android:orientation="horizontal">
 
-                    <ImageView
-                        android:id="@+id/iv_safe"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ic_polygon_down"
-                        app:tint="@color/green" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/margin8"
-                        android:layout_marginLeft="@dimen/margin10"
-                        android:layout_marginTop="@dimen/margin2"
-                        android:layout_marginRight="@dimen/margin10"
-                        android:background="@color/green" />
-
-                    <TextView
-                        style="@style/textViewFontSora"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:text="@string/safe"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text10" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:id="@+id/iv_medium"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ic_polygon_down"
-                        android:visibility="invisible"
-                        app:tint="@color/yellow_text" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/margin8"
-                        android:layout_marginLeft="@dimen/margin10"
-                        android:layout_marginTop="@dimen/margin2"
-                        android:layout_marginRight="@dimen/margin10"
-                        android:background="@color/yellow_text" />
-
-                    <TextView
-                        style="@style/textViewFontSora"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:text="@string/medium"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text10" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:id="@+id/iv_high"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ic_polygon_down"
-                        android:visibility="invisible"
-                        app:tint="@color/orange_text" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/margin8"
-                        android:layout_marginLeft="@dimen/margin10"
-                        android:layout_marginTop="@dimen/margin2"
-                        android:layout_marginRight="@dimen/margin10"
-                        android:background="@color/orange_text" />
-
-                    <TextView
-                        style="@style/textViewFontSora"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:text="@string/high"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text10" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:id="@+id/iv_critical"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ic_polygon_down"
-                        android:visibility="invisible"
-                        app:tint="@color/red" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/margin8"
-                        android:layout_marginLeft="@dimen/margin10"
-                        android:layout_marginTop="@dimen/margin2"
-                        android:layout_marginRight="@dimen/margin10"
-                        android:background="@color/red" />
-
-                    <TextView
-                        style="@style/textViewFontSora"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:text="@string/critical"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text10" />
-
-                </LinearLayout>
-
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="@dimen/margin15"
-                android:background="@color/transparent50" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/margin20"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:id="@+id/ll_open"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:background="@drawable/background_outline_box_light"
-                        android:padding="@dimen/margin15"
-                        android:src="@drawable/ic_open" />
-
-                    <TextView
-                        style="@style/textViewFontSora"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="@dimen/margin5"
-                        android:gravity="center"
-                        android:text="@string/open"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text10" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/ll_sandbox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:background="@drawable/background_outline_box_light"
-                        android:padding="@dimen/margin15"
-                        android:src="@drawable/ic_sandbox" />
-
-                    <TextView
-                        style="@style/textViewFontSora"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="@dimen/margin5"
-                        android:gravity="center"
-                        android:text="@string/sandbox"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text10" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/ll_not_spam"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:background="@drawable/background_outline_box_light"
-                        android:padding="@dimen/margin15"
-                        android:src="@drawable/ic_not_spam" />
-
-                    <TextView
-                        style="@style/textViewFontSora"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="@dimen/margin5"
-                        android:gravity="center"
-                        android:text="@string/not_spam"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text10" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/ll_report"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:background="@drawable/background_outline_box_light"
-                        android:padding="@dimen/margin15"
-                        android:src="@drawable/ic_report" />
-
-                    <TextView
-                        style="@style/textViewFontSora"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="@dimen/margin5"
-                        android:gravity="center"
-                        android:text="@string/report"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text10" />
-
-                </LinearLayout>
-            </LinearLayout>
-
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                app:cardBackgroundColor="@color/primary_color"
-                app:cardCornerRadius="@dimen/margin10">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <com.google.android.material.card.MaterialCardView
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/margin10"
-                        android:elevation="@dimen/margin8"
-                        app:cardBackgroundColor="@color/light_background"
-                        app:cardCornerRadius="@dimen/margin8">
+                        android:layout_weight="1"
+                        android:orientation="vertical">
 
-                        <LinearLayout
+                        <ImageView
+                            android:id="@+id/iv_safe"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_polygon_down"
+                            android:visibility="invisible"
+                            app:tint="@color/green" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/margin8"
+                            android:layout_marginLeft="@dimen/margin10"
+                            android:layout_marginTop="@dimen/margin2"
+                            android:layout_marginRight="@dimen/margin10"
+                            android:background="@color/green" />
+
+                        <TextView
+                            style="@style/textViewFontSora"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:text="@string/safe"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text10" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/iv_medium"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_polygon_down"
+                            android:visibility="invisible"
+                            app:tint="@color/yellow_text" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/margin8"
+                            android:layout_marginLeft="@dimen/margin10"
+                            android:layout_marginTop="@dimen/margin2"
+                            android:layout_marginRight="@dimen/margin10"
+                            android:background="@color/yellow_text" />
+
+                        <TextView
+                            style="@style/textViewFontSora"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:text="@string/medium"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text10" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/iv_high"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_polygon_down"
+                            android:visibility="invisible"
+                            app:tint="@color/orange_text" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/margin8"
+                            android:layout_marginLeft="@dimen/margin10"
+                            android:layout_marginTop="@dimen/margin2"
+                            android:layout_marginRight="@dimen/margin10"
+                            android:background="@color/orange_text" />
+
+                        <TextView
+                            style="@style/textViewFontSora"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:text="@string/high"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text10" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/iv_critical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_polygon_down"
+                            android:visibility="invisible"
+                            app:tint="@color/red" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/margin8"
+                            android:layout_marginLeft="@dimen/margin10"
+                            android:layout_marginTop="@dimen/margin2"
+                            android:layout_marginRight="@dimen/margin10"
+                            android:background="@color/red" />
+
+                        <TextView
+                            style="@style/textViewFontSora"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:text="@string/critical"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text10" />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/margin15"
+                    android:background="@color/transparent50" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/margin20"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/ll_open"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:background="@drawable/background_outline_box_light"
+                            android:padding="@dimen/margin15"
+                            android:src="@drawable/ic_open" />
+
+                        <TextView
+                            style="@style/textViewFontSora"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="@dimen/margin5"
+                            android:gravity="center"
+                            android:text="@string/open"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text10" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_sandbox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:background="@drawable/background_outline_box_light"
+                            android:padding="@dimen/margin15"
+                            android:src="@drawable/ic_sandbox" />
+
+                        <TextView
+                            style="@style/textViewFontSora"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="@dimen/margin5"
+                            android:gravity="center"
+                            android:text="@string/sandbox"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text10" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_not_spam"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:background="@drawable/background_outline_box_light"
+                            android:padding="@dimen/margin15"
+                            android:src="@drawable/ic_not_spam" />
+
+                        <TextView
+                            style="@style/textViewFontSora"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="@dimen/margin5"
+                            android:gravity="center"
+                            android:text="@string/not_spam"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text10" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_report"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:background="@drawable/background_outline_box_light"
+                            android:padding="@dimen/margin15"
+                            android:src="@drawable/ic_report" />
+
+                        <TextView
+                            style="@style/textViewFontSora"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="@dimen/margin5"
+                            android:gravity="center"
+                            android:text="@string/report"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text10" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    app:cardBackgroundColor="@color/primary_color"
+                    app:cardCornerRadius="@dimen/margin10">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <com.google.android.material.card.MaterialCardView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:padding="@dimen/margin10">
-
+                            android:layout_margin="@dimen/margin10"
+                            android:elevation="@dimen/margin8"
+                            app:cardBackgroundColor="@color/light_background"
+                            app:cardCornerRadius="@dimen/margin8">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal">
+                                android:orientation="vertical"
+                                android:padding="@dimen/margin10">
+
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:orientation="vertical">
+                                    android:orientation="horizontal">
 
-                                    <ImageView
-                                        android:id="@+id/iv_app_icon"
-                                        android:layout_width="@dimen/margin60"
-                                        android:layout_height="@dimen/margin60"
-                                        android:layout_gravity="center"
-                                        android:layout_margin="@dimen/margin10"
-                                        android:src="@drawable/ic_www" />
-
-                                    <TextView
-                                        style="@style/textViewFontSora"
+                                    <LinearLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_gravity="center"
-                                        android:gravity="center"
-                                        android:text="@string/worldwide"
-                                        android:textColor="@color/white"
-                                        android:textSize="@dimen/text10" />
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
 
-                                    <TextView
-                                        android:id="@+id/tvWeekCount"
-                                        style="@style/textViewFontSora"
+                                        <ImageView
+                                            android:id="@+id/iv_app_icon"
+                                            android:layout_width="@dimen/margin60"
+                                            android:layout_height="@dimen/margin60"
+                                            android:layout_gravity="center"
+                                            android:layout_margin="@dimen/margin10"
+                                            android:src="@drawable/ic_www" />
+
+                                        <TextView
+                                            style="@style/textViewFontSora"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:gravity="center"
+                                            android:text="@string/worldwide"
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/text10" />
+
+                                        <TextView
+                                            android:id="@+id/tvWeekCount"
+                                            style="@style/textViewFontSora"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:gravity="center"
+                                            android:text="00"
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/text10" />
+
+
+                                    </LinearLayout>
+
+                                    <!--View separator-->
+                                    <View
+                                        android:layout_width="1dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="center"
+                                        android:layout_margin="@dimen/margin20"
+                                        android:background="@color/transparent50" />
+
+                                    <LinearLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_gravity="center"
-                                        android:gravity="center"
-                                        android:text="00"
-                                        android:textColor="@color/white"
-                                        android:textSize="@dimen/text10" />
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
 
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:layout_margin="@dimen/margin5"
+                                            android:layout_weight="1"
+                                            android:gravity="start"
+                                            android:orientation="horizontal">
+
+                                            <ImageView
+                                                android:id="@+id/iv_scan_app"
+                                                android:layout_width="@dimen/margin40"
+                                                android:layout_height="@dimen/margin40"
+                                                android:layout_gravity="center"
+                                                android:gravity="start"
+                                                android:src="@drawable/ic_no_photo" />
+
+                                            <LinearLayout
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center"
+                                                android:layout_marginLeft="@dimen/margin10"
+                                                android:gravity="start"
+                                                android:orientation="vertical">
+
+                                                <TextView
+                                                    style="@style/textViewFontSora"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_gravity="center"
+                                                    android:gravity="start"
+                                                    android:text="@string/scanned_on"
+                                                    android:textColor="@color/white"
+                                                    android:textSize="@dimen/text12"
+                                                    android:textStyle="bold" />
+
+                                                <TextView
+                                                    android:id="@+id/tv_app_name"
+                                                    style="@style/textViewFontInter"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_gravity="center"
+                                                    android:gravity="start"
+                                                    android:text="@string/dummy_value"
+                                                    android:textColor="@color/transparent50"
+                                                    android:textSize="@dimen/text10" />
+                                            </LinearLayout>
+
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:layout_margin="@dimen/margin5"
+                                            android:layout_weight="1"
+                                            android:gravity="start"
+                                            android:orientation="horizontal">
+
+                                            <ImageView
+                                                android:id="@+id/iv_user"
+                                                android:layout_width="@dimen/margin40"
+                                                android:layout_height="@dimen/margin40"
+                                                android:layout_gravity="center"
+                                                android:gravity="start"
+                                                android:src="@drawable/ic_no_photo" />
+
+                                            <LinearLayout
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center"
+                                                android:layout_marginLeft="@dimen/margin10"
+                                                android:gravity="start"
+                                                android:orientation="vertical">
+
+                                                <TextView
+                                                    style="@style/textViewFontSora"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_gravity="center"
+                                                    android:gravity="start"
+                                                    android:text="@string/dummy_value"
+                                                    android:textColor="@color/white"
+                                                    android:textSize="@dimen/text12"
+                                                    android:textStyle="bold" />
+
+                                                <TextView
+                                                    android:id="@+id/tv_sender_name"
+                                                    style="@style/textViewFontInter"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_gravity="center"
+                                                    android:gravity="start"
+                                                    android:text="@string/suspicious_link"
+                                                    android:textColor="@color/transparent50"
+                                                    android:textSize="@dimen/text10" />
+                                            </LinearLayout>
+                                        </LinearLayout>
+                                    </LinearLayout>
 
                                 </LinearLayout>
 
                                 <!--View separator-->
+
                                 <View
-                                    android:layout_width="1dp"
-                                    android:layout_height="match_parent"
-                                    android:layout_gravity="center"
-                                    android:layout_margin="@dimen/margin20"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="1dp"
+                                    android:layout_margin="@dimen/margin5"
                                     android:background="@color/transparent50" />
 
-                                <LinearLayout
+                                <TextView
+                                    android:id="@+id/tv_recent_header"
+                                    style="@style/textViewFontSora"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:orientation="vertical">
+                                    android:layout_margin="@dimen/margin5"
+                                    android:gravity="center_vertical"
+                                    android:text="@string/reports"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/text14"
+                                    app:drawableRightCompat="@drawable/ic_recycler_view" />
 
-                                    <LinearLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center"
-                                        android:layout_margin="@dimen/margin5"
-                                        android:layout_weight="1"
-                                        android:gravity="start"
-                                        android:orientation="horizontal">
+                                <androidx.recyclerview.widget.RecyclerView
+                                    android:id="@+id/rv_reports"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:scrollbars="horizontal" />
 
-                                        <ImageView
-                                            android:id="@+id/iv_scan_app"
-                                            android:layout_width="@dimen/margin40"
-                                            android:layout_height="@dimen/margin40"
-                                            android:layout_gravity="center"
-                                            android:gravity="start"
-                                            android:src="@drawable/ic_no_photo" />
-
-                                        <LinearLayout
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_gravity="center"
-                                            android:layout_marginLeft="@dimen/margin10"
-                                            android:gravity="start"
-                                            android:orientation="vertical">
-
-                                            <TextView
-                                                style="@style/textViewFontSora"
-                                                android:layout_width="match_parent"
-                                                android:layout_height="wrap_content"
-                                                android:layout_gravity="center"
-                                                android:gravity="start"
-                                                android:text="@string/scanned_on"
-                                                android:textColor="@color/white"
-                                                android:textSize="@dimen/text12"
-                                                android:textStyle="bold" />
-
-                                            <TextView
-                                                android:id="@+id/tv_app_name"
-                                                style="@style/textViewFontInter"
-                                                android:layout_width="match_parent"
-                                                android:layout_height="wrap_content"
-                                                android:layout_gravity="center"
-                                                android:gravity="start"
-                                                android:text="@string/safe_link"
-                                                android:textColor="@color/transparent50"
-                                                android:textSize="@dimen/text10" />
-                                        </LinearLayout>
-
-                                    </LinearLayout>
-
-                                    <LinearLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center"
-                                        android:layout_margin="@dimen/margin5"
-                                        android:layout_weight="1"
-                                        android:gravity="start"
-                                        android:orientation="horizontal">
-
-                                        <ImageView
-                                            android:id="@+id/iv_user"
-                                            android:layout_width="@dimen/margin40"
-                                            android:layout_height="@dimen/margin40"
-                                            android:layout_gravity="center"
-                                            android:gravity="start"
-                                            android:src="@drawable/ic_no_photo" />
-
-                                        <LinearLayout
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_gravity="center"
-                                            android:layout_marginLeft="@dimen/margin10"
-                                            android:gravity="start"
-                                            android:orientation="vertical">
-
-                                            <TextView
-                                                style="@style/textViewFontSora"
-                                                android:layout_width="match_parent"
-                                                android:layout_height="wrap_content"
-                                                android:layout_gravity="center"
-                                                android:gravity="start"
-                                                android:text="@string/sent_by"
-                                                android:textColor="@color/white"
-                                                android:textSize="@dimen/text12"
-                                                android:textStyle="bold" />
-
-                                            <TextView
-                                                android:id="@+id/tv_sender_name"
-                                                style="@style/textViewFontInter"
-                                                android:layout_width="match_parent"
-                                                android:layout_height="wrap_content"
-                                                android:layout_gravity="center"
-                                                android:gravity="start"
-                                                android:text="@string/suspicious_link"
-                                                android:textColor="@color/transparent50"
-                                                android:textSize="@dimen/text10" />
-                                        </LinearLayout>
-                                    </LinearLayout>
-                                </LinearLayout>
-
+                                <TextView
+                                    android:id="@+id/tv_empty_reports"
+                                    style="@style/textViewFontSora"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_margin="@dimen/margin5"
+                                    android:gravity="center"
+                                    android:text="@string/empty_list"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/text10" />
                             </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
 
-                            <!--View separator-->
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:layout_margin="@dimen/margin5"
-                                android:background="@color/transparent50" />
-
-                            <TextView
-                                android:id="@+id/tv_recent_header"
-                                style="@style/textViewFontSora"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/margin5"
-                                android:gravity="center_vertical"
-                                android:text="@string/reports"
-                                android:textColor="@color/white"
-                                android:textSize="@dimen/text14"
-                                app:drawableRightCompat="@drawable/ic_recycler_view" />
-
-                            <androidx.recyclerview.widget.RecyclerView
-                                android:id="@+id/rv_recent_scan"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:scrollbars="horizontal" />
-
-                            <TextView
-                                android:id="@+id/tv_empty_reports"
-                                style="@style/textViewFontSora"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_margin="@dimen/margin5"
-                                android:gravity="center"
-                                android:text="@string/empty_list"
-                                android:textColor="@color/white"
-                                android:textSize="@dimen/text10" />
-                        </LinearLayout>
-                    </com.google.android.material.card.MaterialCardView>
-
-                    <com.google.android.material.card.MaterialCardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/margin10"
-                        android:layout_marginRight="@dimen/margin10"
-                        android:elevation="@dimen/margin8"
-                        app:cardBackgroundColor="@color/light_background"
-                        app:cardCornerRadius="@dimen/margin8">
-
-                        <LinearLayout
+                        <com.google.android.material.card.MaterialCardView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:padding="@dimen/margin10">
-
-                            <TextView
-                                android:id="@+id/tv_tech_header"
-                                style="@style/textViewFontSora"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/margin5"
-                                android:text="@string/technical_info"
-                                android:textColor="@color/white"
-                                android:textSize="@dimen/text14" />
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:background="@color/transparent50" />
-
-                            <TextView
-                                android:id="@+id/tv_created_at"
-                                style="@style/textViewFontSora"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_margin="@dimen/margin5"
-                                android:gravity="end"
-                                android:text="@string/created_at"
-                                android:textColor="@color/white"
-                                android:textSize="@dimen/text12" />
+                            android:layout_marginLeft="@dimen/margin10"
+                            android:layout_marginRight="@dimen/margin10"
+                            android:elevation="@dimen/margin8"
+                            app:cardBackgroundColor="@color/light_background"
+                            app:cardCornerRadius="@dimen/margin8">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal">
+                                android:orientation="vertical"
+                                android:padding="@dimen/margin10">
 
                                 <TextView
+                                    android:id="@+id/tv_tech_header"
                                     style="@style/textViewFontSora"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="start"
                                     android:layout_margin="@dimen/margin5"
-                                    android:gravity="center"
-                                    android:text="@string/shorten_link"
-                                    android:textColor="@color/green"
-                                    android:textSize="@dimen/text12" />
-
-                                <TextView
-                                    android:id="@+id/tv_shorten_link"
-                                    style="@style/textViewFontSora"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="start"
-                                    android:layout_margin="@dimen/margin5"
-                                    android:gravity="center"
-                                    android:text="@string/created_at"
+                                    android:text="@string/technical_info"
                                     android:textColor="@color/white"
-                                    android:textSize="@dimen/text12" />
-                            </LinearLayout>
+                                    android:textSize="@dimen/text14" />
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    style="@style/textViewFontSora"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="start"
-                                    android:layout_margin="@dimen/margin5"
-                                    android:gravity="center"
-                                    android:text="@string/site_domain"
-                                    android:textColor="@color/green"
-                                    android:textSize="@dimen/text12" />
+                                <View
+                                    android:layout_width="match_parent"
+                                    android:layout_height="1dp"
+                                    android:background="@color/transparent50" />
 
                                 <TextView
-                                    android:id="@+id/tv_domain"
+                                    android:id="@+id/tv_created_at"
                                     style="@style/textViewFontSora"
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="start"
+                                    android:layout_gravity="center"
                                     android:layout_margin="@dimen/margin5"
-                                    android:gravity="center"
-                                    android:text="@string/created_at"
-                                    android:textColor="@color/white"
-                                    android:textSize="@dimen/text12" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    style="@style/textViewFontSora"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="start"
-                                    android:layout_margin="@dimen/margin5"
-                                    android:gravity="center"
-                                    android:text="@string/scanned_url"
-                                    android:textColor="@color/green"
-                                    android:textSize="@dimen/text12" />
-
-                                <TextView
-                                    android:id="@+id/tv_scanned_url"
-                                    style="@style/textViewFontSora"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="start"
-                                    android:layout_margin="@dimen/margin5"
-                                    android:gravity="center"
-                                    android:text="@string/created_at"
-                                    android:textColor="@color/white"
-                                    android:textSize="@dimen/text12" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    style="@style/textViewFontSora"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="start"
-                                    android:layout_margin="@dimen/margin5"
-                                    android:gravity="center"
-                                    android:text="@string/page_title"
-                                    android:textColor="@color/green"
-                                    android:textSize="@dimen/text12" />
-
-                                <TextView
-                                    android:id="@+id/tv_page_title"
-                                    style="@style/textViewFontSora"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="start"
-                                    android:layout_margin="@dimen/margin5"
-                                    android:gravity="center"
-                                    android:text="@string/created_at"
+                                    android:gravity="end"
+                                    android:text="@string/dummy_value"
                                     android:textColor="@color/white"
                                     android:textSize="@dimen/text12" />
 
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/margin5"
-                                android:orientation="horizontal">
-
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:orientation="vertical">
+                                    android:orientation="horizontal">
 
                                     <TextView
                                         style="@style/textViewFontSora"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_gravity="center"
+                                        android:layout_gravity="start"
+                                        android:layout_margin="@dimen/margin5"
                                         android:gravity="center"
-                                        android:text="@string/origin"
-                                        android:textColor="@color/white"
-                                        android:textSize="@dimen/text14"
-                                        app:drawableLeftCompat="@drawable/ic_origin" />
+                                        android:text="@string/shorten_link"
+                                        android:textColor="@color/green"
+                                        android:textSize="@dimen/text12" />
 
                                     <TextView
-                                        android:id="@+id/tv_ip"
+                                        android:id="@+id/tv_shorten_link"
                                         style="@style/textViewFontSora"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_gravity="center"
+                                        android:layout_gravity="start"
+                                        android:layout_margin="@dimen/margin5"
                                         android:gravity="center"
-                                        android:text="@string/created_at"
+                                        android:text="@string/dummy_value"
                                         android:textColor="@color/white"
-                                        android:textSize="@dimen/text10" />
+                                        android:textSize="@dimen/text12" />
                                 </LinearLayout>
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:orientation="vertical">
+                                    android:orientation="horizontal">
 
                                     <TextView
                                         style="@style/textViewFontSora"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_gravity="center"
+                                        android:layout_gravity="start"
+                                        android:layout_margin="@dimen/margin5"
                                         android:gravity="center"
-                                        android:text="@string/location"
-                                        android:textColor="@color/white"
-                                        android:textSize="@dimen/text14"
-                                        app:drawableLeftCompat="@drawable/ic_location" />
+                                        android:text="@string/site_domain"
+                                        android:textColor="@color/green"
+                                        android:textSize="@dimen/text12" />
 
                                     <TextView
-                                        android:id="@+id/tv_location"
+                                        android:id="@+id/tv_site_domain"
                                         style="@style/textViewFontSora"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_gravity="center"
+                                        android:layout_gravity="start"
+                                        android:layout_margin="@dimen/margin5"
                                         android:gravity="center"
-                                        android:text="@string/created_at"
+                                        android:text="@string/dummy_value"
                                         android:textColor="@color/white"
-                                        android:textSize="@dimen/text10" />
-                                </LinearLayout>
-
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/margin5"
-                                android:orientation="horizontal">
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:orientation="vertical">
-
-                                    <TextView
-                                        style="@style/textViewFontSora"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center"
-                                        android:gravity="center"
-                                        android:text="@string/hosting"
-                                        android:textColor="@color/white"
-                                        android:textSize="@dimen/text14"
-                                        app:drawableLeftCompat="@drawable/ic_hosting" />
-
-                                    <TextView
-                                        android:id="@+id/tv_hosting"
-                                        style="@style/textViewFontSora"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center"
-                                        android:gravity="center"
-                                        android:text="@string/created_at"
-                                        android:textColor="@color/white"
-                                        android:textSize="@dimen/text10" />
+                                        android:textSize="@dimen/text12" />
                                 </LinearLayout>
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:orientation="vertical">
+                                    android:orientation="horizontal">
 
                                     <TextView
                                         style="@style/textViewFontSora"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_gravity="center"
+                                        android:layout_gravity="start"
+                                        android:layout_margin="@dimen/margin5"
                                         android:gravity="center"
-                                        android:text="@string/connection"
-                                        android:textColor="@color/white"
-                                        android:textSize="@dimen/text14"
-                                        app:drawableLeftCompat="@drawable/ic_https" />
+                                        android:text="@string/scanned_url"
+                                        android:textColor="@color/green"
+                                        android:textSize="@dimen/text12" />
 
                                     <TextView
-                                        android:id="@+id/tv_connection"
+                                        android:id="@+id/tv_scanned_url"
                                         style="@style/textViewFontSora"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_gravity="center"
+                                        android:layout_gravity="start"
+                                        android:layout_margin="@dimen/margin5"
                                         android:gravity="center"
-                                        android:text="@string/created_at"
+                                        android:text="@string/dummy_value"
                                         android:textColor="@color/white"
-                                        android:textSize="@dimen/text10" />
-                                </LinearLayout>
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/margin5"
-                                android:orientation="horizontal">
-
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:orientation="vertical">
-
-                                    <TextView
-                                        style="@style/textViewFontSora"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center"
-                                        android:gravity="center"
-                                        android:text="@string/registrar"
-                                        android:textColor="@color/white"
-                                        android:textSize="@dimen/text14"
-                                        app:drawableLeftCompat="@drawable/ic_domain" />
-
-                                    <TextView
-                                        android:id="@+id/tv_registrar"
-                                        style="@style/textViewFontSora"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center"
-                                        android:gravity="center"
-                                        android:text="@string/created_at"
-                                        android:textColor="@color/white"
-                                        android:textSize="@dimen/text10" />
+                                        android:textSize="@dimen/text12" />
                                 </LinearLayout>
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:orientation="vertical">
+                                    android:orientation="horizontal">
 
                                     <TextView
                                         style="@style/textViewFontSora"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_gravity="center"
+                                        android:layout_gravity="start"
+                                        android:layout_margin="@dimen/margin5"
                                         android:gravity="center"
-                                        android:text="@string/seo"
-                                        android:textColor="@color/white"
-                                        android:textSize="@dimen/text12"
-                                        app:drawableLeftCompat="@drawable/ic_seo" />
+                                        android:text="@string/page_title"
+                                        android:textColor="@color/green"
+                                        android:textSize="@dimen/text12" />
 
                                     <TextView
-                                        android:id="@+id/tv_seo"
+                                        android:id="@+id/tv_page_title"
                                         style="@style/textViewFontSora"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_gravity="center"
+                                        android:layout_gravity="start"
+                                        android:layout_margin="@dimen/margin5"
                                         android:gravity="center"
-                                        android:text="@string/created_at"
+                                        android:text="@string/dummy_value"
                                         android:textColor="@color/white"
-                                        android:textSize="@dimen/text8" />
+                                        android:textSize="@dimen/text12" />
+
+
                                 </LinearLayout>
 
-
-                            </LinearLayout>
-
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/tv_detail_report"
-                                style="@style/textViewFontSora"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/margin5"
-                                android:background="@drawable/background_round"
-                                android:text="@string/detailed_report"
-                                android:textColor="@color/white"
-                                android:textSize="@dimen/text12" />
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:background="@color/transparent50" />
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/margin5"
-                                android:orientation="horizontal">
-
-                                <com.google.android.material.card.MaterialCardView
+                                <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginRight="@dimen/margin4"
-                                    android:layout_weight="1"
-                                    android:elevation="@dimen/margin8"
-                                    app:cardBackgroundColor="@color/primary_color"
-                                    app:cardCornerRadius="@dimen/margin8">
+                                    android:layout_margin="@dimen/margin5"
+                                    android:orientation="horizontal">
 
                                     <LinearLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_margin="@dimen/margin5"
+                                        android:layout_weight="1"
                                         android:orientation="vertical">
 
                                         <TextView
                                             style="@style/textViewFontSora"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:layout_margin="@dimen/margin5"
-                                            android:text="@string/meta_tags"
+                                            android:layout_gravity="center"
+                                            android:gravity="center"
+                                            android:text="@string/origin"
                                             android:textColor="@color/white"
-                                            android:textSize="@dimen/text12" />
+                                            android:textSize="@dimen/text12"
+                                            app:drawableLeftCompat="@drawable/ic_origin" />
 
-                                        <View
-                                            android:layout_width="match_parent"
-                                            android:layout_height="1dp"
-                                            android:background="@color/transparent50" />
+                                        <TextView
+                                            android:id="@+id/tv_ip"
+                                            style="@style/textViewFontSora"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:gravity="center"
+                                            android:text="@string/dummy_value"
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/text8" />
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            style="@style/textViewFontSora"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:gravity="center"
+                                            android:text="@string/location"
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/text12"
+                                            app:drawableLeftCompat="@drawable/ic_location" />
+
+                                        <TextView
+                                            android:id="@+id/tv_location"
+                                            style="@style/textViewFontSora"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:gravity="center"
+                                            android:text="@string/dummy_value"
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/text8" />
+                                    </LinearLayout>
+
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="@dimen/margin5"
+                                    android:orientation="horizontal">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            style="@style/textViewFontSora"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:gravity="center"
+                                            android:text="@string/hosting"
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/text12"
+                                            app:drawableLeftCompat="@drawable/ic_hosting" />
+
+                                        <TextView
+                                            android:id="@+id/tv_hosting"
+                                            style="@style/textViewFontSora"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:gravity="center"
+                                            android:text="@string/dummy_value"
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/text8" />
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            style="@style/textViewFontSora"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:gravity="center"
+                                            android:text="@string/connection"
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/text12"
+                                            app:drawableLeftCompat="@drawable/ic_https" />
+
+                                        <TextView
+                                            android:id="@+id/tv_connection"
+                                            style="@style/textViewFontSora"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:gravity="center"
+                                            android:text="@string/dummy_value"
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/text8" />
+                                    </LinearLayout>
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="@dimen/margin5"
+                                    android:orientation="horizontal">
+
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            style="@style/textViewFontSora"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:gravity="center"
+                                            android:text="@string/registrar"
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/text12"
+                                            app:drawableLeftCompat="@drawable/ic_domain" />
+
+                                        <TextView
+                                            android:id="@+id/tv_registrar"
+                                            style="@style/textViewFontSora"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:gravity="center"
+                                            android:text="@string/dummy_value"
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/text8" />
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            style="@style/textViewFontSora"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:gravity="center"
+                                            android:text="@string/seo_score"
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/text12"
+                                            app:drawableLeftCompat="@drawable/ic_seo" />
+
+                                        <TextView
+                                            android:id="@+id/tv_seo_score"
+                                            style="@style/textViewFontSora"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:gravity="center"
+                                            android:text="@string/dummy_value"
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/text8" />
+                                    </LinearLayout>
+
+
+                                </LinearLayout>
+
+                                <com.google.android.material.button.MaterialButton
+                                    android:id="@+id/tv_detail_report"
+                                    style="@style/textViewFontSora"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="@dimen/margin5"
+                                    android:background="@drawable/background_round"
+                                    android:text="@string/detailed_report"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/text12" />
+
+                                <View
+                                    android:layout_width="match_parent"
+                                    android:layout_height="1dp"
+                                    android:background="@color/transparent50" />
+                                <!--Change to Vertical-->
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="@dimen/margin5"
+                                    android:orientation="vertical">
+
+                                    <com.google.android.material.card.MaterialCardView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginBottom="@dimen/margin4"
+                                        android:layout_weight="1"
+                                        android:elevation="@dimen/margin8"
+                                        app:cardBackgroundColor="@color/primary_color"
+                                        app:cardCornerRadius="@dimen/margin8">
 
                                         <LinearLayout
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
-                                            android:orientation="horizontal">
+                                            android:layout_margin="@dimen/margin5"
+                                            android:orientation="vertical">
+
+                                            <TextView
+                                                style="@style/textViewFontSora"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_margin="@dimen/margin5"
+                                                android:text="@string/meta_tags"
+                                                android:textColor="@color/white"
+                                                android:textSize="@dimen/text12" />
+
+                                            <View
+                                                android:layout_width="match_parent"
+                                                android:layout_height="1dp"
+                                                android:background="@color/transparent50" />
 
                                             <LinearLayout
                                                 android:layout_width="match_parent"
                                                 android:layout_height="wrap_content"
-                                                android:layout_weight="1"
-                                                android:orientation="vertical">
+                                                android:orientation="horizontal">
 
-                                                <com.google.android.material.chip.Chip
-                                                    android:id="@+id/chip_title"
-                                                    style="@style/ChipCustomStyle"
-                                                    android:layout_width="wrap_content"
+                                                <LinearLayout
+                                                    android:layout_width="match_parent"
                                                     android:layout_height="wrap_content"
-                                                    android:layout_margin="@dimen/margin2"
-                                                    android:text="@string/title"
-                                                    android:textColor="@color/gray_200"
-                                                    android:textSize="@dimen/text10"
-                                                    app:chipBackgroundColor="@color/light_background"
-                                                    app:chipStrokeColor="@color/light_background"
-                                                    app:chipStrokeWidth="1dp"
-                                                    app:closeIcon="@drawable/ic_tick"
-                                                    app:closeIconVisible="true" />
+                                                    android:layout_weight="1"
+                                                    android:orientation="vertical">
 
-                                                <com.google.android.material.chip.Chip
-                                                    android:id="@+id/chip_desc"
-                                                    style="@style/ChipCustomStyle"
-                                                    android:layout_width="wrap_content"
+                                                    <com.google.android.material.chip.Chip
+                                                        android:id="@+id/chip_title"
+                                                        style="@style/ChipCustomStyle"
+                                                        android:layout_width="wrap_content"
+                                                        android:layout_height="wrap_content"
+                                                        android:layout_margin="@dimen/margin2"
+                                                        android:text="@string/title"
+                                                        android:textColor="@color/gray_200"
+                                                        android:textSize="@dimen/text12"
+                                                        app:chipBackgroundColor="@color/light_background"
+                                                        app:chipIcon="@drawable/ic_tick"
+                                                        app:chipStrokeColor="@color/light_background"
+                                                        app:chipStrokeWidth="1dp" />
+
+                                                    <com.google.android.material.chip.Chip
+                                                        android:id="@+id/chip_desc"
+                                                        style="@style/ChipCustomStyle"
+                                                        android:layout_width="wrap_content"
+                                                        android:layout_height="wrap_content"
+                                                        android:layout_margin="@dimen/margin2"
+                                                        android:text="@string/description"
+                                                        android:textColor="@color/gray_200"
+                                                        android:textSize="@dimen/text12"
+                                                        app:chipBackgroundColor="@color/light_background"
+                                                        app:chipIcon="@drawable/ic_close"
+                                                        app:chipStrokeColor="@color/light_background"
+                                                        app:chipStrokeWidth="1dp" />
+
+                                                    <com.google.android.material.chip.Chip
+                                                        android:id="@+id/chip_image"
+                                                        style="@style/ChipCustomStyle"
+                                                        android:layout_width="wrap_content"
+                                                        android:layout_height="wrap_content"
+                                                        android:layout_margin="@dimen/margin2"
+                                                        android:text="@string/image"
+                                                        android:textColor="@color/gray_200"
+                                                        android:textSize="@dimen/text12"
+                                                        app:chipBackgroundColor="@color/light_background"
+                                                        app:chipIcon="@drawable/ic_tick"
+                                                        app:chipStrokeColor="@color/light_background"
+                                                        app:chipStrokeWidth="1dp" />
+                                                </LinearLayout>
+
+                                                <LinearLayout
+                                                    android:layout_width="match_parent"
                                                     android:layout_height="wrap_content"
-                                                    android:layout_margin="@dimen/margin2"
-                                                    android:text="@string/description"
-                                                    android:textColor="@color/gray_200"
-                                                    android:textSize="@dimen/text10"
-                                                    app:chipBackgroundColor="@color/light_background"
-                                                    app:chipStrokeColor="@color/light_background"
-                                                    app:chipStrokeWidth="1dp"
-                                                    app:closeIcon="@drawable/ic_tick"
-                                                    app:closeIconVisible="true" />
+                                                    android:layout_weight="1"
+                                                    android:orientation="vertical">
 
-                                                <com.google.android.material.chip.Chip
-                                                    android:id="@+id/chip_image"
-                                                    style="@style/ChipCustomStyle"
-                                                    android:layout_width="wrap_content"
-                                                    android:layout_height="wrap_content"
-                                                    android:layout_margin="@dimen/margin2"
-                                                    android:text="@string/image"
-                                                    android:textColor="@color/gray_200"
-                                                    android:textSize="@dimen/text10"
-                                                    app:chipBackgroundColor="@color/light_background"
-                                                    app:chipStrokeColor="@color/light_background"
-                                                    app:chipStrokeWidth="1dp"
-                                                    app:closeIcon="@drawable/ic_tick"
-                                                    app:closeIconVisible="true" />
-                                            </LinearLayout>
+                                                    <com.google.android.material.chip.Chip
+                                                        android:id="@+id/chip_heading"
+                                                        style="@style/ChipCustomStyle"
+                                                        android:layout_width="wrap_content"
+                                                        android:layout_height="wrap_content"
+                                                        android:layout_margin="@dimen/margin2"
+                                                        android:text="@string/heading"
+                                                        android:textColor="@color/gray_200"
+                                                        android:textSize="@dimen/text12"
+                                                        app:chipBackgroundColor="@color/light_background"
+                                                        app:chipIcon="@drawable/ic_tick"
+                                                        app:chipStrokeColor="@color/light_background"
+                                                        app:chipStrokeWidth="1dp" />
 
-                                            <LinearLayout
-                                                android:layout_width="match_parent"
-                                                android:layout_height="wrap_content"
-                                                android:layout_weight="1"
-                                                android:orientation="vertical">
+                                                    <com.google.android.material.chip.Chip
+                                                        android:id="@+id/chip_author"
+                                                        style="@style/ChipCustomStyle"
+                                                        android:layout_width="wrap_content"
+                                                        android:layout_height="wrap_content"
+                                                        android:layout_margin="@dimen/margin2"
+                                                        android:text="@string/author"
+                                                        android:textColor="@color/gray_200"
+                                                        android:textSize="@dimen/text12"
+                                                        app:chipBackgroundColor="@color/light_background"
+                                                        app:chipIcon="@drawable/ic_tick"
+                                                        app:chipStrokeColor="@color/light_background"
+                                                        app:chipStrokeWidth="1dp" />
 
-                                                <com.google.android.material.chip.Chip
-                                                    android:id="@+id/chip_heading"
-                                                    style="@style/ChipCustomStyle"
-                                                    android:layout_width="wrap_content"
-                                                    android:layout_height="wrap_content"
-                                                    android:layout_margin="@dimen/margin2"
-                                                    android:text="@string/heading"
-                                                    android:textColor="@color/gray_200"
-                                                    android:textSize="@dimen/text10"
-                                                    app:chipBackgroundColor="@color/light_background"
-                                                    app:chipStrokeColor="@color/light_background"
-                                                    app:chipStrokeWidth="1dp"
-                                                    app:closeIcon="@drawable/ic_tick"
-                                                    app:closeIconVisible="true" />
-
-                                                <com.google.android.material.chip.Chip
-                                                    android:id="@+id/chip_author"
-                                                    style="@style/ChipCustomStyle"
-                                                    android:layout_width="wrap_content"
-                                                    android:layout_height="wrap_content"
-                                                    android:layout_margin="@dimen/margin2"
-                                                    android:text="@string/author"
-                                                    android:textColor="@color/gray_200"
-                                                    android:textSize="@dimen/text10"
-                                                    app:chipBackgroundColor="@color/light_background"
-                                                    app:chipStrokeColor="@color/light_background"
-                                                    app:chipStrokeWidth="1dp"
-                                                    app:closeIcon="@drawable/ic_tick"
-                                                    app:closeIconVisible="true" />
-
-                                                <com.google.android.material.chip.Chip
-                                                    android:id="@+id/chip_copy"
-                                                    style="@style/ChipCustomStyle"
-                                                    android:layout_width="wrap_content"
-                                                    android:layout_height="wrap_content"
-                                                    android:layout_margin="@dimen/margin2"
-                                                    android:text="@string/copyrights"
-                                                    android:textColor="@color/gray_200"
-                                                    android:textSize="@dimen/text10"
-                                                    app:checkedIconTint="@color/green"
-                                                    app:chipBackgroundColor="@color/light_background"
-                                                    app:chipStrokeColor="@color/light_background"
-                                                    app:chipStrokeWidth="1dp"
-                                                    app:closeIcon="@drawable/ic_tick"
-                                                    app:closeIconEnabled="true"
-                                                    app:closeIconVisible="true" />
+                                                    <com.google.android.material.chip.Chip
+                                                        android:id="@+id/chip_copy"
+                                                        style="@style/ChipCustomStyle"
+                                                        android:layout_width="wrap_content"
+                                                        android:layout_height="wrap_content"
+                                                        android:layout_margin="@dimen/margin2"
+                                                        android:text="@string/copyrights"
+                                                        android:textColor="@color/gray_200"
+                                                        android:textSize="@dimen/text12"
+                                                        app:checkedIconTint="@color/green"
+                                                        app:chipBackgroundColor="@color/light_background"
+                                                        app:chipIcon="@drawable/ic_tick"
+                                                        app:chipStrokeColor="@color/light_background"
+                                                        app:chipStrokeWidth="1dp" />
+                                                </LinearLayout>
                                             </LinearLayout>
                                         </LinearLayout>
-                                    </LinearLayout>
 
-                                </com.google.android.material.card.MaterialCardView>
+                                    </com.google.android.material.card.MaterialCardView>
 
-                                <com.google.android.material.card.MaterialCardView
+                                    <com.google.android.material.card.MaterialCardView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="@dimen/margin4"
+                                        android:layout_weight="1"
+                                        android:elevation="@dimen/margin8"
+                                        app:cardBackgroundColor="@color/primary_color"
+                                        app:cardCornerRadius="@dimen/margin8">
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_margin="@dimen/margin5"
+                                            android:orientation="vertical">
+
+                                            <TextView
+                                                style="@style/textViewFontSora"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_margin="@dimen/margin5"
+                                                android:text="@string/web_info"
+                                                android:textColor="@color/white"
+                                                android:textSize="@dimen/text12" />
+
+                                            <View
+                                                android:layout_width="match_parent"
+                                                android:layout_height="1dp"
+                                                android:background="@color/transparent50" />
+
+                                            <LinearLayout
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:orientation="horizontal">
+
+                                                <LinearLayout
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_weight="1"
+                                                    android:orientation="vertical">
+
+                                                    <com.google.android.material.chip.Chip
+                                                        android:id="@+id/chip_about_us"
+                                                        style="@style/ChipCustomStyle"
+                                                        android:layout_width="wrap_content"
+                                                        android:layout_height="wrap_content"
+                                                        android:layout_margin="@dimen/margin2"
+                                                        android:text="@string/about_us"
+                                                        android:textColor="@color/gray_200"
+                                                        android:textSize="@dimen/text12"
+                                                        app:chipBackgroundColor="@color/light_background"
+                                                        app:chipIcon="@drawable/ic_tick"
+                                                        app:chipStrokeColor="@color/light_background"
+                                                        app:chipStrokeWidth="1dp" />
+
+                                                    <com.google.android.material.chip.Chip
+                                                        android:id="@+id/chip_ssl"
+                                                        style="@style/ChipCustomStyle"
+                                                        android:layout_width="wrap_content"
+                                                        android:layout_height="wrap_content"
+                                                        android:layout_margin="@dimen/margin2"
+                                                        android:text="@string/ssl"
+                                                        android:textColor="@color/gray_200"
+                                                        android:textSize="@dimen/text12"
+                                                        app:chipBackgroundColor="@color/light_background"
+                                                        app:chipIcon="@drawable/ic_close"
+                                                        app:chipStrokeColor="@color/light_background"
+                                                        app:chipStrokeWidth="1dp" />
+
+                                                    <com.google.android.material.chip.Chip
+                                                        android:id="@+id/chip_listing"
+                                                        style="@style/ChipCustomStyle"
+                                                        android:layout_width="wrap_content"
+                                                        android:layout_height="wrap_content"
+                                                        android:layout_margin="@dimen/margin2"
+                                                        android:text="@string/listing"
+                                                        android:textColor="@color/gray_200"
+                                                        android:textSize="@dimen/text12"
+                                                        app:chipBackgroundColor="@color/light_background"
+                                                        app:chipIcon="@drawable/ic_tick"
+                                                        app:chipStrokeColor="@color/light_background"
+                                                        app:chipStrokeWidth="1dp" />
+                                                </LinearLayout>
+
+                                                <LinearLayout
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_weight="1"
+                                                    android:orientation="vertical">
+
+                                                    <com.google.android.material.chip.Chip
+                                                        android:id="@+id/chip_contact_us"
+                                                        style="@style/ChipCustomStyle"
+                                                        android:layout_width="wrap_content"
+                                                        android:layout_height="wrap_content"
+                                                        android:layout_margin="@dimen/margin2"
+                                                        android:text="@string/contact_us"
+                                                        android:textColor="@color/gray_200"
+                                                        android:textSize="@dimen/text12"
+                                                        app:chipBackgroundColor="@color/light_background"
+                                                        app:chipIcon="@drawable/ic_tick"
+                                                        app:chipStrokeColor="@color/light_background"
+                                                        app:chipStrokeWidth="1dp" />
+
+                                                    <com.google.android.material.chip.Chip
+                                                        android:id="@+id/chip_sitemap"
+                                                        style="@style/ChipCustomStyle"
+                                                        android:layout_width="wrap_content"
+                                                        android:layout_height="wrap_content"
+                                                        android:layout_margin="@dimen/margin2"
+                                                        android:text="@string/sitemap"
+                                                        android:textColor="@color/gray_200"
+                                                        android:textSize="@dimen/text12"
+                                                        app:chipBackgroundColor="@color/light_background"
+                                                        app:chipIcon="@drawable/ic_tick"
+                                                        app:chipStrokeColor="@color/light_background"
+                                                        app:chipStrokeWidth="1dp" />
+
+                                                    <com.google.android.material.chip.Chip
+                                                        android:id="@+id/chip_cloudflare"
+                                                        style="@style/ChipCustomStyle"
+                                                        android:layout_width="wrap_content"
+                                                        android:layout_height="wrap_content"
+                                                        android:layout_margin="@dimen/margin2"
+                                                        android:text="@string/cloud"
+                                                        android:textColor="@color/gray_200"
+                                                        android:textSize="@dimen/text12"
+                                                        app:checkedIconTint="@color/green"
+                                                        app:chipBackgroundColor="@color/light_background"
+                                                        app:chipIcon="@drawable/ic_close"
+                                                        app:chipStrokeColor="@color/light_background"
+                                                        app:chipStrokeWidth="1dp" />
+                                                </LinearLayout>
+                                            </LinearLayout>
+
+                                        </LinearLayout>
+
+                                    </com.google.android.material.card.MaterialCardView>
+
+                                </LinearLayout>
+
+                                <TextView
+                                    style="@style/textViewFontSora"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="@dimen/margin5"
+                                    android:text="@string/other_param"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/text14" />
+
+                                <View
+                                    android:layout_width="match_parent"
+                                    android:layout_height="1dp"
+                                    android:background="@color/transparent50" />
+
+                                <androidx.recyclerview.widget.RecyclerView
+                                    android:id="@+id/rv_other_params"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/cv_company_details"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/margin10"
+                            android:elevation="@dimen/margin8"
+                            app:cardBackgroundColor="@color/light_background"
+                            app:cardCornerRadius="@dimen/margin8">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginLeft="@dimen/margin4"
-                                    android:layout_weight="1"
-                                    android:elevation="@dimen/margin8"
-                                    app:cardBackgroundColor="@color/primary_color"
-                                    app:cardCornerRadius="@dimen/margin8">
+                                    android:layout_gravity="center"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        style="@style/textViewFontSora"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="@dimen/margin5"
+                                        android:layout_weight="1"
+                                        android:gravity="center_vertical"
+                                        android:text="@string/company_profile"
+                                        android:textColor="@color/white"
+                                        android:textSize="@dimen/text14" />
+
+                                    <com.google.android.material.button.MaterialButton
+                                        android:id="@+id/btn_visit_site"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="@dimen/margin5"
+                                        android:gravity="center_vertical"
+                                        android:text="@string/visit"
+                                        android:textAllCaps="false"
+                                        android:textColor="@color/white"
+                                        android:textSize="@dimen/text10"
+                                        app:backgroundTint="@color/selected_color" />
+                                </LinearLayout>
+
+                                <View
+                                    android:layout_width="match_parent"
+                                    android:layout_height="1dp"
+                                    android:layout_marginTop="@dimen/margin5"
+                                    android:layout_marginBottom="@dimen/margin5"
+                                    android:background="@color/transparent50" />
+
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent">
+
+
+                                    <ImageView
+                                        android:id="@+id/iv_cover"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:src="@drawable/banner" />
+                                    <!-- negative margin to half of height -->
+                                    <de.hdodenhof.circleimageview.CircleImageView
+                                        android:id="@+id/civ_logo"
+                                        android:layout_width="80dp"
+                                        android:layout_height="80dp"
+                                        android:layout_below="@+id/iv_cover"
+                                        android:layout_centerHorizontal="true"
+                                        android:layout_marginTop="-50dp"
+                                        android:background="@drawable/background_circle_selected"
+                                        android:padding="@dimen/margin2"
+                                        android:src="@mipmap/ic_launcher" />
+
+                                </RelativeLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="@dimen/margin5"
+                                    android:orientation="horizontal">
 
                                     <LinearLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_margin="@dimen/margin5"
+                                        android:layout_weight="1"
                                         android:orientation="vertical">
 
                                         <TextView
                                             style="@style/textViewFontSora"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:layout_margin="@dimen/margin5"
-                                            android:text="@string/web_info"
+                                            android:layout_gravity="center"
+                                            android:gravity="center"
+                                            android:text="@string/category"
                                             android:textColor="@color/white"
-                                            android:textSize="@dimen/text12" />
+                                            android:textSize="@dimen/text12"
+                                            android:textStyle="bold" />
 
-                                        <View
-                                            android:layout_width="match_parent"
-                                            android:layout_height="1dp"
-                                            android:background="@color/transparent50" />
+                                        <TextView
+                                            android:id="@+id/tv_category"
+                                            style="@style/textViewFontSora"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:gravity="center"
+                                            android:text="@string/dummy_value"
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/text10" />
                                     </LinearLayout>
 
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            style="@style/textViewFontSora"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:gravity="center"
+                                            android:text="@string/rank"
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/text12"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:id="@+id/tv_rank"
+                                            style="@style/textViewFontSora"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:gravity="center"
+                                            android:text="@string/dummy_value"
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/text10" />
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            style="@style/textViewFontSora"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:gravity="center"
+                                            android:text="@string/total_scans"
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/text12"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:id="@+id/tv_total_scans"
+                                            style="@style/textViewFontSora"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:gravity="center"
+                                            android:text="@string/dummy_value"
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/text10" />
+                                    </LinearLayout>
+
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="@dimen/margin5"
+                                    android:orientation="horizontal">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            style="@style/textViewFontSora"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:gravity="center"
+                                            android:text="@string/seo"
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/text12"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:id="@+id/tv_seo"
+                                            style="@style/textViewFontSora"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:gravity="center"
+                                            android:text="@string/dummy_value"
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/text10" />
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            style="@style/textViewFontSora"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:gravity="center"
+                                            android:text="@string/founded"
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/text12"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:id="@+id/tv_founded"
+                                            style="@style/textViewFontSora"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:gravity="center"
+                                            android:text="@string/dummy_value"
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/text10" />
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            style="@style/textViewFontSora"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:gravity="center"
+                                            android:text="@string/headquarters"
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/text12"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:id="@+id/tv_headquarters"
+                                            style="@style/textViewFontSora"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:gravity="center"
+                                            android:text="@string/dummy_value"
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/text10" />
+                                    </LinearLayout>
+
+                                </LinearLayout>
+
+
+                                <TextView
+                                    style="@style/textViewFontSora"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="@dimen/margin10"
+                                    android:text="@string/social_links"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/text14" />
+
+                                <View
+                                    android:layout_width="match_parent"
+                                    android:layout_height="1dp"
+                                    android:layout_marginLeft="@dimen/margin5"
+                                    android:layout_marginRight="@dimen/margin5"
+                                    android:background="@color/transparent50" />
+
+                                <com.google.android.material.card.MaterialCardView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="@dimen/margin10"
+                                    android:layout_weight="1"
+                                    android:elevation="@dimen/margin8"
+                                    app:cardBackgroundColor="@color/secondary_color"
+                                    app:cardCornerRadius="@dimen/margin8">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="@dimen/margin5"
+                                        android:orientation="horizontal">
+
+                                        <LinearLayout
+                                            android:id="@+id/ll_linkedin"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:layout_margin="@dimen/margin5"
+                                            android:layout_weight="1"
+                                            android:orientation="vertical">
+
+                                            <ImageView
+                                                android:layout_width="@dimen/margin50"
+                                                android:layout_height="@dimen/margin50"
+                                                android:layout_gravity="center"
+                                                android:src="@drawable/ic_social_linkedin" />
+
+                                            <TextView
+                                                style="@style/textViewFontSora"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center"
+                                                android:layout_marginTop="@dimen/margin5"
+                                                android:gravity="center"
+                                                android:text="@string/linkedin"
+                                                android:textColor="@color/white"
+                                                android:textSize="@dimen/text10" />
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:id="@+id/ll_twitter"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:layout_margin="@dimen/margin5"
+                                            android:layout_weight="1"
+                                            android:orientation="vertical">
+
+                                            <ImageView
+                                                android:layout_width="@dimen/margin50"
+                                                android:layout_height="@dimen/margin50"
+                                                android:layout_gravity="center"
+                                                android:src="@drawable/ic_social_twitter" />
+
+                                            <TextView
+                                                style="@style/textViewFontSora"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center"
+                                                android:layout_marginTop="@dimen/margin5"
+                                                android:gravity="center"
+                                                android:text="@string/twitter"
+                                                android:textColor="@color/white"
+                                                android:textSize="@dimen/text10" />
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:id="@+id/ll_instagram"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:layout_margin="@dimen/margin5"
+                                            android:layout_weight="1"
+                                            android:orientation="vertical">
+
+                                            <ImageView
+                                                android:layout_width="@dimen/margin50"
+                                                android:layout_height="@dimen/margin50"
+                                                android:layout_gravity="center"
+                                                android:src="@drawable/ic_social_instagram" />
+
+                                            <TextView
+                                                style="@style/textViewFontSora"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center"
+                                                android:layout_marginTop="@dimen/margin5"
+                                                android:gravity="center"
+                                                android:text="@string/instagram"
+                                                android:textColor="@color/white"
+                                                android:textSize="@dimen/text10" />
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:id="@+id/ll_facebook"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:layout_margin="@dimen/margin5"
+                                            android:layout_weight="1"
+                                            android:orientation="vertical">
+
+                                            <ImageView
+                                                android:layout_width="@dimen/margin50"
+                                                android:layout_height="@dimen/margin50"
+                                                android:layout_gravity="center"
+                                                android:src="@drawable/ic_social_facebook" />
+
+                                            <TextView
+                                                style="@style/textViewFontSora"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center"
+                                                android:layout_marginTop="@dimen/margin5"
+                                                android:gravity="center"
+                                                android:text="@string/facebook"
+                                                android:textColor="@color/white"
+                                                android:textSize="@dimen/text10" />
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:id="@+id/ll_youtube"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:layout_margin="@dimen/margin5"
+                                            android:layout_weight="1"
+                                            android:orientation="vertical">
+
+                                            <ImageView
+                                                android:layout_width="@dimen/margin50"
+                                                android:layout_height="@dimen/margin50"
+                                                android:layout_gravity="center"
+                                                android:src="@drawable/ic_social_youtube" />
+
+                                            <TextView
+                                                style="@style/textViewFontSora"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center"
+                                                android:layout_marginTop="@dimen/margin5"
+                                                android:gravity="center"
+                                                android:text="@string/youtube"
+                                                android:textColor="@color/white"
+                                                android:textSize="@dimen/text10" />
+                                        </LinearLayout>
+
+
+                                    </LinearLayout>
                                 </com.google.android.material.card.MaterialCardView>
 
-                            </LinearLayout>
-                        </LinearLayout>
-                    </com.google.android.material.card.MaterialCardView>
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-        </LinearLayout>
 
-    </LinearLayout>
-</ScrollView>
+                                <TextView
+                                    style="@style/textViewFontSora"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="@dimen/margin10"
+                                    android:text="@string/similar_companies"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/text14" />
+
+                                <View
+                                    android:layout_width="match_parent"
+                                    android:layout_height="1dp"
+                                    android:layout_marginLeft="@dimen/margin5"
+                                    android:layout_marginRight="@dimen/margin5"
+                                    android:background="@color/transparent50" />
+
+                                <com.google.android.material.card.MaterialCardView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="@dimen/margin10"
+                                    android:layout_weight="1"
+                                    android:elevation="@dimen/margin8"
+                                    app:cardBackgroundColor="@color/secondary_color"
+                                    app:cardCornerRadius="@dimen/margin8">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="@dimen/margin5"
+                                        android:orientation="horizontal">
+
+                                        <androidx.recyclerview.widget.RecyclerView
+                                            android:id="@+id/r_similar_companies"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content" />
+                                    </LinearLayout>
+                                </com.google.android.material.card.MaterialCardView>
+                            </LinearLayout>
+
+                        </com.google.android.material.card.MaterialCardView>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</FrameLayout>

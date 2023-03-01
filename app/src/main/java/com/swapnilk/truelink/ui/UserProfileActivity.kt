@@ -117,7 +117,7 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
                 val okHttpClient = OkHttpClient.Builder()
                     .addInterceptor(AuthorizationInterceptor(this@UserProfileActivity)).build()
                 apolloClient =
-                    ApolloClient.Builder().serverUrl("https://truelink.neki.dev/graphql/")
+                    ApolloClient.Builder().serverUrl(commonFunctions.getServerUrl())
                         .okHttpClient(okHttpClient).build()
                 refreshAccessToken(refreshToken)
             } else {
@@ -356,7 +356,7 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
                             .addInterceptor(AuthorizationInterceptor(this@UserProfileActivity))
                             .build()
                         apolloClient =
-                            ApolloClient.Builder().serverUrl("https://truelink.neki.dev/graphql/")
+                            ApolloClient.Builder().serverUrl(commonFunctions.getServerUrl())
                                 .okHttpClient(okHttpClient).build()
                         updateUser()
                     } else

@@ -189,7 +189,7 @@ meaning regardless of whether they appear in singular or in plural.</span></div>
     <string name="scanned_on">Scanned On</string>
     <string name="sent_by">Send By</string>
     <string name="technical_info">Technical Info</string>
-    <string name="created_at">Created at - 22 Feb 23</string>
+    <string name="dummy_value">Dummy value</string>
     <string name="shorten_link">"Shorten Link           :    "</string>
     <string name="site_domain">"Site Domain            :    "</string>
     <string name="scanned_url">"Scanned URL          :    "</string>
@@ -199,7 +199,7 @@ meaning regardless of whether they appear in singular or in plural.</span></div>
     <string name="hosting">Hosting </string>
     <string name="connection">Connection</string>
     <string name="registrar">Domain Registrar </string>
-    <string name="seo">SEO Score</string>
+    <string name="seo_score">SEO Score</string>
     <string name="detailed_report">Detailed Report</string>
     <string name="meta_tags">Meta Tags</string>
     <string name="web_info">Website Info</string>
@@ -256,4 +256,18 @@ meaning regardless of whether they appear in singular or in plural.</span></div>
     <string name="alert_description">Alert Description</string>
     <string name="service_name">Notification Service</string>
     <string name="title_scan_details">Scan Details</string>
+    <string name="company_profile">Company Details</string>
+    <string name="visit">Visit Site</string>
+    <string name="category">Category</string>
+    <string name="rank">Rank</string>
+    <string name="seo">SEO</string>
+    <string name="founded">Founded</string>
+    <string name="headquarters">Headquarters</string>
+    <string name="social_links">Social Links</string>
+    <string name="linkedin">LinkedIn</string>
+    <string name="twitter">Twitter</string>
+    <string name="instagram">Instagram</string>
+    <string name="facebook">Facebook</string>
+    <string name="youtube">Youtube</string>
+    <string name="similar_companies">Similar Companies</string>
 </resources>

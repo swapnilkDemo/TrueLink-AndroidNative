@@ -146,7 +146,7 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
                         try {
                             apolloClient =
                                 ApolloClient.Builder()
-                                    .serverUrl("https://truelink.neki.dev/graphql/").build()
+                                    .serverUrl(commonFunctions.getServerUrl()).build()
 //            apiHelper = ApiHelper(activity!!)
                             verifyOTP()
                         } catch (e: ApolloException) {
@@ -178,7 +178,7 @@ class VerifyOTPFragment(bundle: Bundle) : BottomSheetDialogFragment(), Coroutine
                     try {
                         apolloClient =
                             ApolloClient.Builder()
-                                .serverUrl("https://truelink.neki.dev/graphql/").build()
+                                .serverUrl(commonFunctions.getServerUrl()).build()
 //            apiHelper = ApiHelper(activity!!)
                         resendOTP()
                     } catch (e: ApolloException) {
