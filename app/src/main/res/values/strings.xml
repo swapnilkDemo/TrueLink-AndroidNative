@@ -216,11 +216,13 @@ meaning regardless of whether they appear in singular or in plural.</span></div>
     <string name="sitemap">Sitemap</string>
     <string name="ssl">SSL Enabled</string>
     <string name="other_param">Other Parameters</string>
-
+    <string name="scans_in_seven_days">scans in 7 last days</string>
+    <string name="secured">HTTPS(Secured)</string>
+    <string name="insecured">Insecure</string>
     <!---->
 
 
-    <string name="total_scans">Total Scans 1,785</string>
+    <string name="total_scans">Total Scans </string>
     <string name="domain_icon">domain icon</string>
     <string name="domain_text">youtube.com</string>
     <string name="full_url">shorturl.at/bgoWYKoLdjo…</string>
@@ -270,4 +272,5 @@ meaning regardless of whether they appear in singular or in plural.</span></div>
     <string name="facebook">Facebook</string>
     <string name="youtube">Youtube</string>
     <string name="similar_companies">Similar Companies</string>
+    <string name="reported_link">"Reported Link - "</string>
 </resources>

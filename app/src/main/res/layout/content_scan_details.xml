@@ -38,20 +38,25 @@
                 android:layout_height="wrap_content">
 
                 <LinearLayout
-                    android:id="@+id/parent"
+                    android:id="@+id/ll_parent"
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    android:background="@color/orange"
+                    android:layout_height="100dp"
+                    android:background="@color/light_background"
                     android:orientation="horizontal" />
 
-                <pl.droidsonroids.gif.GifImageView
+                <com.airbnb.lottie.LottieAnimationView
                     android:id="@+id/gif_iv_spam"
                     android:layout_width="@dimen/margin200"
                     android:layout_height="@dimen/margin200"
-                    android:layout_below="@+id/parent"
+                    android:layout_below="@+id/ll_parent"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="-120dp"
-                    android:src="@drawable/spam" />
+                    android:layout_gravity="center"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginTop="-100dp"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"
+                    app:lottie_renderMode="hardware"
+                    app:lottie_speed="0.5" />
 
             </RelativeLayout>
 
@@ -70,7 +75,6 @@
                     android:drawablePadding="@dimen/margin10"
                     android:gravity="center"
                     android:paddingLeft="@dimen/margin5"
-                    android:text="@string/recent_scan"
                     android:textColor="@color/white"
                     android:textSize="@dimen/text18"
                     android:textStyle="bold"
@@ -88,7 +92,6 @@
                     android:gravity="center"
                     android:maxLines="1"
                     android:paddingLeft="@dimen/margin10"
-                    android:text="@string/url"
                     android:textColor="@color/gray_200"
                     android:textSize="@dimen/text16" />
 
@@ -432,7 +435,6 @@
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center"
                                             android:gravity="center"
-                                            android:text="00"
                                             android:textColor="@color/white"
                                             android:textSize="@dimen/text10" />
 
@@ -496,8 +498,8 @@
                                                     android:layout_height="wrap_content"
                                                     android:layout_gravity="center"
                                                     android:gravity="start"
-                                                    android:text="@string/dummy_value"
-                                                    android:textColor="@color/transparent50"
+
+                                                    android:textColor="@color/white"
                                                     android:textSize="@dimen/text10" />
                                             </LinearLayout>
 
@@ -534,7 +536,7 @@
                                                     android:layout_height="wrap_content"
                                                     android:layout_gravity="center"
                                                     android:gravity="start"
-                                                    android:text="@string/dummy_value"
+                                                    android:text="@string/sent_by"
                                                     android:textColor="@color/white"
                                                     android:textSize="@dimen/text12"
                                                     android:textStyle="bold" />
@@ -546,8 +548,7 @@
                                                     android:layout_height="wrap_content"
                                                     android:layout_gravity="center"
                                                     android:gravity="start"
-                                                    android:text="@string/suspicious_link"
-                                                    android:textColor="@color/transparent50"
+                                                    android:textColor="@color/white"
                                                     android:textSize="@dimen/text10" />
                                             </LinearLayout>
                                         </LinearLayout>
@@ -563,17 +564,43 @@
                                     android:layout_margin="@dimen/margin5"
                                     android:background="@color/transparent50" />
 
-                                <TextView
-                                    android:id="@+id/tv_recent_header"
-                                    style="@style/textViewFontSora"
+                                <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
                                     android:layout_margin="@dimen/margin5"
-                                    android:gravity="center_vertical"
-                                    android:text="@string/reports"
-                                    android:textColor="@color/white"
-                                    android:textSize="@dimen/text14"
-                                    app:drawableRightCompat="@drawable/ic_recycler_view" />
+                                    android:gravity="center"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:id="@+id/tv_recent_header"
+                                        style="@style/textViewFontSora"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginRight="@dimen/margin10"
+                                        android:gravity="center_vertical"
+                                        android:text="@string/reports"
+                                        android:textColor="@color/white"
+                                        android:textSize="@dimen/text14" />
+
+                                    <TextView
+                                        android:id="@+id/tv_report_count"
+                                        style="@style/textViewFontInter"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="@dimen/margin5"
+                                        android:layout_weight="1"
+                                        android:drawablePadding="@dimen/margin5"
+                                        android:gravity="center_vertical"
+                                        android:maxLines="1"
+                                        android:text="92 spam reports"
+                                        android:textColor="@color/white"
+                                        android:textSize="@dimen/text12"
+                                        app:drawableLeftCompat="@drawable/ic_bullet"
+                                        app:drawableRightCompat="@drawable/ic_recycler_view" />
+
+                                </LinearLayout>
+
 
                                 <androidx.recyclerview.widget.RecyclerView
                                     android:id="@+id/rv_reports"
@@ -633,7 +660,7 @@
                                     android:layout_gravity="center"
                                     android:layout_margin="@dimen/margin5"
                                     android:gravity="end"
-                                    android:text="@string/dummy_value"
+
                                     android:textColor="@color/white"
                                     android:textSize="@dimen/text12" />
 
@@ -661,7 +688,7 @@
                                         android:layout_gravity="start"
                                         android:layout_margin="@dimen/margin5"
                                         android:gravity="center"
-                                        android:text="@string/dummy_value"
+
                                         android:textColor="@color/white"
                                         android:textSize="@dimen/text12" />
                                 </LinearLayout>
@@ -690,7 +717,7 @@
                                         android:layout_gravity="start"
                                         android:layout_margin="@dimen/margin5"
                                         android:gravity="center"
-                                        android:text="@string/dummy_value"
+
                                         android:textColor="@color/white"
                                         android:textSize="@dimen/text12" />
                                 </LinearLayout>
@@ -719,7 +746,7 @@
                                         android:layout_gravity="start"
                                         android:layout_margin="@dimen/margin5"
                                         android:gravity="center"
-                                        android:text="@string/dummy_value"
+
                                         android:textColor="@color/white"
                                         android:textSize="@dimen/text12" />
                                 </LinearLayout>
@@ -748,7 +775,7 @@
                                         android:layout_gravity="start"
                                         android:layout_margin="@dimen/margin5"
                                         android:gravity="center"
-                                        android:text="@string/dummy_value"
+
                                         android:textColor="@color/white"
                                         android:textSize="@dimen/text12" />
 
@@ -785,7 +812,7 @@
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center"
                                             android:gravity="center"
-                                            android:text="@string/dummy_value"
+
                                             android:textColor="@color/white"
                                             android:textSize="@dimen/text8" />
                                     </LinearLayout>
@@ -814,7 +841,7 @@
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center"
                                             android:gravity="center"
-                                            android:text="@string/dummy_value"
+
                                             android:textColor="@color/white"
                                             android:textSize="@dimen/text8" />
                                     </LinearLayout>
@@ -852,7 +879,7 @@
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center"
                                             android:gravity="center"
-                                            android:text="@string/dummy_value"
+
                                             android:textColor="@color/white"
                                             android:textSize="@dimen/text8" />
                                     </LinearLayout>
@@ -881,7 +908,7 @@
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center"
                                             android:gravity="center"
-                                            android:text="@string/dummy_value"
+
                                             android:textColor="@color/white"
                                             android:textSize="@dimen/text8" />
                                     </LinearLayout>
@@ -918,7 +945,7 @@
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center"
                                             android:gravity="center"
-                                            android:text="@string/dummy_value"
+
                                             android:textColor="@color/white"
                                             android:textSize="@dimen/text8" />
                                     </LinearLayout>
@@ -947,7 +974,7 @@
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center"
                                             android:gravity="center"
-                                            android:text="@string/dummy_value"
+
                                             android:textColor="@color/white"
                                             android:textSize="@dimen/text8" />
                                     </LinearLayout>
@@ -1381,7 +1408,7 @@
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center"
                                             android:gravity="center"
-                                            android:text="@string/dummy_value"
+
                                             android:textColor="@color/white"
                                             android:textSize="@dimen/text10" />
                                     </LinearLayout>
@@ -1410,7 +1437,7 @@
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center"
                                             android:gravity="center"
-                                            android:text="@string/dummy_value"
+
                                             android:textColor="@color/white"
                                             android:textSize="@dimen/text10" />
                                     </LinearLayout>
@@ -1439,7 +1466,7 @@
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center"
                                             android:gravity="center"
-                                            android:text="@string/dummy_value"
+
                                             android:textColor="@color/white"
                                             android:textSize="@dimen/text10" />
                                     </LinearLayout>
@@ -1477,7 +1504,7 @@
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center"
                                             android:gravity="center"
-                                            android:text="@string/dummy_value"
+
                                             android:textColor="@color/white"
                                             android:textSize="@dimen/text10" />
                                     </LinearLayout>
@@ -1506,7 +1533,7 @@
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center"
                                             android:gravity="center"
-                                            android:text="@string/dummy_value"
+
                                             android:textColor="@color/white"
                                             android:textSize="@dimen/text10" />
                                     </LinearLayout>
@@ -1535,7 +1562,7 @@
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center"
                                             android:gravity="center"
-                                            android:text="@string/dummy_value"
+
                                             android:textColor="@color/white"
                                             android:textSize="@dimen/text10" />
                                     </LinearLayout>

@@ -274,7 +274,8 @@ open class MainActivity : AppCompatActivity(), CoroutineScope {
     private suspend fun handleScanResult(response: ApolloResponse<ScanLinkMutation.Data>) {
         commonFunctions.showToast(this@MainActivity, "Links Scanned successfully")
         var scanResultIntent = Intent(this@MainActivity, ScanResultsActivity::class.java)
-        scanResultIntent.putExtra("response", "response")
+        ScanResultsActivity.response = response
+//        scanResultIntent.putExtra("response", response)
         startActivity(scanResultIntent)
     }
 

@@ -431,7 +431,7 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
         scanList.clear()
         val recentScans = RecentScansLatestQuery(
             0,
-            1,
+            10,
             if (sender != null && sender.isNotEmpty())
                 Optional.present(sender)
             else Optional.Absent,
@@ -443,7 +443,7 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
         GlobalScope.launch(Dispatchers.Main) {
             try {
                 progressBar.visibility = View.VISIBLE
-                var faviconStr = ""
+                var faviconStr = "www.favicon.com"
                 val response: ApolloResponse<RecentScansLatestQuery.Data> =
                     apolloClient.query(recentScans).execute()
                 for (i in response.data?.recentScans?.payload?.results!!) {

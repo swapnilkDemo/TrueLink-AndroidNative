@@ -1,16 +1,66 @@
 mutation ScanLink($form: ScanLinkInput!) {
-    scanLink(form: $form) {
-        code
-        message
-        success
-        payload {
-            app
-            appType
-            image
-            scan {
-                status
+  scanLink(form: $form) {
+    code
+	message
+    success
+    payload {
+      scan {
+      createdAt   # scan first created at
+        severity #color based severity rating safe medium high and critical
+        flag # whether it is spam or phishing or fraud
+        status # if the scan is finished or ended with an error
+        progress # if the scan is pending then its progress will show here
+        link {
+          full_url # actual url of the link
+          whois {
+            domainName # domain name
+            registrar # domain registrar
+            company {
+              verified # if the link is from a verified source or not
             }
-            sender
+          }
+          category # category of the link social media or entertainment
+          totalReports # total number of reports submitted for this link
+          reports { # list of reports that have been submitted
+            comment
+            severity
+            flag
+            link
+            createdAt
+            user {
+              uid
+              fullname
+              avatar
+               city
+                            country
+            }
+          }
+          redirect # link that it is redirecting to
+          ipinfo {
+            ip # origin ip address
+            # use this for the server location info
+            city
+            country
+            country_name
+          }
         }
+        quickScan {
+          TLSexpired # if ceritiifate is expired
+          usingTLS # if tls enbled
+          SEOScore  #SEO Score
+        }
+        triggers # total number of scans on this link world wide last 7 days
+
+        #find other meta tags and website
+        siteDetails {
+          title # title of the webpage it is forwarding to
+          robots
+          og_type
+          og_image
+        }
+      }
+      app # name of app that it is scanned on
+      sender # name of the person who sent this link
     }
+  }
 }

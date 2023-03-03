@@ -22,7 +22,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/orange"
+            android:background="@color/light_background"
             android:minHeight="?attr/actionBarSize"
             android:theme="?attr/actionBarTheme"
             app:layout_constraintEnd_toEndOf="parent"
@@ -55,7 +55,7 @@
                     android:layout_weight="1"
                     android:drawablePadding="@dimen/margin5"
                     android:gravity="center"
-                    android:text="@string/suspicious_link"
+                    android:text="@string/title_scan_details"
                     android:textColor="@color/white"
                     android:textSize="@dimen/text16" />
 

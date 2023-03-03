@@ -66,9 +66,11 @@
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/fragment_update_user_profile.xml" value="0.10460526315789474" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/list_items_circular.xml" value="0.1921875" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/list_items_recent_scan.xml" value="0.25" />
+        <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/list_link_reports.xml" value="0.25" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/list_senders_chip.xml" value="0.1839080459770115" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/list_senders_item.xml" value="0.165625" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/list_users_chip.xml" value="0.16354166666666667" />
+        <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/new_scan_results.xml" value="0.1" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/toolbar_profile.xml" value="0.1921875" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/toolbar_scan_details.xml" value="0.19114583333333332" />
       </map>

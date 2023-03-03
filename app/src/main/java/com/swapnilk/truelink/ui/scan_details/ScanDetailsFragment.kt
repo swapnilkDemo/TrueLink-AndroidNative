@@ -1,5 +1,6 @@
 package com.swapnilk.truelink.ui.scan_details
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,17 +9,22 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.lottie.LottieAnimationView
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.ApolloResponse
 import com.apollographql.apollo3.api.Optional
 import com.apollographql.apollo3.exception.ApolloException
 import com.apollographql.apollo3.network.okHttpClient
-import com.example.GetScanDetailsQuery
-import com.example.type.ReportSummaryGraphType
-import com.example.type.SortOrder
+import com.example.ScanLinkMutation
+import com.example.type.AppType
+import com.example.type.ScanLinkInput
+import com.example.type.ScanTriggerType
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
@@ -26,6 +32,7 @@ import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
 import com.swapnilk.truelink.R
 import com.swapnilk.truelink.data.online.AuthorizationInterceptor
+import com.swapnilk.truelink.data.online.adapters.ReportListAdapter
 import com.swapnilk.truelink.data.online.model.RecentScansModel
 import com.swapnilk.truelink.databinding.FragmentScanDetailsBinding
 import com.swapnilk.truelink.utils.CommonFunctions
@@ -35,7 +42,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
-import pl.droidsonroids.gif.GifImageView
 import kotlin.coroutines.CoroutineContext
 
 class ScanDetailsFragment : Fragment(), CoroutineScope {
@@ -59,7 +65,9 @@ class ScanDetailsFragment : Fragment(), CoroutineScope {
     private lateinit var btnShare: TextView
     private lateinit var btnHome: TextView
     private lateinit var tvHeader: TextView
-    lateinit var gifImageView: GifImageView
+    private lateinit var toolbar: Toolbar
+    lateinit var llParent: LinearLayout
+    private lateinit var gifImageView: LottieAnimationView
     lateinit var tvDomainName: TextView
     lateinit var tvFullURL: TextView
     lateinit var ivSafe: ImageView
@@ -74,7 +82,8 @@ class ScanDetailsFragment : Fragment(), CoroutineScope {
     lateinit var tvScannedOnApp: TextView
     lateinit var tvSentBy: TextView
     lateinit var rvReports: RecyclerView
-    lateinit var tvShortenLink: TextView
+    lateinit var tvReportsCount: TextView
+    private lateinit var tvShortenLink: TextView
     lateinit var tvSiteDomain: TextView
     lateinit var tvScannedUrl: TextView
     lateinit var tvPageTitle: TextView
@@ -165,22 +174,27 @@ class ScanDetailsFragment : Fragment(), CoroutineScope {
 
     private fun bindValuesToVies() {
         progressBar.visibility = View.VISIBLE
-        val scanDetails = GetScanDetailsQuery(
-            thisRecentScanModel.hashId,
-            90,
-            ReportSummaryGraphType.overall,
-            Optional.absent(),
-            Optional.absent(),
-            0,
-            100,
-            SortOrder.ASC
+        val scanLinkInput = ScanLinkInput(
+            thisRecentScanModel.actualUrl.toString(),
+            ScanTriggerType.MANUAL,
+            Optional.Absent,
+            Optional.present(AppType.SOCIAL_MEDIA),
+            Optional.Absent,
+            Optional.Absent,
+            Optional.Absent,
+            Optional.Absent,
+            Optional.Absent
+        )
+        val scanLink = ScanLinkMutation(
+            scanLinkInput
         )
         launch {
             try {
-                val response: ApolloResponse<GetScanDetailsQuery.Data> =
-                    apolloClient.query(scanDetails).execute()
+                val response: ApolloResponse<ScanLinkMutation.Data> =
+                    apolloClient.mutation(scanLink).execute()
 
-                commonFunctions.showToast(requireContext(), response.data?.getScanDetails!!.message)
+                commonFunctions.showToast(requireContext(), response.data?.scanLink!!.message)
+                handleResponse(response);
 
             } catch (ex: ApolloException) {
                 ex.stackTrace
@@ -192,8 +206,90 @@ class ScanDetailsFragment : Fragment(), CoroutineScope {
         }
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables", "SetTextI18n")
+    private fun handleResponse(response: ApolloResponse<ScanLinkMutation.Data>) {
+        val scan = response.data?.scanLink?.payload?.scan
+        when (scan?.severity) {
+            0 -> {
+                toolbar.setBackgroundColor(resources.getColor(R.color.green))
+                llParent.setBackgroundColor(resources.getColor(R.color.green))
+                ivSafe.visibility = View.VISIBLE
+            }
+            1 -> {
+                toolbar.setBackgroundColor(resources.getColor(R.color.yellow_text))
+                llParent.setBackgroundColor(resources.getColor(R.color.yellow_text))
+                gifImageView.setAnimation(R.raw.warning)
+                ivMedium.visibility = View.VISIBLE
+            }
+            2 -> {
+                toolbar.setBackgroundColor(resources.getColor(R.color.orange_text))
+                llParent.setBackgroundColor(resources.getColor(R.color.orange_text))
+                gifImageView.setAnimation(R.raw.warning)
+                ivHigh.visibility = View.VISIBLE
+            }
+            else -> {
+                toolbar.setBackgroundColor(resources.getColor(R.color.red))
+                llParent.setBackgroundColor(resources.getColor(R.color.red))
+                gifImageView.setAnimation(R.raw.stop)
+                ivCritical.visibility = View.VISIBLE
+            }
+        }
+
+        tvDomainName.text = scan?.link?.whois?.domainName
+        if (scan?.quickScan?.TLSexpired!! || !scan.quickScan.usingTLS!!)
+            tvDomainName.setCompoundDrawables(
+                resources.getDrawable(R.drawable.ic_lock),
+                null,
+                null,
+                null
+            )
+        tvFullURL.text = scan?.link?.full_url
+        tvScannedOnApp.text = response.data?.scanLink?.payload?.app
+        tvSentBy.text = response.data?.scanLink?.payload?.sender
+        tvTotalScans.text =
+            scan?.triggers.toString() + " " + getString(R.string.scans_in_seven_days)
+
+        tvShortenLink.text = "NA"
+        tvSiteDomain.text = scan?.link?.whois?.domainName
+        tvScannedUrl.text = scan?.link?.full_url
+        tvPageTitle.text = scan?.siteDetails?.title
+
+        tvIP.text = scan?.link?.ipinfo?.ip
+        tvServerLocation.text = scan?.link?.ipinfo?.country
+        tvHosting.text = "NA"
+        if (!scan?.quickScan?.TLSexpired || scan?.quickScan?.usingTLS == true)
+            tvHttps.text = getString(R.string.secured)
+        else
+            tvHttps.text = getString(R.string.insecured)
+        tvRegistrar.text = scan?.link?.whois?.registrar
+        tvSeoCore.text = scan?.quickScan?.SEOScore.toString()
+
+        var reportList: ArrayList<ScanLinkMutation.Report> = ArrayList()
+        for (reports in scan?.link?.reports!!)
+            reportList.add(reports!!)
+
+        if (reportList.size > 0) {
+            tvEmptyReports.visibility = View.GONE
+            tvReportsCount.text =
+                reportList.size.toString() + " " + getString(R.string.reports_count)
+            rvReports.apply {
+                layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+                adapter = ReportListAdapter(reportList, requireContext(), parentFragmentManager)
+                var dividerItemDecoration = DividerItemDecoration(
+                    context,
+                    (layoutManager as LinearLayoutManager).orientation
+                )
+                addItemDecoration(dividerItemDecoration)
+                isNestedScrollingEnabled = false
+            }
+        } else {
+            rvReports.visibility = View.GONE
+        }
+    }
+
     private fun bindViews() {
         progressBar = binding.content.progressBar
+        llParent = binding.content.llParent
         gifImageView = binding.content.gifIvSpam
         tvDomainName = binding.content.tvDomainName
         tvFullURL = binding.content.tvUrl
@@ -212,6 +308,7 @@ class ScanDetailsFragment : Fragment(), CoroutineScope {
         tvSentBy = binding.content.tvSenderName
 
         rvReports = binding.content.rvReports
+        tvReportsCount = binding.content.tvReportCount
         tvEmptyReports = binding.content.tvEmptyReports
 
         tvShortenLink = binding.content.tvShortenLink
@@ -274,6 +371,7 @@ class ScanDetailsFragment : Fragment(), CoroutineScope {
         activity?.findViewById<AppBarLayout>(R.id.appBarLayout)?.visibility = View.GONE
         activity?.findViewById<BottomNavigationView>(R.id.bottom_navigation)?.visibility = View.GONE
 
+        toolbar = binding.toolbarScanDetails.toolbar
         btnHome = binding.toolbarScanDetails.btnHomeUp
         btnShare = binding.toolbarScanDetails.btnShare
         tvHeader = binding.toolbarScanDetails.tvHeader

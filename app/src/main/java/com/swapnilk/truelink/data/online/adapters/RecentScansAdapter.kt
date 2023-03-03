@@ -34,10 +34,11 @@ class RecentScansAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val recentScansModel = scanList[position]
 //        holder.civFavicon.setImageDrawable(context.getDrawable(recentScansModel.faviconUrl!!))
-        Picasso.with(context)
-            .load(recentScansModel.faviconUrl)
-            .placeholder(R.drawable.ic_no_photo)
-            .into(holder.civFavicon)
+        if (recentScansModel.faviconUrl != null || recentScansModel.faviconUrl != "")
+            Picasso.with(context)
+                .load(recentScansModel.faviconUrl)
+                .placeholder(R.drawable.ic_no_photo)
+                .into(holder.civFavicon)
         holder.tvDomain.text = recentScansModel.domainName
         holder.tvTime.text = recentScansModel.time
         holder.tvUrl.text = recentScansModel.actualUrl
@@ -126,7 +127,8 @@ class RecentScansAdapter(
 
 
         holder.itemView.setOnClickListener {
-            val scanDetailsFragment: ScanDetailsFragment = ScanDetailsFragment.newInstance(recentScansModel)
+            val scanDetailsFragment: ScanDetailsFragment =
+                ScanDetailsFragment.newInstance(recentScansModel)
 
             MainActivity.addFragmentToActivity(scanDetailsFragment, fm)
         }

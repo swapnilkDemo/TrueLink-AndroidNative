@@ -7,17 +7,27 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
+import com.apollographql.apollo3.api.ApolloResponse
+import com.example.ScanLinkMutation
 import com.swapnilk.truelink.service.ForegroundService
 import com.swapnilk.truelink.service.PopupService
+import com.swapnilk.truelink.utils.CommonFunctions
 
 class ScanResultsActivity : Activity() {
+    lateinit var commonFunctions: CommonFunctions
+
+    companion object {
+        lateinit var response: ApolloResponse<ScanLinkMutation.Data>
+    }
+
     // method for starting the service
     //    make activity invisible
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        commonFunctions = CommonFunctions(this@ScanResultsActivity)
         val intent = intent
         val action = intent.action
-        val data = intent.data
+        val data: Uri? = intent.data
         Log.d("ScanResultsActivity", "onCreate: $action $data")
         val window = Window(this)
         val serviceIntent = Intent(applicationContext, PopupService::class.java)
@@ -47,23 +57,24 @@ class ScanResultsActivity : Activity() {
         bundle.putString("data", data.toString())
         serviceIntent.putExtras(bundle)
         applicationContext.startService(serviceIntent)
+        val scan = response.data?.scanLink?.payload?.scan
         window.open(
-            "null",
-            "null",
-            1,
-            "SPAM",
-            1,
+            scan?.link?.full_url,
+            scan?.link?.whois?.domainName,
+            scan?.triggers,
+            scan?.flag ?: "SPAM",
+            scan?.link?.totalReports,
             0,
             0,
             0,
             1,
-            1,
+            scan?.severity,
+            scan?.link?.ipinfo?.ip,
+            scan?.link?.category,
+            commonFunctions.convertTimeStamp2Date(scan?.createdAt.toString()),
             "null",
-            "null",
-            "null",
-            "null",
-            "null",
-            "null"
+            scan?.link?.ipinfo?.country,
+            "Null"
         );
         finish()
     }
