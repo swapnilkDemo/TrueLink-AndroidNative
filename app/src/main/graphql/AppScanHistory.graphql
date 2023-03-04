@@ -1,5 +1,19 @@
 query AppScanHistory($skip: FilterSkip!, $limit: FilterLimit!, $days: Int, $sendersSkip2: FilterSkip!, $sendersLimit2: FilterLimit!, $packageName: String) {
-    appScanHistory(skip: $skip, limit: $limit, days: $days, packageName: $packageName) {
+    main:  overAllScanHistory(days: $days) {
+              code
+              success
+              message
+              payload {
+                clickedLinks
+                safeLinks
+                scannedFromNotifications
+                scannedWithinBrowser
+                suspicousLinks
+                totalLinks
+                verifiedLinks
+              }
+            }
+   app: appScanHistory(skip: $skip, limit: $limit, days: $days, packageName: $packageName) {
         code
         success
         message

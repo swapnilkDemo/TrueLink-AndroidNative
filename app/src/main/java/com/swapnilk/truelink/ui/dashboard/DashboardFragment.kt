@@ -338,10 +338,11 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
     private fun loadTopAppList(appList: ArrayList<AppDataModel>) {
         binding.rvApps.apply {
             if (selectedItem == -1)
-                selectedItem = appList.size - 1
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, true)
+//                selectedItem = appList.size - 1
+                selectedItem = 0
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = TopAppDataAdapter(appList, requireContext(), selectedItem)
-            scrollToPosition(selectedItem)
+            //scrollToPosition(selectedItem)
         }
 
     }
@@ -503,8 +504,28 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
                 val response: ApolloResponse<AppScanHistoryQuery.Data> =
                     apolloClient.query(appScanHistory).execute()
                 // for (i in response)
-                println(response.data?.appScanHistory?.payload)
-                for (i in response.data?.appScanHistory?.payload!!) {
+                println(response.data?.app?.payload)
+                var overallScanModel = AppDataModel(
+                    "",
+                    "Overall",
+                    response.data?.main?.payload?.totalLinks,
+                    response.data?.main?.payload?.safeLinks,
+                    response.data?.main?.payload?.clickedLinks,
+                    response.data?.main?.payload?.suspicousLinks,
+                    0,
+                    0,
+                    response.data?.main?.payload?.verifiedLinks,
+                    "",
+                    R.color.selected_color,
+                    false,
+                    null,
+                    null,
+                    null,
+                    null, null
+
+                )
+                appList.add(overallScanModel);
+                for (i in response.data?.app?.payload!!) {
                     var appScansModel = AppDataModel(
                         i?.icon,
                         i?.appName,
@@ -663,7 +684,8 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
         tvClickedCount.text = appScansModel.clickedLinks.toString()
         tvVerifiedCount.text = appScansModel.verifiedLinks.toString()
         sendersList.clear()
-        sendersList = appScansModel.senders as ArrayList<AppScanHistoryQuery.Sender?>
+        if (appScansModel.senders != null)
+            sendersList = appScansModel.senders as ArrayList<AppScanHistoryQuery.Sender?>
         if (appScansModel.packageName != null) {
             packageName = appScansModel.packageName
             llOverall.visibility = View.GONE
@@ -682,15 +704,17 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
             llOverall.visibility = View.VISIBLE
             ivAppIcon.visibility = View.GONE
         }
-        if (sendersList.size > 0) {
+        if (sendersList != null && sendersList.size > 0) {
             rvSenderChip.apply {
                 llSenders.visibility = View.VISIBLE
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                adapter = SenderDataAdapterChip(
-                    appScansModel.senders,
-                    requireContext(),
-                    appScansModel.packageName
-                )
+                adapter = appScansModel.senders?.let {
+                    SenderDataAdapterChip(
+                        it,
+                        requireContext(),
+                        appScansModel.packageName
+                    )
+                }
                 //   scrollToPosition(appList.size - 1)
             }
         } else {
@@ -706,7 +730,8 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
                 true
             )
 
-        loadTabs(appScansModel)
+        if (appScansModel.allScansMap != null)
+            loadTabs(appScansModel)
 
     }
 

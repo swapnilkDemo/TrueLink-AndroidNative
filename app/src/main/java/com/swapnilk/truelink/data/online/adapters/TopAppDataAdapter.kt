@@ -59,8 +59,13 @@ class TopAppDataAdapter(
             }
 
         } else {
-            holder.tvAppName.text = context.getString(R.string.overall)
-            holder.ivAppIcon.setImageDrawable(context.resources.getDrawable(R.drawable.ic_overall))
+            if (appDataModel.appName.equals("Overall")) {
+                holder.tvAppName.text = context.getString(R.string.overall)
+                holder.ivAppIcon.setImageDrawable(context.resources.getDrawable(R.drawable.ic_overall))
+            } else {
+                holder.tvAppName.text = "Unknown"
+
+            }
         }
 
         if (appDataModel.totalLinks!! < 99)

@@ -213,6 +213,7 @@ class ScanDetailsFragment : Fragment(), CoroutineScope {
             0 -> {
                 toolbar.setBackgroundColor(resources.getColor(R.color.green))
                 llParent.setBackgroundColor(resources.getColor(R.color.green))
+                gifImageView.setAnimation(R.raw.shield_success)
                 ivSafe.visibility = View.VISIBLE
             }
             1 -> {
@@ -224,7 +225,7 @@ class ScanDetailsFragment : Fragment(), CoroutineScope {
             2 -> {
                 toolbar.setBackgroundColor(resources.getColor(R.color.orange_text))
                 llParent.setBackgroundColor(resources.getColor(R.color.orange_text))
-                gifImageView.setAnimation(R.raw.warning)
+                gifImageView.setAnimation(R.raw.sheild_alert)
                 ivHigh.visibility = View.VISIBLE
             }
             else -> {

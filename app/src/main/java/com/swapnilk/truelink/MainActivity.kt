@@ -38,7 +38,10 @@ import com.swapnilk.truelink.data.online.AuthorizationInterceptor
 import com.swapnilk.truelink.databinding.ActivityMainBinding
 import com.swapnilk.truelink.service.ForegroundService
 import com.swapnilk.truelink.service.MyReceiver
+import com.swapnilk.truelink.service.NotificationCollectorMonitorService
+import com.swapnilk.truelink.service.NotificationService
 import com.swapnilk.truelink.ui.SigninActivity
+import com.swapnilk.truelink.ui.scan_details.ScanDetailsFragment
 import com.swapnilk.truelink.ui.user_profile.UpdateUserProfile
 import com.swapnilk.truelink.utils.CommonFunctions
 import com.swapnilk.truelink.utils.SharedPreferences
@@ -55,6 +58,7 @@ import kotlin.coroutines.CoroutineContext
 
 open class MainActivity : AppCompatActivity(), CoroutineScope {
     private val fm = supportFragmentManager
+    private lateinit var notificationService: NotificationService
 
     companion object GlobalFields {
         val INTENT_ACTION_NOTIFICATION = "it.gmariotti.notification"
@@ -138,6 +142,7 @@ open class MainActivity : AppCompatActivity(), CoroutineScope {
         //  job.start()
         if (mReceiver == null) mReceiver = MyReceiver()
         registerReceiver(mReceiver, IntentFilter(INTENT_ACTION_NOTIFICATION))
+        startService(Intent(this, NotificationCollectorMonitorService::class.java))
     }
 
 
@@ -152,6 +157,7 @@ open class MainActivity : AppCompatActivity(), CoroutineScope {
         //////////////////////////////////////////////////////////////
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        /////////////////////Register to Notification service///////////
 
         //////////////////Fragment Navigation//////////////////////////////
         val navHostFragment =
@@ -362,8 +368,14 @@ open class MainActivity : AppCompatActivity(), CoroutineScope {
     ////////////////////////Handle Navigation and Backpress//////////////////
     override fun onBackPressed() {
         super.onBackPressed()
-        if (supportFragmentManager.fragments.size == 1)
-            navView.selectedItemId = R.id.nav_threat_control
+        for (fragment in supportFragmentManager.fragments) {
+            if (fragment is ScanDetailsFragment || fragment is UpdateUserProfile)
+                navView.selectedItemId = R.id.nav_dashboard
+            else if (supportFragmentManager.fragments.size > 1)
+                supportFragmentManager.popBackStack()
+            else
+                commonFunctions.showToast(this, "Do you want to exit this Application?")
+        }
     }
 
     ////////////////Start Foreground Service//////////////////

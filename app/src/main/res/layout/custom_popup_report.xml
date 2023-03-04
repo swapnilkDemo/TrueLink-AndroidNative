@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="@dimen/margin350"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@drawable/popup_background"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/tv_title"
+        style="@style/textViewFontSora"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="@dimen/margin10"
+        android:gravity="start"
+        android:text="@string/report_link"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text16"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tv_link"
+        style="@style/textViewFontInter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="@dimen/margin10"
+        android:layout_marginRight="@dimen/margin10"
+        android:background="@drawable/background_outline_box_light"
+        android:gravity="start"
+        android:maxLines="1"
+        android:padding="@dimen/margin5"
+        android:text="@string/url"
+        android:textColor="@color/transparent80"
+        android:textSize="@dimen/text12" />
+
+    <TextView
+        android:id="@+id/tv_text2"
+        style="@style/textViewFontInter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="@dimen/margin10"
+        android:layout_marginRight="@dimen/margin10"
+        android:layout_marginBottom="@dimen/margin10"
+        android:gravity="start"
+        android:text="@string/select_severity"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text14" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_app_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/margin10"
+        android:visibility="gone" />
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/iv_gif"
+        android:layout_width="@dimen/margin250"
+        android:layout_height="@dimen/margin250"
+        android:layout_gravity="center"
+        android:src="@drawable/truelink_set_default_browser" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/id_btn_confirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/margin10"
+        android:gravity="center"
+        android:text="@string/set_default"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text14"
+        app:backgroundTint="@color/green" />
+
+</LinearLayout>
