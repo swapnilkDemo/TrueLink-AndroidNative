@@ -41,42 +41,40 @@ class AppDataAdapterList(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val appDataModel = appList[position]
-        if (appDataModel != null) {
-            if (appDataModel.packageName != null) {
-                if (commonFunctions.getAppNameFromPackageName(
+        if (appDataModel.packageName != null) {
+            if (commonFunctions.getAppNameFromPackageName(
+                    appDataModel.packageName,
+                    context
+                ) != "Unknown"
+            ) {
+                holder.tvAppName.text =
+                    commonFunctions.getAppNameFromPackageName(appDataModel.packageName, context)
+                holder.ivAppIcon.setImageDrawable(
+                    commonFunctions.getAppIconFromPackageName(
                         appDataModel.packageName,
                         context
-                    ) != "Unknown"
-                ) {
-                    holder.tvAppName.text =
-                        commonFunctions.getAppNameFromPackageName(appDataModel.packageName, context)
-                    holder.ivAppIcon.setImageDrawable(
-                        commonFunctions.getAppIconFromPackageName(
-                            appDataModel.packageName,
-                            context
-                        )
                     )
-                } else {
-                    holder.tvAppName.text = appDataModel.appName
-                    Picasso.with(context)
-                        .load(appDataModel.appIconUrl)
-                        .placeholder(R.drawable.ic_no_photo)
-                        .into(holder.ivAppIcon)
-                }
+                )
             } else {
-                holder.tvAppName.text = context.getString(R.string.overall)
-                holder.ivAppIcon.setImageDrawable(context.resources.getDrawable(R.drawable.ic_overall))
+                holder.tvAppName.text = appDataModel.appName
+                Picasso.with(context)
+                    .load(appDataModel.appIconUrl)
+                    .placeholder(R.drawable.ic_no_photo)
+                    .into(holder.ivAppIcon)
             }
-            holder.tvSafeLinks.text = appDataModel.safeLinks.toString()
-            holder.tvSuspiciousLinks.text = appDataModel.suspiciousLinks.toString()
-            holder.tvTotalLinks.text = appDataModel.totalLinks.toString()
-            holder.ivArrowRight.visibility = View.VISIBLE
+        } else {
+            holder.tvAppName.text = context.getString(R.string.overall)
+            holder.ivAppIcon.setImageDrawable(context.resources.getDrawable(R.drawable.ic_overall))
+        }
+        holder.tvSafeLinks.text = appDataModel.safeLinks.toString()
+        holder.tvSuspiciousLinks.text = appDataModel.suspiciousLinks.toString()
+        holder.tvTotalLinks.text = appDataModel.totalLinks.toString()
+        holder.ivArrowRight.visibility = View.VISIBLE
 
-            holder.itemView.setOnClickListener {
-                DashboardFragment.selectedItem = position
-                DashboardFragment.mListener.onAppSelected(appDataModel)
-                dialog.dismiss()
-            }
+        holder.itemView.setOnClickListener {
+            DashboardFragment.selectedItem = position
+            DashboardFragment.mListener.onAppSelected(appDataModel)
+            dialog.dismiss()
         }
     }
 

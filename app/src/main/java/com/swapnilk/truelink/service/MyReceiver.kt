@@ -1,5 +1,6 @@
 package com.swapnilk.truelink.service
 
+import android.annotation.SuppressLint
 import android.app.Notification
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -15,14 +16,15 @@ open class MyReceiver : BroadcastReceiver() {
     private var text: TextView? = null
     private var subtext: TextView? = null
     private var largeIcon: ImageView? = null
+    @SuppressLint("UnsafeProtectedBroadcastReceiver")
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent != null) {
             val extras = intent.extras
             val notificationTitle = extras!!.getString(Notification.EXTRA_TITLE)
             val notificationLargeIcon =
-                extras!!.getParcelable<Parcelable>(Notification.EXTRA_LARGE_ICON) as Bitmap?
-            val notificationText = extras!!.getCharSequence(Notification.EXTRA_TEXT)
-            val notificationSubText = extras!!.getCharSequence(Notification.EXTRA_SUB_TEXT)
+                extras.getParcelable<Parcelable>(Notification.EXTRA_LARGE_ICON) as Bitmap?
+            val notificationText = extras.getCharSequence(Notification.EXTRA_TEXT)
+            val notificationSubText = extras.getCharSequence(Notification.EXTRA_SUB_TEXT)
             title?.text = notificationTitle
             text?.text = notificationText
             subtext?.text = notificationSubText

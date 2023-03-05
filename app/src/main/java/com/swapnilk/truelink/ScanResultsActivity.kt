@@ -74,7 +74,8 @@ class ScanResultsActivity : Activity() {
             commonFunctions.convertTimeStamp2Date(scan?.createdAt.toString()),
             "null",
             scan?.link?.ipinfo?.country,
-            "Null"
+            "Null",
+            this
         );
         finish()
     }

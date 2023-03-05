@@ -11,7 +11,6 @@ import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.cardview.widget.CardView
-import androidx.core.view.marginTop
 import com.airbnb.lottie.LottieAnimationView
 import com.swapnilk.truelink.R
 
@@ -35,8 +34,8 @@ class Window(  // declaring required variables
     private var moreInfo: Button? = null
     private var bottomCard: LinearLayout? = null
     private var tagIcon: ImageView? = null
-    private var webIcon : ImageView? = null
-    private var dotIcon : TextView? = null
+    private var webIcon: ImageView? = null
+    private var dotIcon: TextView? = null
     private var topLayout: LinearLayout? = null
     private var httpsIcon: ImageView? = null
     private var createdOnText: TextView? = null
@@ -105,7 +104,7 @@ class Window(  // declaring required variables
         if (full_url.length > 25) {
             val substring = full_url.substring(0, 25)
             fullUrlText!!.text = "${substring}..."
-        }else {
+        } else {
             fullUrlText!!.text = full_url
         }
         totalScanText?.text = "Secured by truelink"
@@ -131,25 +130,27 @@ class Window(  // declaring required variables
         }
     }
 
-@SuppressLint("SetTextI18n")
-fun open(
-    full_url: String?,
-    domain: String?,
-    totalScans: Int?,
-    flag: String?,
-    spamReports: Int?,
-    malwareReports: Int?,
-    phishingReports: Int?,
-    fakewebReports: Int?,
-    totalReports: Int?,
-    severityInt: Int?,
-    originIp: String?,
-    category: String?,
-    createdOn: String?,
-    connectionType: String?,
-    location: String?,
-    hosting: String?
-) {
+    @SuppressLint("SetTextI18n")
+    fun open(
+        full_url: String?,
+        domain: String?,
+        totalScans: Int?,
+        flag: String?,
+        spamReports: Int?,
+        malwareReports: Int?,
+        phishingReports: Int?,
+        fakewebReports: Int?,
+        totalReports: Int?,
+        severityInt: Int?,
+        originIp: String?,
+        category: String?,
+        createdOn: String?,
+        connectionType: String?,
+        location: String?,
+        hosting: String?,
+        context: Context
+    ) {
+        val sharedPreferences = com.swapnilk.truelink.utils.SharedPreferences(context)
 //        set title text
         domainText!!.text = domain
         totalScanText!!.text = "$category | Total Scans $totalScans"
@@ -166,7 +167,7 @@ fun open(
         if (full_url?.length!! > 25) {
             val substring = full_url.substring(0, 25)
             fullUrlText!!.text = "${substring}..."
-        }else {
+        } else {
             fullUrlText!!.text = full_url
         }
 
@@ -187,7 +188,7 @@ fun open(
             flagText!!.text = "SPAM"
             tagIcon!!.setImageResource(R.drawable.spam_icon)
             spamReportsText!!.text = "$spamReports Spam Reports"
-        }else {
+        } else {
             flagText!!.visibility = View.GONE
             tagIcon!!.visibility = View.GONE
             dotIcon!!.visibility = View.GONE
@@ -204,7 +205,7 @@ fun open(
         warningPolygon?.visibility = View.INVISIBLE
         dangerPolygon?.visibility = View.INVISIBLE
         bottomCard?.visibility = View.VISIBLE
-    if (severityInt == 0) {
+        if (severityInt == 0) {
             banner?.setCardBackgroundColor(context.resources.getColor(R.color.safe))
             safePolygon?.visibility = ImageView.VISIBLE
             scanIcon?.setAnimation(R.raw.shield_success)
@@ -227,23 +228,23 @@ fun open(
         if (hosting?.length!! > 12) {
             val substring = hosting.substring(0, 12)
             hostingText!!.text = "${substring}..."
-        }else {
+        } else {
             hostingText?.text = hosting
         }
 
         moreInfo?.setOnClickListener {
-                try {
+            try {
 //                    convert full_url to base64 url safe
-                    val base64Url = Base64.encodeToString(full_url.toByteArray(), Base64.URL_SAFE)
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("truelink://scan/$base64Url"))
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                    intent.setPackage("com.truelink")
-                    context.startActivity(intent)
-                    close()
-                } catch (e: Exception) {
-                    Log.e("Error", e.toString())
-                    Toast.makeText(context, "Error opening link", Toast.LENGTH_SHORT).show()
-                }
+                val base64Url = Base64.encodeToString(full_url.toByteArray(), Base64.URL_SAFE)
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("truelink://scan/$base64Url"))
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                intent.setPackage("com.swapnilk.truelink")
+                context.startActivity(intent)
+                close()
+            } catch (e: Exception) {
+                Log.e("Error", e.toString())
+                Toast.makeText(context, "Error opening link", Toast.LENGTH_SHORT).show()
+            }
         }
 
         val openBrowser = mView.findViewById<Button>(R.id.open_in_browser) as Button
@@ -257,12 +258,17 @@ fun open(
 //            open in browser
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(full_url))
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                intent.setPackage("com.android.chrome")
+                intent.setPackage(
+                    if (sharedPreferences.getFavouriteBrowser() != null)
+                        sharedPreferences.getFavouriteBrowser()
+                    else
+                        "com.android.chrome"
+                )
                 context.startActivity(intent)
                 close()
-            }catch (
+            } catch (
                 e: Exception
-            ){
+            ) {
                 Log.d("Window", "open in browser error")
                 e.printStackTrace()
                 close()

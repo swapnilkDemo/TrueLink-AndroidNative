@@ -50,6 +50,7 @@ import kotlinx.coroutines.*
 import okhttp3.OkHttpClient
 import pl.droidsonroids.gif.GifImageView
 import kotlin.coroutines.CoroutineContext
+import kotlin.math.roundToInt
 
 
 class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
@@ -506,7 +507,7 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
                 // for (i in response)
                 println(response.data?.app?.payload)
                 var overallScanModel = AppDataModel(
-                    "",
+                    "dummyurl.om",
                     "Overall",
                     response.data?.main?.payload?.totalLinks,
                     response.data?.main?.payload?.safeLinks,
@@ -607,18 +608,15 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
         }
         yesBtn.setOnClickListener {
             dialog.dismiss()
-            if (action == "overlay")
-                MainActivity.checkOverlayPermission(context as MainActivity)
-            else if (action == "notification")
-                MainActivity.allowNotificationAccess(context as MainActivity)
-            else if (action == "browser") {
-                run {
+            when (action) {
+                "overlay" -> MainActivity.checkOverlayPermission(context as MainActivity)
+                "notification" -> MainActivity.allowNotificationAccess(context as MainActivity)
+                "browser" -> run {
                     MainActivity.showLauncherSelection(context as MainActivity)
 
                 }
             }
         }
-
         dialog.show()
 
     }
@@ -630,17 +628,17 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
             progress = 33
             if (Settings.canDrawOverlays(requireContext())) {
                 progress = 66
-                /* if (!sharedPreferences.isNLServiceRunning(requireContext())) {
-                     showPopupWindow(
-                         requireContext(),
-                         getString(R.string.notification_access),
-                         getString(R.string.text3),
-                         "",
-                         getString(R.string.allow),
-                         R.drawable.ic_read_ntif,
-                         "notification"
-                     )
-                 }*/
+                if (!commonFunctions.isNLServiceRunning(requireContext())) {
+                    showPopupWindow(
+                        requireContext(),
+                        getString(R.string.notification_access),
+                        getString(R.string.text3),
+                        "",
+                        getString(R.string.allow),
+                        R.drawable.ic_read_ntif,
+                        "notification"
+                    )
+                }
             } else {
                 showPopupWindow(
                     requireContext(),
@@ -676,7 +674,13 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onAppSelected(appScansModel: AppDataModel) {
-        tvSafeCount.text = appScansModel.safeLinks.toString()
+        tvSafeCount.text =
+            appScansModel.safeLinks?.let {
+                appScansModel.totalLinks?.let { it1 ->
+                    commonFunctions.getPercentages(it, it1).roundToInt()
+                        .toString() + "%"
+                }
+            }
         tvSuspiciousCount.text = appScansModel.suspiciousLinks.toString()
         tvBrowserCount.text = appScansModel.scannedWithinBrowser.toString()
         tvAppLinkCount.text = appScansModel.scannedFromNotification.toString()
@@ -686,7 +690,7 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
         sendersList.clear()
         if (appScansModel.senders != null)
             sendersList = appScansModel.senders as ArrayList<AppScanHistoryQuery.Sender?>
-        if (appScansModel.packageName != null) {
+        if (appScansModel.packageName != null && appScansModel.appName != "Overall") {
             packageName = appScansModel.packageName
             llOverall.visibility = View.GONE
             ivAppIcon.visibility = View.VISIBLE
@@ -707,7 +711,8 @@ class DashboardFragment : Fragment(), CoroutineScope, DataChangedInterface {
         if (sendersList != null && sendersList.size > 0) {
             rvSenderChip.apply {
                 llSenders.visibility = View.VISIBLE
-                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                layoutManager =
+                    LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 adapter = appScansModel.senders?.let {
                     SenderDataAdapterChip(
                         it,

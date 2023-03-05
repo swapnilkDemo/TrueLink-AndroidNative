@@ -38,7 +38,6 @@ import com.swapnilk.truelink.data.online.AuthorizationInterceptor
 import com.swapnilk.truelink.databinding.ActivityMainBinding
 import com.swapnilk.truelink.service.ForegroundService
 import com.swapnilk.truelink.service.MyReceiver
-import com.swapnilk.truelink.service.NotificationCollectorMonitorService
 import com.swapnilk.truelink.service.NotificationService
 import com.swapnilk.truelink.ui.SigninActivity
 import com.swapnilk.truelink.ui.scan_details.ScanDetailsFragment
@@ -141,8 +140,7 @@ open class MainActivity : AppCompatActivity(), CoroutineScope {
         // showToolBar()
         //  job.start()
         if (mReceiver == null) mReceiver = MyReceiver()
-        registerReceiver(mReceiver, IntentFilter(INTENT_ACTION_NOTIFICATION))
-        startService(Intent(this, NotificationCollectorMonitorService::class.java))
+        registerReceiver(mReceiver, IntentFilter(NOTIFICATION_SERVICE))
     }
 
 

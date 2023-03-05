@@ -1,9 +1,9 @@
 package com.swapnilk.truelink.utils
 
 import android.app.Activity
+import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
-import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.content.res.Resources
@@ -34,6 +34,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.ozcanalasalvar.library.utils.DateUtils
 import com.ozcanalasalvar.library.view.popup.DatePickerPopup
 import com.swapnilk.truelink.R
+import com.swapnilk.truelink.service.NotificationService
 import java.io.IOException
 import java.io.InputStream
 import java.net.HttpURLConnection
@@ -200,26 +201,42 @@ class CommonFunctions(context: Context) {
     }
 
     /////////////////Get App Name From Package Name/////////////////
-    fun getAppNameFromPackageName(packageName: String?, context: Context): CharSequence {
-        var applicationInfo: ApplicationInfo? = null
+    fun getAppNameFromPackageName(packageName: String?, context: Context): String {
+
+        val allApps = Intent(Intent.ACTION_MAIN)
+        val allAppList: List<ResolveInfo> =
+            context.packageManager.queryIntentActivities(allApps, 0)
+        var resolveInfo: ResolveInfo? = null
         try {
-            applicationInfo = context.packageManager.getApplicationInfo(packageName!!, 0)
+            for (i in allAppList) {
+                if (i.activityInfo.packageName == packageName)
+                    resolveInfo = i
+            }
         } catch (e: PackageManager.NameNotFoundException) {
             Log.d("TAG", "The package with the given name cannot be found on the system.")
         }
-        return (if (applicationInfo != null) context.packageManager.getApplicationLabel(
-            applicationInfo
-        ) else "Unknown")
+        return (resolveInfo?.loadLabel(
+            context.packageManager
+        )?.toString() ?: "Unknown")
     }
 
     ///////////////////Get App Icon From Package Name////////////////////////
     fun getAppIconFromPackageName(packageName: String, context: Context): Drawable? {
         var icon: Drawable? = null
+        val allApps = Intent(Intent.ACTION_MAIN)
+        val allAppList: List<ResolveInfo> =
+            context.packageManager.queryIntentActivities(allApps, 0)
+        var resolveInfo: ResolveInfo? = null
         try {
-            icon =
-                context.packageManager.getApplicationIcon(packageName)
+            for (i in allAppList) {
+                if (i.activityInfo.packageName == packageName)
+                    resolveInfo = i
+            }
         } catch (e: PackageManager.NameNotFoundException) {
-            e.printStackTrace()
+            Log.d("TAG", "The package with the given name cannot be found on the system.")
+        }
+        if (resolveInfo != null) {
+            icon = resolveInfo.loadIcon(context.packageManager)
         }
         return icon;
     }
@@ -257,5 +274,21 @@ class CommonFunctions(context: Context) {
             ex.stackTrace
             null
         }
+    }
+
+    ///////////////////////Check if Notification service is running/////////////////
+    fun isNLServiceRunning(context: Context): Boolean {
+        val manager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager?
+        for (service in manager!!.getRunningServices(Int.MAX_VALUE)) {
+            if (NotificationService::class.java.name == service.service.className) {
+                return true
+            }
+        }
+        return false
+    }
+
+    ///////////////////Calculate %//////////////////////
+    fun getPercentages(safeCount: Int, totalCount: Int): Double {
+        return (safeCount.toDouble() / totalCount.toDouble()) * 100
     }
 }

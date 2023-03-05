@@ -305,11 +305,12 @@
                     android:textSize="@dimen/text14" />
 
                 <TextView
+                    android:id="@+id/tv_favourite_browser"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:paddingLeft="@dimen/margin20"
-                    android:text="@string/chrome"
+                    android:text="@string/not_set"
                     android:textColor="@color/gray_200"
                     android:textSize="@dimen/text14" />
             </LinearLayout>

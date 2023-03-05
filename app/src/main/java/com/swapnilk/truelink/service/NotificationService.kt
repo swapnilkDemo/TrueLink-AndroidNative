@@ -60,7 +60,8 @@ class NotificationService : NotificationListenerService() {
             val byteArray: ByteArray = stream.toByteArray()
             msgrcv.putExtra("icon", byteArray)
         }
-        context?.let { sendBroadcast(msgrcv) }
+        context?.let {
+            sendBroadcast(msgrcv) }
     }
 
     override fun onNotificationRemoved(sbn: StatusBarNotification?) {}

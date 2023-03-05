@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.Activity
 import android.app.AlertDialog
+import android.app.Dialog
 import android.content.ComponentName
 import android.content.Context
 import android.content.DialogInterface
@@ -21,18 +22,14 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.TextUtils
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.view.*
+import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.core.content.PermissionChecker
 import androidx.core.content.PermissionChecker.checkSelfPermission
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.ApolloResponse
 import com.apollographql.apollo3.api.Optional
@@ -52,6 +49,7 @@ import com.squareup.picasso.Picasso
 import com.ss.profilepercentageview.ProfilePercentageView
 import com.swapnilk.truelink.R
 import com.swapnilk.truelink.data.online.AuthorizationInterceptor
+import com.swapnilk.truelink.data.online.adapters.FavouriteBrowserAdapter
 import com.swapnilk.truelink.databinding.FragmentUpdateUserProfileBinding
 import com.swapnilk.truelink.utils.CommonFunctions
 import com.swapnilk.truelink.utils.SharedPreferences
@@ -62,6 +60,7 @@ import kotlinx.coroutines.launch
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.create
+import pl.droidsonroids.gif.GifImageView
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
@@ -72,7 +71,7 @@ import java.util.*
 import kotlin.coroutines.CoroutineContext
 
 
-open class UpdateUserProfile : Fragment(), CoroutineScope {
+open class UpdateUserProfile : Fragment(), CoroutineScope, SettingsChangedInterface {
     ////////////Start Coroutine for Background Task../////////////
     private var job: Job = Job()
     override val coroutineContext: CoroutineContext
@@ -110,6 +109,7 @@ open class UpdateUserProfile : Fragment(), CoroutineScope {
 
     var myBitmap: Bitmap? = null
     var picUri: Uri? = null
+    private lateinit var tvFavouriteBrowser: TextView
 
 
     private var permissionsToRequest: ArrayList<String>? = null
@@ -118,18 +118,25 @@ open class UpdateUserProfile : Fragment(), CoroutineScope {
 
     private val ALL_PERMISSIONS_RESULT = 107
 
+    companion object {
+        var favouriteBrowser: MutableList<String> = ArrayList()
+        lateinit var mListener: SettingsChangedInterface
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentUpdateUserProfileBinding.inflate(inflater, container, false)
         val root: View = binding.root
+        mListener = this
         showToolBar()
         ///////////////////////////////Initialize UI/////////////////////
         Initialize()
         ////////////////////////////////GET shared Preferences///////////
         sharedPreferences = SharedPreferences(requireActivity())
         commonFunctions = CommonFunctions(requireContext())
-
+        loadSettings()
 
         ////////////////////////////////////////////////////////////////
         if (commonFunctions.checkConnection(requireContext())) {
@@ -153,6 +160,109 @@ open class UpdateUserProfile : Fragment(), CoroutineScope {
         return root
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun loadSettings() {
+        if (sharedPreferences.getFavouriteBrowser() != "") {
+            tvFavouriteBrowser.text = commonFunctions.getAppNameFromPackageName(
+                sharedPreferences.getFavouriteBrowser(),
+                requireContext()
+            )
+            sharedPreferences.getFavouriteBrowser()?.let { favouriteBrowser.add(it) }
+        }
+
+        tvFavouriteBrowser.setOnClickListener {
+            if (getAllBrowsers().isNotEmpty())
+                showPopupWindow(
+                    requireContext(),
+                    getString(R.string.set_browser),
+                    "",
+                    "",
+                    getString(R.string.done),
+                    R.drawable.ic_favourite_browser,
+                    "overlay",
+                    getAllBrowsers()
+                )
+            else
+                commonFunctions.showToast(
+                    requireContext(),
+                    getString(R.string.no_browser_found)
+                )
+        }
+
+    }
+
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun showPopupWindow(
+        context: Context,
+        title: String,
+        infoText: String,
+        infoText1: String,
+        buttonText: String,
+        iconRes: Int,
+        action: String,
+        allBrowsers: List<ResolveInfo>,
+
+        ) {
+        val dialog = Dialog(context)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.custom_popup)
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+        val rvAppList = dialog.findViewById(R.id.rv_app_list) as RecyclerView
+        val gifLoader = dialog.findViewById(R.id.iv_gif) as GifImageView
+        val icon = dialog.findViewById(R.id.iv_icon) as ImageView
+        val body = dialog.findViewById(R.id.tv_title) as TextView
+        val info = dialog.findViewById(R.id.tv_text1) as TextView
+        val info1 = dialog.findViewById(R.id.tv_text2) as TextView
+        val yesBtn = dialog.findViewById(R.id.id_btn_confirm) as Button
+        if (!TextUtils.isEmpty(title))
+            body.text = title
+        if (!TextUtils.isEmpty(infoText))
+            info.text = infoText
+        if (!TextUtils.isEmpty(infoText1))
+            info1.text = infoText
+        if (!TextUtils.isEmpty(buttonText))
+            yesBtn.text = buttonText
+        if (iconRes != 0)
+            icon.setImageDrawable(context.getDrawable(iconRes))
+
+        if (action == "overlay") {
+            info1.visibility = View.GONE
+            gifLoader.visibility = View.GONE
+            rvAppList.visibility = View.VISIBLE
+
+            rvAppList.apply {
+                layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+                adapter =
+                    FavouriteBrowserAdapter(
+                        allBrowsers,
+                        requireContext()
+                    )
+            }
+        } else if (action == "notification") {
+            info1.visibility = View.GONE
+            gifLoader.visibility = View.GONE
+        }
+        yesBtn.setOnClickListener {
+            if (favouriteBrowser.size > 0) {
+                dialog.dismiss()
+                sharedPreferences.setFavouriteBrowser(favouriteBrowser[0])
+                mListener.onSettingChanged(
+                    commonFunctions.getAppNameFromPackageName(
+                        sharedPreferences.getFavouriteBrowser(),
+                        context
+                    )
+                )
+            } else
+                commonFunctions.showToast(requireContext(), getString(R.string.select_browser))
+        }
+        dialog.show()
+
+    }
+
     //////////////////////Initialize UI/////////////////////////
     private fun Initialize() {
         textProgress = binding.textProgress
@@ -164,6 +274,8 @@ open class UpdateUserProfile : Fragment(), CoroutineScope {
         editPhone = binding.editPhone
         progressBar = binding.progressBar
         editGender = binding.editGender
+
+        tvFavouriteBrowser = binding.tvFavouriteBrowser
 
     }
 
@@ -810,24 +922,23 @@ open class UpdateUserProfile : Fragment(), CoroutineScope {
     }
 
 
-    fun getAllBrowsers(): List<ResolveInfo> {
+    private fun getAllBrowsers(): List<ResolveInfo> {
         val allLaunchers = ArrayList<String>()
-
-        val allApps = Intent(Intent.ACTION_MAIN)
-        val allAppList: List<ResolveInfo> =
-            requireContext().packageManager.queryIntentActivities(allApps, 0)
-        for (i in allAppList.indices) allLaunchers.add(allAppList[i].activityInfo.packageName)
-
         val myApps = Intent(Intent.ACTION_VIEW)
         myApps.data = Uri.parse("http://www.google.es")
-        val myAppList: List<ResolveInfo> =
-            requireContext().packageManager.queryIntentActivities(myApps, 0)
+        val myAppList: MutableList<ResolveInfo> =
+            requireContext().packageManager.queryIntentActivities(myApps, PackageManager.MATCH_ALL)
         for (i in myAppList.indices) {
-            if (allLaunchers.contains(myAppList[i].activityInfo.packageName)) {
-                Log.e("match", myAppList[i].activityInfo.packageName + "")
+            if (myAppList[i].activityInfo.packageName == requireContext().packageName) {
+//                Log.e("match", myAppList[i].activityInfo.packageName + "")
+                myAppList.removeAt(i)
             }
         }
         return myAppList
+    }
+
+    override fun onSettingChanged(browserName: String) {
+        tvFavouriteBrowser.text = browserName
     }
 }
 

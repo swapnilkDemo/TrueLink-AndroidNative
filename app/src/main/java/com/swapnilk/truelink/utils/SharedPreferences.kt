@@ -1,9 +1,7 @@
 package com.swapnilk.truelink.utils
 
-import android.app.ActivityManager
 import android.content.Context
 import android.content.SharedPreferences
-import com.swapnilk.truelink.service.NotificationService
 
 
 class SharedPreferences(context: Context) {
@@ -92,14 +90,14 @@ class SharedPreferences(context: Context) {
         return sharedPreferences.getString("refreshToken", "")
     }
 
-    fun isNLServiceRunning(context: Context): Boolean {
-        val manager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager?
-        for (service in manager!!.getRunningServices(Int.MAX_VALUE)) {
-            if (NotificationService::class.java.name == service.service.className) {
-                return true
-            }
-        }
-        return false
+    fun setFavouriteBrowser(browserName: String) {
+        val editor = sharedPreferences.edit()
+        editor.putString("favouriteBrowser", browserName)
+        editor.commit()
+    }
+
+    fun getFavouriteBrowser(): String? {
+        return sharedPreferences.getString("favouriteBrowser", "")
     }
 
 }
