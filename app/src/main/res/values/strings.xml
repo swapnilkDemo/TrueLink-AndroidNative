@@ -280,4 +280,12 @@ meaning regardless of whether they appear in singular or in plural.</span></div>
     <string name="report_link">Report this link</string>
     <string name="select_severity">Select severity</string>
     <string name="not_set">Not set</string>
+    <string name="default_notification_channel_id">truelink.push.channel</string>
+    <string name="warning">Warning</string>
+    <string name="dangerous">Dangerous</string>
+    <string name="tell_us">Tell us your experience</string>
+    <string name="write_comment">Write a comment to warn others</string>
+    <string name="attach_file">Attach media</string>
+    <string name="flag_link">Falg the link as</string>
+    <string name="fraud">Fraud</string>
 </resources>

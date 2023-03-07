@@ -13,7 +13,6 @@ import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -37,15 +36,12 @@ import com.example.type.LocationType
 import com.example.type.UpdateUserInput
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.textfield.TextInputEditText
-import com.google.firebase.messaging.FirebaseMessaging
 import com.ozcanalasalvar.library.view.popup.DatePickerPopup
 import com.swapnilk.truelink.MainActivity
 import com.swapnilk.truelink.R
 import com.swapnilk.truelink.data.online.AuthorizationInterceptor
-import com.swapnilk.truelink.ui.VerifyOTPFragment.Companion.TAG
 import com.swapnilk.truelink.utils.CommonFunctions
 import com.swapnilk.truelink.utils.PermissionUtils
 import com.swapnilk.truelink.utils.SharedPreferences
@@ -128,7 +124,7 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
         }
         /////////////////Request Permissions////////////
         getUserLocation()
-        generateFCMToken()
+        commonFunctions.generateFCMToken(this, sharedPreferences)
         ////////////////////Get Extras//////////////////
         if (intent.extras != null) {
             gender = intent.extras!!.getSerializable("gender") as Gender?
@@ -226,23 +222,6 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
         }
     }
 
-    ////////////////////////Generate Firebase token///////////////////////
-    @SuppressLint("StringFormatInvalid")
-    private fun generateFCMToken() {
-        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                Log.w(TAG, "Fetching FCM registration token failed", task.exception)
-                return@OnCompleteListener
-            }
-            // Get new FCM registration token
-            val token = task.result
-
-            // Log and toast
-            val msg = getString(R.string.msg_token_fmt, token)
-            if (msg.isNotEmpty()) sharedPreferences.storeFCM(token)
-            Log.d(TAG, msg)
-        })
-    }
 
     /////////////////////////////////Initialize UI////////////////////////////
     private fun initialize() {

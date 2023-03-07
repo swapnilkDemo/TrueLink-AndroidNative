@@ -40,7 +40,7 @@ open class ForegroundService : Service() {
     // foreground service is running
     @RequiresApi(Build.VERSION_CODES.O)
     private fun startMyOwnForeground() {
-        val NOTIFICATION_CHANNEL_ID = "example.permanence"
+        val NOTIFICATION_CHANNEL_ID = "truelink.permanence"
         val channelName = "Background Service"
         val chan = NotificationChannel(
             NOTIFICATION_CHANNEL_ID,

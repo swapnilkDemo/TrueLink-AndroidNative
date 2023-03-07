@@ -16,6 +16,7 @@ import androidx.work.WorkerParameters
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.swapnilk.truelink.MainActivity
+import com.swapnilk.truelink.R
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
     // [START receive_message]
@@ -30,16 +31,19 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
             if (/* Check if data needs to be processed by long running job */ true) {
                 // For long-running tasks (10 seconds or more) use WorkManager.
-                scheduleJob()
+                scheduleJob(remoteMessage.data.toString())
             } else {
                 // Handle message within 10 seconds
-                handleNow()
+                handleNow(remoteMessage.data.toString())
             }
+
+            sendNotification(remoteMessage)
         }
 
         // Check if message contains a notification payload.
         remoteMessage.notification?.let {
             Log.d(TAG, "Message Notification Body: ${it.body}")
+            sendNotification(remoteMessage)
         }
 
         // Also if you intend on generating your own notifications as a result of a received FCM
@@ -63,7 +67,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     }
     // [END on_new_token]
 
-    private fun scheduleJob() {
+    private fun scheduleJob(toString: String) {
         // [START dispatch_job]
         val work = OneTimeWorkRequest.Builder(MyWorker::class.java)
             .build()
@@ -73,7 +77,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         // [END dispatch_job]
     }
 
-    private fun handleNow() {
+    private fun handleNow(toString: String) {
         Log.d(TAG, "Short lived task is done.")
     }
 
@@ -82,7 +86,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         Log.d(TAG, "sendRegistrationTokenToServer($token)")
     }
 
-    private fun sendNotification(messageBody: String) {
+    private fun sendNotification(messageBody: RemoteMessage) {
         val intent = Intent(this, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = PendingIntent.getActivity(
@@ -94,9 +98,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
             .setContentTitle("FCM Message")
-            .setContentText(messageBody)
+            .setContentText(messageBody.notification?.body)
             .setAutoCancel(true)
             .setSound(defaultSoundUri)
+            .setSmallIcon(R.mipmap.ic_launcher)
             .setContentIntent(pendingIntent)
 
         val notificationManager =

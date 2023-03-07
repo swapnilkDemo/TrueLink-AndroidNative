@@ -18,7 +18,7 @@
         android:gravity="start"
         android:text="@string/report_link"
         android:textColor="@color/white"
-        android:textSize="@dimen/text16"
+        android:textSize="@dimen/text14"
         android:textStyle="bold" />
 
     <TextView
@@ -39,45 +39,400 @@
 
     <TextView
         android:id="@+id/tv_text2"
-        style="@style/textViewFontInter"
+        style="@style/textViewFontSora"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="@dimen/margin10"
         android:layout_marginRight="@dimen/margin10"
-        android:layout_marginBottom="@dimen/margin10"
         android:gravity="start"
         android:text="@string/select_severity"
         android:textColor="@color/white"
-        android:textSize="@dimen/text14" />
+        android:textSize="@dimen/text12" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin10"
+        android:layout_marginTop="@dimen/margin5"
+        android:layout_marginRight="@dimen/margin10"
+        android:orientation="horizontal">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_app_list"
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1">
+
+            <View
+                android:id="@+id/view_warn"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/margin8"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margin2"
+                android:background="@color/lowRisk" />
+
+            <ImageView
+                android:id="@+id/iv_warning"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_radio_selector"
+                android:visibility="gone" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1">
+
+            <View
+                android:id="@+id/view_medium"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/margin8"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margin2"
+                android:background="@color/warning" />
+
+            <ImageView
+                android:id="@+id/iv_medium"
+                android:layout_width="@dimen/margin20"
+                android:layout_height="@dimen/margin20"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_radio_selector"
+                android:visibility="gone" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1">
+
+            <View
+                android:id="@+id/view_high"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/margin8"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margin2"
+                android:background="@color/orange" />
+
+            <ImageView
+                android:id="@+id/iv_dangerous"
+                android:layout_width="@dimen/margin20"
+                android:layout_height="@dimen/margin20"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_radio_selector"
+                android:visibility="gone" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1">
+
+            <View
+                android:id="@+id/view_critical"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/margin8"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margin2"
+                android:background="@color/red" />
+
+            <ImageView
+                android:id="@+id/iv_critical"
+                android:layout_width="@dimen/margin20"
+                android:layout_height="@dimen/margin20"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_radio_selector"
+                android:visibility="gone" />
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin5"
+        android:layout_marginRight="@dimen/margin5"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rdo_warning"
+            style="@style/textViewFontSora"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:buttonTint="@color/lowRisk"
+            android:text="@string/warning"
+            android:textColor="@color/lowRisk"
+            android:textSize="@dimen/text10" />
+
+        <RadioButton
+            android:id="@+id/rdo_medium"
+            style="@style/textViewFontSora"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:buttonTint="@color/warning"
+            android:text="@string/medium"
+            android:textColor="@color/warning"
+            android:textSize="@dimen/text10" />
+
+        <RadioButton
+            android:id="@+id/rdo_high"
+            style="@style/textViewFontSora"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:buttonTint="@color/orange"
+            android:text="@string/dangerous"
+            android:textColor="@color/orange"
+            android:textSize="@dimen/text10" />
+
+        <RadioButton
+            android:id="@+id/rdo_critical"
+            style="@style/textViewFontSora"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:buttonTint="@color/red"
+            android:text="@string/critical"
+            android:textColor="@color/red"
+            android:textSize="@dimen/text10" />
+    </RadioGroup>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/transparent50" />
+
+    <TextView
+        style="@style/textViewFontSora"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="@dimen/margin10"
+        android:layout_marginTop="@dimen/margin10"
+        android:layout_marginRight="@dimen/margin10"
+        android:gravity="start"
+        android:text="@string/tell_us"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text12" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin10"
+        android:elevation="@dimen/margin8"
+        app:cardBackgroundColor="@color/light_background"
+        app:cardCornerRadius="@dimen/margin8"
+        app:strokeColor="@color/gray"
+        app:strokeWidth="@dimen/margin2">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/margin20">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edt_comment"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/margin70"
+                android:background="@null"
+                android:gravity="top"
+                android:hint="@string/write_comment"
+                android:inputType="text|textMultiLine"
+                android:maxLines="5"
+                android:textColorHint="@color/gray"
+                android:textSize="@dimen/text14" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_outline_box_light"
+                android:drawableRight="@drawable/ic_upload"
+                android:drawablePadding="@dimen/margin10"
+                android:paddingLeft="@dimen/margin10"
+                android:paddingTop="@dimen/margin5"
+                android:paddingRight="@dimen/margin10"
+                android:paddingBottom="@dimen/margin5"
+                android:text="@string/attach_file"
+                android:textColor="@color/lowRisk"
+                android:textSize="@dimen/text10" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        style="@style/textViewFontSora"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="@dimen/margin10"
+        android:layout_marginRight="@dimen/margin10"
+        android:gravity="start"
+        android:text="@string/flag_link"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text12" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin10"
+        android:layout_marginRight="@dimen/margin10"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/ll_malware"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin5"
+            android:layout_weight="1"
+            android:background="@drawable/background_outline_box_light"
+            android:orientation="horizontal"
+            android:padding="@dimen/margin5">
+
+            <ImageView
+                android:layout_width="@dimen/margin16"
+                android:layout_height="@dimen/margin16"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/margin5"
+                android:layout_marginEnd="@dimen/margin5"
+                android:gravity="end|center_vertical"
+                android:src="@drawable/ic_malware" />
+
+            <TextView
+                android:id="@+id/tv_malware"
+                style="@style/textViewFontInter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center"
+                android:gravity="center"
+                android:maxLines="1"
+                android:paddingRight="@dimen/margin10"
+                android:text="@string/malware"
+                android:textColor="@color/gray_200"
+                android:textSize="@dimen/text12" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_phishing"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin5"
+            android:layout_weight="1"
+            android:background="@drawable/background_outline_box_light"
+            android:orientation="horizontal"
+            android:padding="@dimen/margin5">
+
+            <ImageView
+                android:id="@+id/iv_result_icon"
+                android:layout_width="@dimen/margin16"
+                android:layout_height="@dimen/margin16"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/margin5"
+                android:layout_marginEnd="@dimen/margin5"
+                android:gravity="end|center_vertical"
+                android:src="@drawable/ic_phishing" />
+
+            <TextView
+                android:id="@+id/tv_phishing"
+                style="@style/textViewFontInter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center"
+                android:gravity="center"
+                android:maxLines="1"
+                android:paddingRight="@dimen/margin10"
+                android:text="@string/phishing"
+                android:textColor="@color/gray_200"
+                android:textSize="@dimen/text12" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_spam"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin5"
+            android:layout_weight="1"
+            android:background="@drawable/background_outline_box_light"
+            android:orientation="horizontal"
+            android:padding="@dimen/margin5">
+
+            <ImageView
+                android:layout_width="@dimen/margin16"
+                android:layout_height="@dimen/margin16"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/margin5"
+                android:layout_marginEnd="@dimen/margin5"
+                android:gravity="end|center_vertical"
+                android:src="@drawable/ic_spam" />
+
+            <TextView
+                style="@style/textViewFontInter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center"
+                android:gravity="center"
+                android:maxLines="1"
+                android:paddingRight="@dimen/margin10"
+                android:text="@string/spam"
+                android:textColor="@color/gray_200"
+                android:textSize="@dimen/text12" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_fraud"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin5"
+            android:layout_weight="1"
+            android:background="@drawable/background_outline_box_light"
+            android:orientation="horizontal"
+            android:padding="@dimen/margin5">
+
+            <ImageView
+                android:layout_width="@dimen/margin16"
+                android:layout_height="@dimen/margin16"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/margin5"
+                android:layout_marginEnd="@dimen/margin5"
+                android:gravity="end|center_vertical"
+                android:src="@drawable/ic_fake" />
+
+            <TextView
+                style="@style/textViewFontInter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center"
+                android:gravity="center"
+                android:maxLines="1"
+                android:paddingRight="@dimen/margin10"
+                android:text="@string/fraud"
+                android:textColor="@color/gray_200"
+                android:textSize="@dimen/text12" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/id_btn_confirm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="@dimen/margin10"
-        android:visibility="gone" />
-
-    <pl.droidsonroids.gif.GifImageView
-        android:id="@+id/iv_gif"
-        android:layout_width="@dimen/margin250"
-        android:layout_height="@dimen/margin250"
-        android:layout_gravity="center"
-        android:src="@drawable/truelink_set_default_browser" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/id_btn_confirm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="@dimen/margin10"
         android:gravity="center"
-        android:text="@string/set_default"
+        android:text="@string/report"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="@dimen/text14"
-        app:backgroundTint="@color/green" />
+        app:backgroundTint="@color/orange" />
+
 
 </LinearLayout>

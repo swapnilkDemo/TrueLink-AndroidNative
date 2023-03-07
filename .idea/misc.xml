@@ -34,6 +34,7 @@
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/ic_permission_notification.xml" value="0.138" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/ic_phishing.xml" value="0.1435" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/ic_polygon_down.xml" value="0.1435" />
+        <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/ic_radio_selector.xml" value="0.165" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/ic_recycler_view.xml" value="0.1135" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/ic_report.xml" value="0.1435" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/ic_round_arrow_drop_down_24.xml" value="0.1435" />
@@ -49,6 +50,8 @@
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/ic_verified_link.xml" value="0.138" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/ic_verified_link_small.xml" value="0.1435" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/linear_interpolator.xml" value="0.1435" />
+        <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/radio_circle.xml" value="0.167" />
+        <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/radoi_selector.xml" value="0.167" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/rect.xml" value="0.138" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/rounded_corner_top.xml" value="0.1435" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/drawable/seekbar_background.xml" value="0.138" />
@@ -59,7 +62,7 @@
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/bottom_sheet_privacy.xml" value="0.165625" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/content_scan_details.xml" value="0.16" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/custom_popup.xml" value="0.12072368421052632" />
-        <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/custom_popup_report.xml" value="0.33" />
+        <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/custom_popup_report.xml" value="0.22" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/fragment_bar_chart.xml" value="0.1921875" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/fragment_bulk_scan.xml" value="0.11151315789473684" />
         <entry key="..\:/work/TrueLink-AndroidNative/app/src/main/res/layout/fragment_dashboard.xml" value="0.1" />

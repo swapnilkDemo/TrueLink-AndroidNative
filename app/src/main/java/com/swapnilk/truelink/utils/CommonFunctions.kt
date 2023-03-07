@@ -1,5 +1,6 @@
 package com.swapnilk.truelink.utils
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ActivityManager
 import android.content.Context
@@ -29,12 +30,15 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.palette.graphics.Palette
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.messaging.FirebaseMessaging
 import com.ozcanalasalvar.library.utils.DateUtils
 import com.ozcanalasalvar.library.view.popup.DatePickerPopup
 import com.swapnilk.truelink.R
 import com.swapnilk.truelink.service.NotificationService
+import com.swapnilk.truelink.ui.VerifyOTPFragment
 import java.io.IOException
 import java.io.InputStream
 import java.net.HttpURLConnection
@@ -290,5 +294,27 @@ class CommonFunctions(context: Context) {
     ///////////////////Calculate %//////////////////////
     fun getPercentages(safeCount: Int, totalCount: Int): Double {
         return (safeCount.toDouble() / totalCount.toDouble()) * 100
+    }
+
+    ////////////////////////Generate Firebase token///////////////////////
+    @SuppressLint("StringFormatInvalid")
+    public fun generateFCMToken(context: Context, sharedPreferences: SharedPreferences) {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w(
+                    VerifyOTPFragment.TAG,
+                    "Fetching FCM registration token failed",
+                    task.exception
+                )
+                return@OnCompleteListener
+            }
+            // Get new FCM registration token
+            val token = task.result
+
+            // Log and toast
+            val msg = context.getString(R.string.msg_token_fmt, token)
+            if (msg.isNotEmpty()) sharedPreferences.storeFCM(token)
+            Log.d(VerifyOTPFragment.TAG, msg)
+        })
     }
 }

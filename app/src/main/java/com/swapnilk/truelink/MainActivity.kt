@@ -1,11 +1,7 @@
 package com.swapnilk.truelink
 
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -17,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.apollographql.apollo3.ApolloClient
@@ -28,19 +23,17 @@ import com.apollographql.apollo3.network.okHttpClient
 import com.auth0.android.jwt.JWT
 import com.example.ScanLinkMutation
 import com.example.TokenUpdateMutation
-import com.example.type.AppType
-import com.example.type.ScanLinkInput
-import com.example.type.ScanTriggerType
-import com.example.type.WhoisInput
+import com.example.UpdateUserMutation
+import com.example.type.*
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.ktx.messaging
 import com.swapnilk.truelink.data.online.AuthorizationInterceptor
 import com.swapnilk.truelink.databinding.ActivityMainBinding
 import com.swapnilk.truelink.service.ForegroundService
 import com.swapnilk.truelink.service.MyReceiver
-import com.swapnilk.truelink.service.NotificationService
 import com.swapnilk.truelink.ui.SigninActivity
-import com.swapnilk.truelink.ui.scan_details.ScanDetailsFragment
 import com.swapnilk.truelink.ui.user_profile.UpdateUserProfile
 import com.swapnilk.truelink.utils.CommonFunctions
 import com.swapnilk.truelink.utils.SharedPreferences
@@ -57,10 +50,9 @@ import kotlin.coroutines.CoroutineContext
 
 open class MainActivity : AppCompatActivity(), CoroutineScope {
     private val fm = supportFragmentManager
-    private lateinit var notificationService: NotificationService
 
     companion object GlobalFields {
-        val INTENT_ACTION_NOTIFICATION = "it.gmariotti.notification"
+        const val INTENT_ACTION_NOTIFICATION = "it.gmariotti.notification"
 
         fun addFragmentToActivity(fragment: Fragment?, fm: FragmentManager) {
 
@@ -140,7 +132,7 @@ open class MainActivity : AppCompatActivity(), CoroutineScope {
         // showToolBar()
         //  job.start()
         if (mReceiver == null) mReceiver = MyReceiver()
-        registerReceiver(mReceiver, IntentFilter(NOTIFICATION_SERVICE))
+        registerReceiver(mReceiver, IntentFilter(INTENT_ACTION_NOTIFICATION))
     }
 
 
@@ -151,7 +143,7 @@ open class MainActivity : AppCompatActivity(), CoroutineScope {
         sharedPreferences = SharedPreferences(this@MainActivity)
         commonFunctions = CommonFunctions(this@MainActivity)
         commonFunctions.setStatusBar(this@MainActivity)
-
+        Firebase.messaging.isAutoInitEnabled = true
         //////////////////////////////////////////////////////////////
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -169,6 +161,11 @@ open class MainActivity : AppCompatActivity(), CoroutineScope {
         setBadgeToAlert()
         /////////////////Set Up Toolbar//////////////////
         setUpToolbar()
+        val fcmToken = sharedPreferences.getFCM()
+        if (fcmToken == "") {
+            commonFunctions.generateFCMToken(this, sharedPreferences)
+            updateUserFCM(sharedPreferences.getFCM())
+        }
 
         val refreshToken = sharedPreferences.getRefreshToken();
         if (!refreshToken.isNullOrEmpty()) {
@@ -203,31 +200,56 @@ open class MainActivity : AppCompatActivity(), CoroutineScope {
             scanLink(data)
         }
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(onNotice, IntentFilter("Msg"));
     }
 
-    private val onNotice: BroadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent) {
-            // String pack = intent.getStringExtra("package");
-            val title = intent.getStringExtra("title")
-            val text = intent.getStringExtra("text")
-            //int id = intent.getIntExtra("icon",0);
-            val remotePackageContext: Context? = null
-            try {
-//                remotePackageContext = getApplicationContext().createPackageContext(pack, 0);
-//                Drawable icon = remotePackageContext.getResources().getDrawable(id);
-//                if(icon !=null) {
-//                    ((ImageView) findViewById(R.id.imageView)).setBackground(icon);
-//                }
-                val byteArray = intent.getByteArrayExtra("icon")
-                var bmp: Bitmap? = null
-                if (byteArray != null) {
-                    bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
-                }
+    private fun updateUserFCM(fcm: String?) {
+        ////////////////Add required parameters//////////////////
+        val updateUserInput = UpdateUserInput(
+            Optional.Absent,
+            Optional.Absent,
+            Optional.Absent,
+            Optional.Absent,
+            Optional.Absent,
+            Optional.Absent,
+            Optional.Absent,
+            Optional.Absent,
+            Optional.Present(fcm),
+            Optional.Absent,
+            Optional.Absent
+        )
+        ///////////////Initialize mutation/////////////
+        val updateUserMutation = UpdateUserMutation(
+            updateUserInput
 
-            } catch (e: java.lang.Exception) {
-                e.printStackTrace()
+        )
+        /////////////////Perform Background Task///////////////////
+        try {
+            launch {
+                val response: ApolloResponse<UpdateUserMutation.Data> =
+                    apolloClient.mutation(updateUserMutation).execute()
+                afterResult(response)
             }
+        } catch (e: Exception) {
+            e.stackTrace
+            commonFunctions.showToast(this@MainActivity, e.message)
+
+        } catch (e: ApolloException) {
+            e.stackTrace
+            commonFunctions.showToast(this@MainActivity, e.message)
+
+        }
+    }
+
+    private fun afterResult(response: ApolloResponse<UpdateUserMutation.Data>) {
+        if (response.data?.updateUser?.success == true) {
+            sharedPreferences.setProfileUpdate(true)
+        } else {
+            commonFunctions.showErrorSnackBar(
+                this@MainActivity,
+                toolbar,
+                response.data?.updateUser?.message.toString(),
+                true
+            )
         }
     }
 
@@ -361,19 +383,6 @@ open class MainActivity : AppCompatActivity(), CoroutineScope {
             )
         }
         yield()
-    }
-
-    ////////////////////////Handle Navigation and Backpress//////////////////
-    override fun onBackPressed() {
-        super.onBackPressed()
-        for (fragment in supportFragmentManager.fragments) {
-            if (fragment is ScanDetailsFragment || fragment is UpdateUserProfile)
-                navView.selectedItemId = R.id.nav_dashboard
-            else if (supportFragmentManager.fragments.size > 1)
-                supportFragmentManager.popBackStack()
-            else
-                commonFunctions.showToast(this, "Do you want to exit this Application?")
-        }
     }
 
     ////////////////Start Foreground Service//////////////////

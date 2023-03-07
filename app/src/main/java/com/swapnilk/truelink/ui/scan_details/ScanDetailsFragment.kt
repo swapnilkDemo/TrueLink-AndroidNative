@@ -1,10 +1,15 @@
 package com.swapnilk.truelink.ui.scan_details
 
 import android.annotation.SuppressLint
+import android.app.Dialog
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
@@ -36,6 +41,7 @@ import com.swapnilk.truelink.data.online.adapters.ReportListAdapter
 import com.swapnilk.truelink.data.online.model.RecentScansModel
 import com.swapnilk.truelink.databinding.FragmentScanDetailsBinding
 import com.swapnilk.truelink.utils.CommonFunctions
+import com.swapnilk.truelink.utils.SharedPreferences
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -132,6 +138,7 @@ class ScanDetailsFragment : Fragment(), CoroutineScope {
 
     lateinit var commonFunctions: CommonFunctions
     lateinit var apolloClient: ApolloClient
+    lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -144,6 +151,7 @@ class ScanDetailsFragment : Fragment(), CoroutineScope {
         bindViews()
 
         ///////////////////////////////////////////////
+        sharedPreferences = SharedPreferences(requireContext())
         commonFunctions = CommonFunctions(requireContext())
         if (commonFunctions.checkConnection(requireContext())) {
             //////////////////////////////Get Apollo Client//////////////////
@@ -168,8 +176,45 @@ class ScanDetailsFragment : Fragment(), CoroutineScope {
                 true
             )
 
+        llOpenInBrowser.setOnClickListener {
+            openLinkInFavouriteBrowser()
+        }
+
+        llReport.setOnClickListener {
+            showReportLinkPopup()
+        }
+
 
         return root
+    }
+
+    private fun openLinkInFavouriteBrowser() {
+        try {
+            Log.d("Window", "open in browser")
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(tvFullURL.text.toString()))
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            intent.setPackage(
+                if (sharedPreferences.getFavouriteBrowser() != null)
+                    sharedPreferences.getFavouriteBrowser()
+                else
+                    "com.android.chrome"
+            )
+            context?.startActivity(intent)
+        } catch (
+            e: Exception
+        ) {
+            Log.d("Window", "open in browser error")
+            e.printStackTrace()
+        }
+    }
+
+    private fun showReportLinkPopup() {
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.custom_popup_report)
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.show()
     }
 
     private fun bindValuesToVies() {
